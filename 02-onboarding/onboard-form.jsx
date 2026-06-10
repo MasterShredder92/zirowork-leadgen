@@ -249,9 +249,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>Your ZiroWork number is auto-provisioned in this area code.</div>
       </div>
       <div style={{ marginBottom: 14 }}>{fLabel('Booking / Contact Email', standalone)}<input style={inp} value={form.email} onChange={e => set('email', e.target.value)} placeholder="hello@yourstudio.com" /></div>
-      {standalone && (
-        <div style={{ marginBottom: 14 }}>{fLabel('Portal Password', true)}<input style={inp} type="password" value={form.password} onChange={e => set('password', e.target.value)} placeholder="Create a password (8+ characters)" /><div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>You'll log into your ZiroWork portal with your email + this password.</div></div>
-      )}
       <div style={{ marginBottom: 14 }}>{fLabel('Street Address')}<input style={inp} value={form.address} onChange={e => set('address', e.target.value)} placeholder="1234 Music Ave, Suite 200" /></div>
       <div style={{ marginBottom: 14 }}>{fLabel('Hours')}<input style={inp} value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="Mon–Fri 2–8pm · Sat 9am–2pm" /></div>
     </div>
@@ -542,6 +539,13 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           </div>
         ))}
       </div>
+      {standalone && (
+        <div style={{ marginTop: 14 }}>
+          {fLabel('Create Your Portal Password', true)}
+          <input style={inp} type="password" value={form.password} onChange={e => set('password', e.target.value)} placeholder="8+ characters" />
+          <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>You'll log into your ZiroWork portal with {form.email || 'your email'} + this password.</div>
+        </div>
+      )}
     </div>
   );
 
