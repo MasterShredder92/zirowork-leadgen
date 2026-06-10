@@ -18,7 +18,8 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     about: '',
   };
 
-  const INSTRUMENTS = ['Piano', 'Guitar', 'Voice', 'Drums', 'Bass', 'Violin', 'Ukulele', 'Saxophone', 'Trumpet', 'Flute'];
+  // Live landing-page templates only — expand as more instrument pages ship (see TEMPL in handleSubmit)
+  const INSTRUMENTS = ['Piano', 'Guitar', 'Voice', 'Drums'];
   const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   const STEPS = [
@@ -265,7 +266,10 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   const S2 = () => (
     <div>
       <div style={{ marginBottom: 18 }}>
-        {fLabel('Instruments Taught', true)}
+        {fLabel('Which Instruments Do You Want Leads For?', true)}
+        <div style={{ fontSize: 11, color: T.t4, marginTop: 2, marginBottom: 4, lineHeight: 1.5 }}>
+          Each instrument you pick gets its own landing page and campaign built for it. We're live with these four — more instruments coming soon.
+        </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 6 }}>
           {INSTRUMENTS.map(inst => {
             const on = form.instruments.includes(inst);
