@@ -32,7 +32,7 @@ Your task explicitly names: agents, the Python backend, SMS/email logic, FastAPI
 ## Do NOT enter if
 - Task involves the React CRM frontend (views, shell, design) → that is the main repo, not here
 - Task involves Supabase migrations for the CRM → check `94-knowledge/migrations/`
-- Task involves the landing pages or client portal → those are separate deployments
+- Task involves the schools pages or the dashboard → `schools/` / `dashboard/` (same Vercel project, routed by root vercel.json)
 
 ## Navigate within this folder
 | Task | Load |

@@ -19,6 +19,7 @@ node_modules/
 *.log
 .codegraph/
 caveman/
+.temp/
 
 # Session state (not repo code)
 .brain/

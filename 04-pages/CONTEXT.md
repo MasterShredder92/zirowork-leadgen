@@ -3,7 +3,7 @@
 > **JUDGMENT IS NOT PERMITTED.** Follow these rules exactly. Situation not covered? STOP AND ASK.
 
 ## You are here
-Pages — landing page configuration and management for client campaigns (ZiroWork-hosted, not the landing-pages/ deployment).
+Pages — landing page configuration and management for client campaigns (the config view; the actual pages live in `schools/`).
 
 ## Files in this folder
 ```
@@ -15,7 +15,7 @@ signup-page-blueprint.md   — design reference doc (read-only, do not modify)
 Your task explicitly names: pages, landing page configuration, route `pages`, or `window.PagesView`.
 
 ## Do NOT enter if
-- Task involves the actual landing page SPA → go to `landing-pages/` (separate deployment)
+- Task involves the actual landing page SPA → go to `schools/` (served at /schools, same Vercel project)
 - Task involves campaigns → go to `03-campaigns/`
 - Task involves seed data → go to `93-hooks/use-local-data.js`
 

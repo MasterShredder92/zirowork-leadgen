@@ -1,7 +1,10 @@
-# ZiroWork Operator CRM
+# ZiroWork Lead-Gen Platform
 
-React 18 + Babel SPA. No bundler. Supabase live (Phase 2 in progress).
-Internal operator CRM — not client-facing. See `94-knowledge/northstar-ideology.md`.
+React 18 + Babel SPAs. No bundler. Supabase live.
+**ONE repo** (`github.com/MasterShredder92/zirowork-leadgen`), **ONE Vercel project** (Root Directory `.`).
+Surfaces, all in this repo, routed by root `vercel.json`:
+operator CRM (`/`) · student landing pages (`/schools`) · client portal (`/dashboard`) · public self-serve onboarding (`onboard.html`).
+Doctrine / SSOT: `ZiroWork-Client-Flow` + `94-knowledge/northstar-ideology.md`.
 
 ---
 
@@ -29,17 +32,16 @@ Internal operator CRM — not client-facing. See `94-knowledge/northstar-ideolog
 
 ## Repo Tree
 
-Folder number = CRM page nav position.
+One repo, one Vercel project (root dir `.`). Operator folder number = CRM sidebar nav position.
 
 ```
-zirowork-command-center-speed-to-lead/
-├── index.html              — SPA shell + <script> load order (CRITICAL: order matters)
-├── CLAUDE.md               — this file (Layer 0)
-├── CONTEXT.md              — task router (Layer 1)
+zirowork-leadgen/
 │
+│  OPERATOR CRM — served at /  (internal; numbered folder = sidebar position)
+├── index.html              — operator SPA shell + <script> load order (CRITICAL: order matters)
 ├── 00-command-center/      window.CommandCenterView   | route: command-center
 ├── 01-clients/             window.ClientsView         | route: clients
-├── 02-onboarding/          window.ClientOnboardingView| route: onboarding
+├── 02-onboarding/          window.ClientOnboardingView| route: onboarding  (also powers onboard.html)
 ├── 03-campaigns/           window.CampaignsView       | route: campaigns
 ├── 04-pages/               window.PagesView           | route: pages
 ├── 05-leads/               window.LeadsView           | route: leads
@@ -53,20 +55,31 @@ zirowork-command-center-speed-to-lead/
 ├── 13-integrations/        window.IntegrationsView    | route: integrations
 ├── 14-settings/            window.SettingsView        | route: settings
 ├── 15-insights/            window.InsightsView        | route: insights
-├── 02-studio-map/          window.StudioMapView       | route: studio-map — NOT BUILT YET
-│
+├── 16-studio-map/          window.StudioMapView       | route: studio-map
 ├── 90-shell/               — Header, Router, sidebar, user-menu, workspace-overlay
 ├── 91-auth/                — Session.jsx (auth bypass, seeds globals)
-├── 92-design/              — theme.js ⚠️ HIGH RISK, design-tokens, colors, icons
-├── 93-hooks/               — use-local-data.js, use-studio-context.js, use-supabase-table.js (stub),
-│                             use-form-state.js, use-is-mobile.js, use-lessons.js, use-students.js, use-pages.js
-├── 94-knowledge/           — northstar-ideology.md, architecture.md, design-system.md, data-model.md
+├── 92-design/              — theme.js ⚠️ HIGH RISK, design-tokens, design-tweaks, icons
+├── 93-hooks/               — use-local-data.js, use-studio-context.js, use-supabase-table.js (stub), use-is-mobile.js, use-pages.js …
 ├── 96-public/              — favicons, icon.svg
 │
-├── client-portal/          — separate React SPA (client-facing, own deploy)
-├── landing-pages/          — separate React SPA (marketing, own deploy)
+│  PUBLIC SURFACES — same Vercel project, routed by vercel.json
+├── schools/                — student landing pages  → /schools/{slug}/{instrument}
+├── dashboard/              — client portal           → /dashboard
+├── onboard.html            — public self-serve onboarding (renders 02-onboarding OnboardForm)
+├── onboarding/             — scaffold (future onboarding section — empty)
+├── www/                    — scaffold (future marketing site — empty)
 ├── legal/                  — static legal pages
-└── 99-agents/              — Python agent backend (separate deployment, port 8000)
+│
+│  BACKEND & DOCS — not served to the browser
+├── 99-agents/              — Python / Supabase edge-function backend
+├── 94-knowledge/           — reference docs (architecture, data-model, design-system, northstar …)
+├── ZiroWork-Client-Flow    — single source of truth / doctrine (markdown, no extension)
+├── MASTER_PLAN.md          — launch execution plan
+├── .brain/                 — session memory + logs
+│
+├── vercel.json             — rewrites /schools + /dashboard; operator served at /
+├── CLAUDE.md               — this file (Layer 0 router)
+└── CONTEXT.md              — task router (Layer 1)
 ```
 
 ---
@@ -79,6 +92,9 @@ zirowork-command-center-speed-to-lead/
 | `index.html` script load order | New pages must load **before** `90-shell/Router.jsx` |
 | `90-shell/Router.jsx renderMain()` | Duplicate route cases silently overwrite each other |
 | `93-hooks/use-local-data.js` | `window.SEED_DATA` — all page views read from here |
+| `vercel.json` (root) | Wrong/removed rewrite 404s `/schools` or `/dashboard` |
+| `onboard.html` ↔ `02-onboarding/onboard-form.jsx` | Form shared by CRM onboarding view AND public onboard.html — edits hit both |
+| `schools/index.html`, `dashboard/index.html` | Script `src`s are absolute (`/schools/…`, `/dashboard/…`) — keep the prefix or assets 404 |
 
 ---
 
@@ -104,12 +120,18 @@ zirowork-command-center-speed-to-lead/
 |---|---|
 | Task routing | `CONTEXT.md` |
 | Product vision + business model | `94-knowledge/northstar-ideology.md` |
+| Single source of truth (doctrine) | `ZiroWork-Client-Flow` |
 | Design system | `94-knowledge/design-system.md` |
 | Architecture | `94-knowledge/architecture.md` |
 | Data model | `94-knowledge/data-model.md` |
 | Seed data | `93-hooks/use-local-data.js` |
 | Auth bypass | `91-auth/Session.jsx` |
-| SPA routing | `90-shell/Router.jsx` |
+| SPA routing (operator) | `90-shell/Router.jsx` |
 | Sidebar nav | `90-shell/sidebar.jsx` |
+| Student landing pages | `schools/` → /schools/{slug}/{instrument} |
+| Client portal | `dashboard/` → /dashboard |
+| Public onboarding form | `onboard.html` + `02-onboarding/onboard-form.jsx` |
+| Deploy / routing | root `vercel.json` (one Vercel project, root dir `.`) |
 | Agent backend | `99-agents/README.md` |
 | Supabase credentials | `.env` (gitignored) |
+```

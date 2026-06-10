@@ -15,7 +15,7 @@ Your task explicitly names: assets, brand assets, templates, route `assets`, or 
 
 ## Do NOT enter if
 - Task involves design tokens or the app's own visual system → go to `92-design/`
-- Task involves landing page assets → go to `landing-pages/`
+- Task involves landing page assets → go to `schools/`
 - Task involves seed data → go to `93-hooks/use-local-data.js`
 
 ## Load only

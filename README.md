@@ -1,63 +1,40 @@
-# ZiroWork — Music Academy OS
+# ZiroWork Lead-Gen Platform
 
-A full CRM and operations platform for managing music schools. Handles leads, families, students, teachers, invoices, scheduling, and payroll in a single React SPA.
+ZiroWork works leads for music-school clients and hands off enrolled students. This repo is the whole platform — **one repo, one Vercel project**.
 
-**Status:** UI shell complete. Supabase backend not yet connected. All data is mock.
+**Stack:** React 18 + Babel (browser-native JSX via CDN — no bundler, no build step). Supabase (live). Agent/edge-function backend under `99-agents/`.
 
----
+## Surfaces
 
-## Stack
+One Vercel project (Root Directory `.`), routed by root `vercel.json`:
 
-- React 18 + Babel (no bundler — browser-native JSX via CDN)
-- Supabase (planned — not yet wired)
-- No build step. No package.json. No install.
+| URL | Folder | What |
+|---|---|---|
+| `/` | `index.html` + `00-…16-` numbered folders | Operator CRM (internal) |
+| `/schools/{slug}/{instrument}` | `schools/` | Student landing pages |
+| `/dashboard` | `dashboard/` | Client portal |
+| `/onboard.html` | `onboard.html` + `02-onboarding/onboard-form.jsx` | Public self-serve onboarding |
 
----
+## Running locally
 
-## Running Locally
+No build step. Serve the repo root with any static server:
 
-Open `index.html` in a browser. That's it.
-
-For live reload during development, serve the folder with any static server:
 ```
 npx serve .
-# or
-python -m http.server 8080
+# operator CRM:   http://localhost:3000/
+# a school page:  http://localhost:3000/schools/index.html
 ```
 
-Then open `http://localhost:8080/index.html`.
+> The `/schools/{slug}/{instrument}` and `/dashboard` clean URLs are produced by `vercel.json` rewrites in production; a plain static server serves the section `index.html` files directly.
 
----
+## Where to look
 
-## Architecture
+- **`CLAUDE.md`** — start here. The L0 router: repo tree, safety gates, key globals, navigation.
+- **`CONTEXT.md`** — task router (which folder for which task).
+- **`ZiroWork-Client-Flow`** — single source of truth / doctrine.
+- **`94-knowledge/`** — architecture, data model, design system, northstar.
+- **`99-agents/README.md`** — agent / edge-function backend.
 
-The app is a single HTML file (`index.html`) that loads Babel-compiled `.jsx` component files as `<script type="text/babel">` tags. All components share the browser's global scope — a component defined in `roster.jsx` is available as `RosterView` inside `index.html`.
+## Deploy
 
-**Theme:** `theme.js` initializes `window.T` with all color tokens. Components access theme via `const T = window.T || {};`.
-
-**Navigation:** State-driven. `App()` in `index.html` dispatches views via `setView()`. No URL routing.
-
-See `knowledge/architecture.md` for the full file routing map and component patterns.
-
----
-
-## Agent Navigation
-
-- `CLAUDE.md` — start here (ICM L0 router)
-- `knowledge/architecture.md` — component patterns, theme, nav routing
-- `knowledge/api-contract.md` — API endpoint specs for Supabase wiring
-- `knowledge/database-schema.md` — database table schemas
-- `.brain/repo-digest.md` — quick reference + current file map
-- `.brain/session-log.md` — what changed recently, what's next
-
----
-
-## Key Files
-
-| File | Purpose |
-|---|---|
-| `index.html` | App shell + inline components (3,600+ lines) |
-| `theme.js` | Dual theme system, pixel-crawl animation |
-| `sidebar.jsx` | Navigation + command palette |
-| `student-profile.jsx` | Student profile page |
-| `knowledge/handoff.md` | Comprehensive architecture + API handoff document |
+Push to `main` on `github.com/MasterShredder92/zirowork-leadgen` → Vercel auto-deploys (Root Directory `.`).
