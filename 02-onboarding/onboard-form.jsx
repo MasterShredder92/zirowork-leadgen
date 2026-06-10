@@ -564,7 +564,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   const handleSubmit = async () => {
     if (!window.sb) { setSubmitted(true); onSuccess && onSuccess(form); return; }
     setSaving(true); setSaveError(null);
-    const slug = form.studio_name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    const slug = form.studio_name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-').replace(/^-|-$/g, '');
     const { data, error } = await window.sb.from('clients').insert([{
       name: form.studio_name, city: form.city, state: form.state, status: 'onboarding',
       health: null, sms_number: null, lead_form_webhook: null,
