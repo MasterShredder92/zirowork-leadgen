@@ -342,8 +342,9 @@ Deno.serve(async (req) => {
   let url: string;
   try {
     const body = await req.json();
-    url = body.url;
-    if (!url || !url.startsWith('http')) throw new Error('invalid url');
+    url = String(body.url || '').trim();
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;  // accept bare domains ("www.site.com/omaha")
+    if (!new URL(url).hostname.includes('.')) throw new Error('invalid url');
   } catch {
     return new Response(JSON.stringify({ error: 'invalid request — send { url: string }' }), { status: 400, headers: CORS });
   }
