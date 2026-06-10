@@ -13,3 +13,6 @@ verify_jwt = false
 
 [functions.complete-onboarding]
 verify_jwt = false
+
+[functions.scrape-school]
+verify_jwt = false

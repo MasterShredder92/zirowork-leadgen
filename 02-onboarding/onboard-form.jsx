@@ -222,7 +222,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
             </div>
           )}
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-            <button onClick={() => setScrapeReady(false)} style={{ padding: '6px 12px', borderRadius: 6, border: `1px solid ${T.border}`, background: 'var(--bg)', color: T.t2, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Edit</button>
             <button onClick={() => setStep(s => s + 1)} style={{ padding: '6px 14px', borderRadius: 6, border: 'none', background: T.accent, color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Looks good → Step 2</button>
           </div>
         </div>
