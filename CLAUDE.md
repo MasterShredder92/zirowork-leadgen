@@ -162,5 +162,20 @@ zirowork-leadgen/
 | Public onboarding form | `onboard.html` + `02-onboarding/onboard-form.jsx` |
 | Deploy / routing | root `vercel.json` (one Vercel project, root dir `.`) |
 | Agent backend | `99-agents/README.md` |
-| Supabase credentials | `.env` (gitignored) |
+| Supabase credentials + live access | `.env` (gitignored) — see **Live Supabase Access** below |
 ```
+
+---
+
+## Live Supabase Access
+
+**All live credentials live in `.env`** (gitignored — never committed, never deployed; edge functions read their own secrets from the Supabase dashboard). Project ref `txpgyuetfsrzfxxopwzf`. This is the SSOT pointer — agents pull the actual values from `.env`, never from a committed file.
+
+| To do… | Use (from `.env`) | Notes |
+|---|---|---|
+| Read/write table rows | `SUPABASE_URL` + `SUPABASE_ANON_KEY` (or `SUPABASE_SERVICE_ROLE_KEY`) via PostgREST `/rest/v1/` | RLS is open in Phase 2 |
+| Call an edge function / pg_cron | `SUPABASE_SECRET_KEY` (`sb_secret_…`) as `Authorization: Bearer` | ⚠ This project migrated to new keys — the legacy `service_role` JWT returns **401** from functions |
+| Run SQL / DDL (create/alter/drop) | `SUPABASE_MGMT_TOKEN` → `POST https://api.supabase.com/v1/projects/txpgyuetfsrzfxxopwzf/database/query`, body `{"query":"…"}` | PostgREST cannot run DDL; the CLI is also logged in |
+| Deploy an edge function | `supabase functions deploy <name> --project-ref txpgyuetfsrzfxxopwzf` | CLI session already authenticated |
+
+**Never** paste these secrets into committed files — only `.env` holds them.
