@@ -9,6 +9,7 @@
     { key: 'pipeline',  label: 'Pipeline',    icon: '⟶' },
     { key: 'upload',    label: 'Upload',      icon: '↑' },
     { key: 'business',  label: 'My Business', icon: '⊕' },
+    { key: 'billing',   label: 'Billing',     icon: '▭' },
   ];
 
   function ThemeToggle() {
@@ -146,6 +147,7 @@
           {view === 'pipeline' && <window.PortalPipeline tenantId={tenantId} />}
           {view === 'upload'   && <window.PortalUpload   tenantId={tenantId} userId={user.id} />}
           {view === 'business' && <window.PortalMyBusiness tenantId={tenantId} />}
+          {view === 'billing'  && <window.PortalBilling tenantId={tenantId} />}
         </div>
       </div>
     );
