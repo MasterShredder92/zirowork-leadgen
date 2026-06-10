@@ -31,3 +31,6 @@ verify_jwt = false
 
 [functions.intake-form]
 verify_jwt = false
+
+[functions.billing]
+verify_jwt = false
