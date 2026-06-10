@@ -10,9 +10,9 @@
   const dark = {
     isDark: true,
     // Backgrounds — neutral cool grays
-    bg: '#162833', sidebarBg: '#0F1E27', cardBg: '#233D4C', surface: '#233D4C',
-    elevatedBg: '#2B4859', inputBg: 'rgba(255,255,255,0.05)',
-    headerBg: '#1B3340',
+    bg: '#1A1C1F', sidebarBg: '#141619', cardBg: '#26292D', surface: '#26292D',
+    elevatedBg: '#303338', inputBg: 'rgba(255,255,255,0.05)',
+    headerBg: '#1E2024',
     // Text
     t1: '#F5F4F1', t2: '#B0ADA9', t3: '#7A7773', t4: '#565350', t5: '#383532',
     // Borders
@@ -37,18 +37,18 @@
       {bg:'rgba(146,64,14,0.3)',fg:'#FDE68A'},{bg:'rgba(20,83,45,0.3)',fg:'#86EFAC'},
     ],
     // Calendar
-    calBg: '#1B3340', calHeaderBg: '#233D4C',
+    calBg: '#1E2024', calHeaderBg: '#26292D',
     calBorder: 'rgba(255,255,255,0.06)', calHalf: 'rgba(255,255,255,0.025)',
-    calToday: '#233D4C',
+    calToday: '#26292D',
     // Lifecycle canvas
-    lcDotBg: '#162833', lcDotBorder: 'rgba(255,255,255,0.15)',
+    lcDotBg: '#1A1C1F', lcDotBorder: 'rgba(255,255,255,0.15)',
     lcDotFill: 'rgba(255,255,255,0.18)', lcLine: 'rgba(255,255,255,0.08)',
     lcAnim: 'rgba(255,255,255,0.15)', lcGrid: 'rgba(255,255,255,0.06)',
-    lcTriggerBorder: 'rgba(255,255,255,0.14)', lcCardBg: '#233D4C',
+    lcTriggerBorder: 'rgba(255,255,255,0.14)', lcCardBg: '#26292D',
     lcCardBorder: 'rgba(255,255,255,0.08)', lcAddBg: 'rgba(255,255,255,0.04)',
     lcAddBorder: 'rgba(255,255,255,0.12)',
     // Drawer / modal
-    drawerBg: '#1B3340',
+    drawerBg: '#1E2024',
     drawerShadow: '-1px 0 0 rgba(255,255,255,0.06), -20px 0 60px rgba(0,0,0,0.6)',
     scrim: 'rgba(0,0,0,0.45)',
     sysMsg: 'rgba(255,255,255,0.05)',
