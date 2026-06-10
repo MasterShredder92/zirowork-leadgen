@@ -31,6 +31,6 @@ Do NOT load all at once. Load only the one the task requires.
 
 ## Danger Zone
 
-`database-schema.md` and `api-contract.md` describe the **intended** schema and API contracts. Neither has been connected to a live Supabase instance yet. Before treating any entry here as ground truth, verify it against the actual Supabase schema using the MCP Supabase tools or Supabase dashboard.
+`database-schema.md` was **regenerated from the live Supabase schema on 2026-06-09** (26 real tables) — treat it as accurate, but re-verify against live before migrations since it can drift again. `api-contract.md` still describes the **intended** API contract and has NOT been verified against live — confirm endpoints before relying on it.
 
-Do not modify these files to match a diverged live schema without updating `handoff.md` to match.
+When the schema changes, update `database-schema.md` in the same change — a stale schema doc is a defect.
