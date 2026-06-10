@@ -33,6 +33,7 @@ supabase/                — THE LIVE BACKEND (Deno edge functions)
     monthly-report/      — per-tenant monthly report generation
     scrape-school/       — school profile from a pasted URL, 3 layers: Firecrawl fetch (plain-fetch fallback) → JSON-LD + logo/stylesheet color hints → Claude extract (location-aware) → Google Places merge (hours, reviews→testimonials, rating, photos, map link; fills gaps only). Secrets: ANTHROPIC_API_KEY, FIRECRAWL_API_KEY, GOOGLE_PLACES_API_KEY
     complete-onboarding/ — self-serve onboarding: creates the school's portal auth user + client_users link (service role)
+    billing/             — Stripe card-on-file + per-enrollment charges (portal Billing tab; actions: status / setup-intent / confirm-pm / charge-handoff). DORMANT until STRIPE_SECRET_KEY + STRIPE_PUBLISHABLE_KEY secrets are set. charge-handoff is internal-only (x-service-key header) — wire into enrollment-handoff when activating. Untested scaffold.
 database/                — SQL migrations + platform/Adkins seed scripts (run in order)
 knowledge/               — DOCTRINE LAYER (agent methodology + voice — DO NOT alter brand speak)
   system/                — Zach's methodology: playbooks/, sms-scripts/,
