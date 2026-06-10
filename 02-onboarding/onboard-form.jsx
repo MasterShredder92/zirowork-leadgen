@@ -44,6 +44,9 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   const [scrapedMeta, setScrapedMeta] = useState({});
   const [photoUploading, setPhotoUploading] = useState(false);
   const [photoError, setPhotoError] = useState('');
+  const [phase, setPhase] = useState(standalone ? 'welcome' : 'wizard');
+  const FUN_MSGS = ['Reading your website…', 'Finding your programs…', 'Pulling in your photos…', 'Getting a feel for your studio…', 'Almost ready…'];
+  const [loadMsg, setLoadMsg] = useState(FUN_MSGS[0]);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -116,10 +119,24 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         + (updates.teachers?.length ? 1 : 0);
       if (filled > 0) { setScrapeReady(true); setScrapeMsg(''); }
       else setScrapeMsg('Scraped — no new fields found');
+      setScraping(false);
+      return filled > 0;
     } catch {
       setScrapeMsg('Could not scrape site — fill manually');
+      setScraping(false);
+      return false;
     }
-    setScraping(false);
+  };
+
+  // Welcome screen → run the scrape with a fun loading state, then enter the wizard.
+  const startFromWebsite = async () => {
+    if (!form.website || scraping) return;
+    let i = 0;
+    setLoadMsg(FUN_MSGS[0]);
+    const iv = setInterval(() => { i = (i + 1) % FUN_MSGS.length; setLoadMsg(FUN_MSGS[i]); }, 1400);
+    const ok = await scrapeWebsite();
+    clearInterval(iv);
+    if (ok) { setScrapeMsg(''); setStep(1); setPhase('wizard'); }
   };
 
   const blockers = [
@@ -160,6 +177,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
 
   const S1 = () => (
     <div>
+      {!standalone && (
       <div style={{ marginBottom: scrapeReady ? 12 : 20, padding: '12px 14px', background: T.accent + '12', border: `1px solid ${T.accent}40`, borderRadius: 8 }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Start here — auto-fill from website</div>
         <div style={{ display: 'flex', gap: 8 }}>
