@@ -406,7 +406,8 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
               const urls = [];
               for (const file of toUpload) {
                 const ext = file.name.split('.').pop();
-                const path = 'studio-photos/' + (form.studio_name || 'school').toLowerCase().replace(/\s+/g, '-') + '-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7) + '.' + ext;
+                const safeName = (form.studio_name || 'school').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-') || 'school';
+                const path = 'studio-photos/' + safeName + '-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7) + '.' + ext.toLowerCase().replace(/[^a-z0-9]/g, '');
                 const { error: upErr } = await window.sb.storage.from('client-assets').upload(path, file, { upsert: true });
                 if (upErr) { setPhotoError('Upload failed: ' + upErr.message); break; }
                 const { data: urlData } = window.sb.storage.from('client-assets').getPublicUrl(path);
