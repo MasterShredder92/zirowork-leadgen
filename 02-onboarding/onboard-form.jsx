@@ -748,7 +748,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
-        <StepComponent />
+        {StepComponent()}
       </div>
 
       <div style={{ padding: '14px 24px', borderTop: `1px solid ${T.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
