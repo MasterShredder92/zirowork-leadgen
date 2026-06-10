@@ -31,7 +31,7 @@ RULES:
 - pricing_notes: one sentence on lesson pricing/rates, or null.
 - tagline: short marketing motto/tagline explicitly stated by the school, or null.
 - about: 3-5 sentences covering identity, mission, teaching philosophy, founding story, and differentiators. Pull from About/bio sections. Be specific and rich — this trains the AI agent.
-- testimonials: array of real verbatim customer quotes found anywhere on the site (reviews, testimonials sections, Google review snippets, etc.). Include as many as you find. Return [] if none.
+- testimonials: array of real verbatim customer quotes found anywhere on the site (reviews, testimonials sections, Google review snippets, etc.). If the customer's name appears with the quote, append it to the quote as " — Name". Include as many as you find. Return [] if none.
 - director_name: owner, director, or founder's name, or null.
 - platform: website builder or scheduling software they appear to use. Look for footer credits, booking widget branding, or CMS signatures. Examples: "WordPress", "Squarespace", "Wix", "Jackrabbit", "iClassPro", "Music Teacher's Helper", "Studio Helper". Null if undetectable.
 - social_facebook: full Facebook page URL if found, or null.
@@ -423,7 +423,8 @@ Deno.serve(async (req) => {
       extracted.google_review_count = place.userRatingCount ?? null;
       const quotes = reviewQuotes(place);
       if (quotes.length) {
-        extracted.testimonials = [...new Set([...(Array.isArray(extracted.testimonials) ? extracted.testimonials : []), ...quotes])];
+        // attributed Google reviews first — they carry names and land in the form's visible boxes
+        extracted.testimonials = [...new Set([...quotes, ...(Array.isArray(extracted.testimonials) ? extracted.testimonials : [])])];
       }
       extracted.google_photos = await placePhotoUrls(place);
     } else {
