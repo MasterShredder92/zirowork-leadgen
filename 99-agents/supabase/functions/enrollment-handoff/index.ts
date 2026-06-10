@@ -1,21 +1,43 @@
+// enrollment-handoff — the studio notification step of an enrollment.
+// When a student confirms (schools/pages/confirm.jsx), the browser writes the
+// enrollment row itself (anon key, RLS-allowed). This function does the one thing
+// the browser cannot: text the school "new student enrolled" via Twilio, and log
+// the handoff to ziro_events. Public endpoint (verify_jwt=false) — uses the
+// service role internally, like complete-onboarding / scrape-school.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendSMS } from '../_shared/twilio.ts';
 
-const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
-const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+const cors = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
+
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...cors, 'Content-Type': 'application/json' },
+  });
+}
 
 Deno.serve(async (req) => {
-  if (req.headers.get('authorization') !== `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`) {
-    return new Response('Unauthorized', { status: 401 });
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
+  if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
+
+  let body: { enrollment_id?: string; client_id?: string };
+  try {
+    body = await req.json();
+  } catch {
+    return json({ error: 'bad_json' }, 400);
   }
 
-  const { enrollment_id, client_id } = await req.json();
+  const { enrollment_id, client_id } = body;
+  if (!enrollment_id || !client_id) return json({ error: 'missing_fields' }, 400);
 
-  if (!enrollment_id || !client_id) {
-    return new Response('Missing enrollment_id or client_id', { status: 400 });
-  }
-
-  const db = createClient(PLATFORM_URL, PLATFORM_SERVICE_KEY);
+  const db = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
   const { data: enrollment } = await db
     .from('enrollments')
@@ -23,9 +45,7 @@ Deno.serve(async (req) => {
     .eq('id', enrollment_id)
     .single();
 
-  if (!enrollment) {
-    return new Response('Enrollment not found', { status: 404 });
-  }
+  if (!enrollment) return json({ error: 'enrollment_not_found' }, 404);
 
   const { data: client } = await db
     .from('clients')
@@ -33,7 +53,17 @@ Deno.serve(async (req) => {
     .eq('id', client_id)
     .single();
 
+  // Mark the enrollment handed off using the columns that actually exist
+  // (outcome / handed_off_at). Idempotent with the confirm page.
+  await db
+    .from('enrollments')
+    .update({ outcome: 'enrolled', handed_off_at: new Date().toISOString() })
+    .eq('id', enrollment_id);
+
+  // Text the school. This is the whole point of the function. A failure here is
+  // recorded loudly to ziro_events below and returned as a non-200 — never silent.
   let notified = false;
+  let smsError: string | null = null;
 
   if (client?.studio_phone) {
     const message =
@@ -43,40 +73,27 @@ Deno.serve(async (req) => {
       `Rate: $${Math.round((enrollment.weekly_rate_cents || 0) / 100)}/week\n` +
       `Enrolled: ${new Date().toLocaleDateString()}\n` +
       `Ready to start — student will be in touch.`;
-
-    await sendSMS(client.studio_phone, message);
-    notified = true;
+    try {
+      await sendSMS(client.studio_phone, message);
+      notified = true;
+    } catch (e) {
+      smsError = e instanceof Error ? e.message : String(e);
+    }
+  } else {
+    smsError = 'no_studio_phone';
   }
 
-  await db
-    .from('enrollments')
-    .update({ stage: 'enrolled', handoff_sent_at: new Date().toISOString() })
-    .eq('id', enrollment_id)
-    .catch(() => null);
+  await db.from('ziro_events').insert({
+    event_id: crypto.randomUUID(),
+    tenant_id: client_id,
+    event_type: 'enrollment_handoff',
+    agent_assigned: 'ZIRO_ENROLL',
+    input_summary: `${enrollment.student_name} → ${client?.name || client_id} (${enrollment.program})`,
+    output_summary: notified ? 'studio notified by SMS' : `not notified: ${smsError}`,
+    status: notified ? 'complete' : 'failed',
+    error_message: smsError,
+  });
 
-  await db
-    .from('leads')
-    .update({ stage: 'enrolled' })
-    .eq('client_id', client_id)
-    .eq('student_name', enrollment.student_name)
-    .catch(() => null);
-
-  await db
-    .from('ziro_events')
-    .insert({
-      tenant_id: client_id,
-      event_type: 'enrollment_handoff',
-      payload: {
-        enrollment_id,
-        student_name: enrollment.student_name,
-        program: enrollment.program,
-      },
-      created_at: new Date().toISOString(),
-    })
-    .catch(() => null);
-
-  return new Response(
-    JSON.stringify({ success: true, notified }),
-    { status: 200, headers: { 'Content-Type': 'application/json' } },
-  );
+  if (!notified) return json({ success: false, notified, error: smsError }, 502);
+  return json({ success: true, notified });
 });

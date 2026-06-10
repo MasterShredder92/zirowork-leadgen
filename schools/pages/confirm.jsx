@@ -44,7 +44,7 @@ function ConfirmPage({ school, client, slug }) {
       .update({ status: 'confirmed', confirmed_at: now })
       .eq('id', booking.id);
 
-    const { error: eErr } = await window.sb.from('enrollments').insert([{
+    const { data: enrRows, error: eErr } = await window.sb.from('enrollments').insert([{
       booking_id: booking.id,
       lead_id: booking.lead_id,
       client_id: (client && client.id) || null,
@@ -56,7 +56,7 @@ function ConfirmPage({ school, client, slug }) {
       enrolled_at: today,
       weekly_rate_cents: rateCents,
       handed_off_at: now,
-    }]);
+    }]).select();
 
     if (booking.lead_id) {
       await window.sb.from('leads').update({ stage: 'enrolled' }).eq('id', booking.lead_id);
@@ -67,6 +67,25 @@ function ConfirmPage({ school, client, slug }) {
       setStatus('ready');
       return;
     }
+
+    // Notify the school that a student enrolled. The SMS must run server-side
+    // (Twilio secrets), so we hand off to the enrollment-handoff edge function.
+    // The enrollment already succeeded, so a failed text never blocks the parent —
+    // but the function records the outcome to ziro_events so it's never silent.
+    const enrolled = enrRows && enrRows[0];
+    if (enrolled && enrolled.client_id) {
+      try {
+        const resp = await fetch('https://txpgyuetfsrzfxxopwzf.supabase.co/functions/v1/enrollment-handoff', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enrollment_id: enrolled.id, client_id: enrolled.client_id }),
+        });
+        if (!resp.ok) console.error('enrollment-handoff failed:', resp.status, await resp.text());
+      } catch (e) {
+        console.error('enrollment-handoff error:', e);
+      }
+    }
+
     setStatus('done');
   }
 
