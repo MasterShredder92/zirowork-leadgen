@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Music Lessons</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+  #root { min-height: 100vh; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+
+  @media (min-width: 640px) {
+    .nav-phone { display: block !important; }
+  }
+
+  /* Smooth scroll */
+  html { scroll-behavior: smooth; }
+
+  /* Selection */
+  ::selection { background: rgba(0,0,0,0.08); }
+</style>
+
+<!-- Widgets (no external deps) -->
+<script type="text/babel" src="/schools/widgets/piano-widget.jsx"></script>
+<script type="text/babel" src="/schools/widgets/guitar-widget.jsx"></script>
+<script type="text/babel" src="/schools/widgets/vocals-widget.jsx"></script>
+<script type="text/babel" src="/schools/widgets/drums-widget.jsx"></script>
+
+<!-- Pages (depend on widgets + LandingLayout) -->
+<script type="text/babel" src="/schools/pages/not-found.jsx"></script>
+<script type="text/babel" src="/schools/pages/piano.jsx"></script>
+<script type="text/babel" src="/schools/pages/guitar.jsx"></script>
+<script type="text/babel" src="/schools/pages/vocals.jsx"></script>
+<script type="text/babel" src="/schools/pages/drums.jsx"></script>
+<script type="text/babel" src="/schools/pages/signup.jsx"></script>
+<script type="text/babel" src="/schools/pages/thank-you.jsx"></script>
+<script type="text/babel" src="/schools/pages/confirm.jsx"></script>
+
+<!-- App: defines LandingLayout, fetches data, mounts root (load last) -->
+<script type="text/babel" src="/schools/app.jsx"></script>
+
+</head>
+<body>
+<div id="root"></div>
+</body>
+</html>

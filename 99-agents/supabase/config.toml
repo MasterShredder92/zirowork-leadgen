@@ -1,0 +1,12 @@
+[api]
+enabled = true
+port = 54321
+
+[db]
+port = 54322
+
+[functions.on-new-lead]
+verify_jwt = false
+
+[functions.process-pending]
+verify_jwt = false

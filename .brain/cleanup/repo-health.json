@@ -1,0 +1,40 @@
+{
+  "_readme": {
+    "purpose": "Controls thresholds for the Tier 1 auto health check (cleanup.sh). Update lastCleanup after every manual deep clean. Update trackedFiles when adding new knowledge/ or .brain/ docs.",
+    "whenToUse": "Only touch this file during Tier 3 manual cleanup. Follow .brain/how-to/repo-cleanup/CONTEXT.md — it tells you exactly what to do. The auto script (.brain/cleanup/cleanup.sh) reads staleDaysThreshold and maxFileSizeKB automatically via jq. After cleanup: set lastCleanup to today, update trackedFiles if files changed, then re-run the script to verify 0 warnings.",
+    "fields": {
+      "lastCleanup": "ISO date of last manual deep cleanup (Tier 3). Update this after running how-to/repo-cleanup/.",
+      "staleDaysThreshold": "Files not modified in this many days are flagged as orphan candidates.",
+      "maxFileSizeKB": "Warn if any file in these paths exceeds the KB limit.",
+      "trackedFiles": "Files that should always exist and stay current. Cleanup script warns if missing or oversize.",
+      "archiveThreshold": "When to trim session-log.md and move old files to .brain/archive/."
+    }
+  },
+
+  "lastCleanup": "2026-06-05",
+
+  "staleDaysThreshold": 30,
+
+  "maxFileSizeKB": {
+    "94-knowledge/*": 50,
+    ".brain/*": 20,
+    "*.md": 30
+  },
+
+  "trackedFiles": {
+    "94-knowledge/design-system.md":       { "purpose": "design rules — load before any new view",         "updateFrequency": "rarely" },
+    "94-knowledge/architecture.md":        { "purpose": "code rules, theme tokens, component patterns",     "updateFrequency": "when structure changes" },
+    "94-knowledge/api-contract.md":        { "purpose": "API endpoint specs",                               "updateFrequency": "when API changes" },
+    "94-knowledge/database-schema.md":     { "purpose": "Supabase table schemas + FK relationships",        "updateFrequency": "when schema changes" },
+    "94-knowledge/canonical-crm-schema.md":{ "purpose": "full SQL schema reference",                        "updateFrequency": "when schema changes" },
+    ".brain/CLAUDE.md":                 { "purpose": "brain folder router + load table",                  "updateFrequency": "when brain structure changes" },
+    ".brain/current-state.md":          { "purpose": "session state — where we left off",                "updateFrequency": "every session" },
+    ".brain/whats-left.md":             { "purpose": "everything still to build or wire",                 "updateFrequency": "weekly" },
+    ".brain/session-log.md":            { "purpose": "full session history archive",                      "updateFrequency": "every session" }
+  },
+
+  "archiveThreshold": {
+    "sessionLogEntries": 10,
+    "oldSessionDays": 30
+  }
+}

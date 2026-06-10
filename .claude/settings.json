@@ -1,0 +1,88 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(git log *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(curl *)",
+      "Bash(codegraph *)",
+      "Bash(rg *)",
+      "Bash(sed *)",
+      "Bash(wc *)",
+      "Read(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)"
+    ]
+  },
+  "enabledMcpjsonServers": ["codegraph"],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/queue-dirty.py",
+            "statusMessage": "Queuing context update...",
+            "timeout": 5,
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/queue-dirty.py",
+            "statusMessage": "Queuing context update...",
+            "timeout": 5,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /c/Users/admin/.claude/projects/zirowork-reimagines-5.28.2026/.brain/cleanup/cleanup.sh",
+            "statusMessage": "Checking repo health...",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/sweep-contexts.py",
+            "statusMessage": "Sweeping CONTEXT.md files...",
+            "timeout": 60,
+            "async": false
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'if git status --porcelain | grep -q .; then git add -A && git commit -m \"chore: auto-save $(date +%Y-%m-%d)\" && git push origin main; fi'",
+            "statusMessage": "Auto-saving uncommitted changes...",
+            "timeout": 30,
+            "async": false
+          }
+        ]
+      }
+    ]
+  }
+}

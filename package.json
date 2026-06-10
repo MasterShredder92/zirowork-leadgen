@@ -1,0 +1,22 @@
+{
+  "name": "zirowork-tests",
+  "version": "1.0.0",
+  "description": "Testing infrastructure for ZiroWork Supabase hooks",
+  "type": "module",
+  "scripts": {
+    "test": "vitest --config 93-hooks/__tests__/vitest.config.js",
+    "test:ui": "vitest --ui --config 93-hooks/__tests__/vitest.config.js",
+    "test:watch": "vitest --watch --config 93-hooks/__tests__/vitest.config.js",
+    "test:coverage": "vitest --coverage --config 93-hooks/__tests__/vitest.config.js"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@vitest/ui": "^1.2.0",
+    "jsdom": "^23.0.1",
+    "vitest": "^1.2.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.107.0"
+  }
+}

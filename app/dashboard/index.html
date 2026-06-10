@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ZiroWork — Client Portal</title>
+<link rel="icon" href="/dashboard/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+  window.sb = supabase.createClient(
+    'https://txpgyuetfsrzfxxopwzf.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cGd5dWV0ZnNyemZ4eG9wd3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDk5MzQsImV4cCI6MjA5NDc4NTkzNH0.LaSe5Gfho9WIqKQOyBECKHx4CbtIO95RexqoAQMkIvQ'
+  );
+</script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  /* Force light theme always */
+  :root {
+    --bg:       #FAFAF8;
+    --surface:  #FFFFFF;
+    --sidebar:  #F2F1EE;
+    --border:   rgba(0,0,0,0.07);
+    --bmed:     rgba(0,0,0,0.11);
+    --hover:    rgba(0,0,0,0.04);
+    --t1:       #1C1C1A;
+    --t2:       #4A4A48;
+    --t3:       #717170;
+    --t4:       #8C8C8A;
+    --accent:   #C84520;
+    --accent-bg: rgba(200,69,32,0.08);
+  }
+
+  html, body {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    background: var(--bg);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: var(--t1);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #root { width: 100%; height: 100%; display: flex; }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 2px; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>
+
+</head>
+<body>
+<div id="root"></div>
+
+<!-- views load first, app mounts last -->
+<script type="text/babel" src="/dashboard/views/login.jsx"></script>
+<script type="text/babel" src="/dashboard/views/overview.jsx"></script>
+<script type="text/babel" src="/dashboard/views/pipeline.jsx"></script>
+<script type="text/babel" src="/dashboard/views/upload.jsx"></script>
+<script type="text/babel" src="/dashboard/views/my-business.jsx"></script>
+<script type="text/babel" src="/dashboard/app.jsx"></script>
+
+</body>
+</html>

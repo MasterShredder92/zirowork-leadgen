@@ -1,0 +1,30 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+
+# Node (if ever added)
+node_modules/
+
+# Environment
+.env
+.env.*
+
+# Claude Code internals
+.claude/
+
+# Temp
+*.log
+.codegraph/
+caveman/
+
+# Session state (not repo code)
+.brain/
+.brain/archive/
+.brain/cleanup-report.txt
+
+# Local config overrides
+*.local.json
+.vercel

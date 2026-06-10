@@ -1,0 +1,17 @@
+{
+    "files.autoSave": "afterDelay",
+    "files.exclude": {
+        "package-lock.json": true,
+        "vercel.json": true,
+        "README.md": true,
+        ".vercelignore": true,
+        ".mcp.json": true,
+        ".gitignore": true,
+        ".env.local": true,
+        "node_modules": true,
+        ".git": true,
+        ".codegraph": true,
+        ".claude": true,
+        "supabase": true
+    }
+}
