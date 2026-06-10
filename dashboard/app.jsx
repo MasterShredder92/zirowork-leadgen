@@ -153,6 +153,11 @@
       setTenantId(tid);
     }
 
+    // Design preview bypass: /dashboard/?preview renders the portal with sample data, no login.
+    if (new URLSearchParams(window.location.search).has('preview')) {
+      return <Portal user={{ id: 'preview' }} tenantId="preview" />;
+    }
+
     if (checking) return (
       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ color: 'var(--t3)', fontSize: 13 }}>Loading…</div>

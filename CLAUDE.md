@@ -45,6 +45,20 @@ Each of these docs carries a `> Keep this in sync:` header. **A stale doc is a d
 
 ---
 
+## Branding Gate (never ship a page without it)
+
+Every HTML entry point — operator, `schools`, `dashboard`, `onboard.html`, and **any new page/surface** — MUST include the ZiroWork favicon set + brand assets. Not optional. A page without ZiroWork branding is **NOT done**.
+
+```html
+<link rel="icon" href="/96-public/favicon.ico?v=3" sizes="any">
+<link rel="icon" href="/96-public/icon.svg?v=3" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/96-public/apple-touch-icon.png?v=3">
+```
+
+Brand assets live in `96-public/`. (Operator `index.html` is served at `/` so it uses relative `96-public/...`; every other surface uses absolute `/96-public/...`.)
+
+---
+
 ## Repo Tree
 
 One repo, one Vercel project (root dir `.`). Operator folder number = CRM sidebar nav position.
