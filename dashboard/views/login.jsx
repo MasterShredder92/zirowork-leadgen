@@ -41,16 +41,16 @@ window.PortalLogin = function PortalLogin({ onLogin }) {
     },
     card: {
       width: 380, background: 'var(--surface)',
-      border: '1px solid var(--border)', borderRadius: 12,
-      padding: '36px 32px',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.06)',
+      border: '1px solid var(--border)', borderRadius: 14,
+      padding: '40px 36px',
+      boxShadow: '0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.07)',
     },
     logo: {
-      display: 'flex', alignItems: 'center', gap: 8, marginBottom: 28,
+      display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32,
     },
     logoMark: {
       width: 28, height: 28, background: 'var(--accent)',
-      borderRadius: 6, flexShrink: 0,
+      borderRadius: 7, flexShrink: 0,
     },
     logoText: {
       fontSize: 15, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.3px',
@@ -60,22 +60,22 @@ window.PortalLogin = function PortalLogin({ onLogin }) {
     },
     heading: {
       fontSize: 20, fontWeight: 700, color: 'var(--t1)',
-      letterSpacing: '-0.4px', marginBottom: 4,
+      letterSpacing: '-0.4px', marginBottom: 5,
     },
-    sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 24 },
-    label: { display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--t2)', marginBottom: 5 },
+    sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 28 },
+    label: { display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--t3)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 7 },
     input: {
-      width: '100%', padding: '9px 12px',
+      width: '100%', padding: '10px 12px',
       background: 'var(--bg)', border: '1px solid var(--bmed)',
-      borderRadius: 7, fontSize: 14, color: 'var(--t1)',
+      borderRadius: 8, fontSize: 14, color: 'var(--t1)',
       outline: 'none', fontFamily: 'inherit',
     },
-    fieldWrap: { marginBottom: 14 },
+    fieldWrap: { marginBottom: 16 },
     btn: {
-      width: '100%', padding: '10px 0',
+      width: '100%', padding: '11px 0',
       background: 'var(--accent)', color: '#fff',
-      border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600,
-      cursor: 'pointer', marginTop: 8, fontFamily: 'inherit',
+      border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600,
+      cursor: 'pointer', marginTop: 10, fontFamily: 'inherit',
       opacity: loading ? 0.6 : 1,
     },
     err: {

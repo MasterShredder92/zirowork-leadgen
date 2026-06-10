@@ -101,39 +101,48 @@ window.PortalOverview = function PortalOverview({ tenantId }) {
 
   if (!metrics) return (
     <div style={s.page}>
-      <div style={s.heading}>Overview</div>
-      <div style={{ color: 'var(--t3)', fontSize: 13, marginTop: 8 }}>No data yet. Leads will appear here once your campaign is live.</div>
+      <div style={s.band}>
+        <div style={s.heading}>Overview</div>
+        <div style={s.sub}>Your pipeline at a glance</div>
+      </div>
+      <div style={s.content}>
+        <div style={{ color: 'var(--t3)', fontSize: 13 }}>No data yet. Leads will appear here once your campaign is live.</div>
+      </div>
     </div>
   );
 
   return (
     <div style={s.page}>
-      <div style={s.heading}>Overview</div>
-      <div style={s.sub}>Your pipeline at a glance</div>
-
-      <div style={s.grid}>
-        <div style={s.card}>
-          <div style={s.label}>Total Leads</div>
-          <div style={s.value}>{metrics.totalLeads}</div>
-          <div style={s.badge}>{metrics.last30Days} last 30 days</div>
-        </div>
-        <div style={s.card}>
-          <div style={s.label}>Replied</div>
-          <div style={s.value}>{metrics.replied}</div>
-          <div style={s.badge}>{metrics.replyRate}% response rate</div>
-        </div>
-        <div style={s.card}>
-          <div style={s.label}>Messages Sent</div>
-          <div style={s.value}>{metrics.messagesSent}</div>
-          <div style={s.badge}>by ZiroWork</div>
-        </div>
+      <div style={s.band}>
+        <div style={s.heading}>Overview</div>
+        <div style={s.sub}>Your pipeline at a glance</div>
       </div>
 
-      <div style={s.activityCard}>
-        <div style={s.dot} />
-        <div style={s.activityText}>
-          System active —{' '}
-          <span style={s.activityBold}>last outreach {metrics.lastActivity}</span>
+      <div style={s.content}>
+        <div style={s.grid}>
+          <div style={s.stat}>
+            <div style={s.label}>Total Leads</div>
+            <div style={s.value}>{metrics.totalLeads}</div>
+            <div style={s.meta}>{metrics.last30Days} last 30 days</div>
+          </div>
+          <div style={s.stat}>
+            <div style={s.label}>Replied</div>
+            <div style={s.value}>{metrics.replied}</div>
+            <div style={s.meta}>{metrics.replyRate}% response rate</div>
+          </div>
+          <div style={s.stat}>
+            <div style={s.label}>Messages Sent</div>
+            <div style={s.value}>{metrics.messagesSent}</div>
+            <div style={s.meta}>by ZiroWork</div>
+          </div>
+        </div>
+
+        <div style={s.activityRow}>
+          <div style={s.dot} />
+          <div style={s.activityText}>
+            System active —{' '}
+            <span style={s.activityBold}>last outreach {metrics.lastActivity}</span>
+          </div>
         </div>
       </div>
     </div>

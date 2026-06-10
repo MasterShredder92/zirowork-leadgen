@@ -69,39 +69,34 @@ window.PortalPipeline = function PortalPipeline({ tenantId }) {
   };
 
   const s = {
-    page: { padding: '32px 36px', overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
+    page: { padding: '24px 28px', overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
     heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
     sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 32 },
     flow: { display: 'flex', alignItems: 'flex-start', gap: 0 },
-    stageWrap: { display: 'flex', alignItems: 'center' },
-    stageCard: (key) => ({
-      background: COLORS[key].bg,
-      border: `1px solid ${COLORS[key].border}`,
-      borderRadius: 10, padding: '20px 22px', width: 180,
-      position: 'relative',
-    }),
-    stageTop: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 },
+    stageWrap: { display: 'flex', alignItems: 'flex-start' },
+    stageCol: { width: 160, padding: '0 4px' },
+    stageTop: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 },
     dot: (key) => ({
       width: 9, height: 9, borderRadius: '50%',
       background: COLORS[key].dot, flexShrink: 0,
     }),
-    stageLabel: (key) => ({
-      fontSize: 12, fontWeight: 700, color: COLORS[key].text,
-      letterSpacing: '0.03em',
-    }),
+    stageLabel: {
+      fontSize: 11, fontWeight: 700, color: 'var(--t3)',
+      letterSpacing: '0.06em', textTransform: 'uppercase',
+    },
     count: (key) => ({
-      fontSize: 32, fontWeight: 700, color: COLORS[key].text,
-      letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 6,
+      fontSize: 30, fontWeight: 700, color: COLORS[key].text,
+      letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 8,
+      fontVariantNumeric: 'tabular-nums',
     }),
     desc: { fontSize: 11, color: 'var(--t3)', lineHeight: 1.4 },
     arrow: {
-      width: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
-      color: 'var(--t4)', flexShrink: 0, paddingTop: 20,
+      width: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      color: 'var(--t4)', flexShrink: 0, paddingTop: 24,
     },
     note: {
-      marginTop: 28, padding: '14px 18px',
-      background: 'var(--surface)', border: '1px solid var(--border)',
-      borderRadius: 8, fontSize: 12, color: 'var(--t3)', lineHeight: 1.6,
+      marginTop: 28, paddingTop: 18, borderTop: '1px solid var(--border)',
+      fontSize: 12, color: 'var(--t3)', lineHeight: 1.6,
     },
   };
 
@@ -126,10 +121,10 @@ window.PortalPipeline = function PortalPipeline({ tenantId }) {
       <div style={s.flow}>
         {stages.map((stage, i) => (
           <div key={stage.key} style={s.stageWrap}>
-            <div style={s.stageCard(stage.key)}>
+            <div style={s.stageCol}>
               <div style={s.stageTop}>
                 <div style={s.dot(stage.key)} />
-                <div style={s.stageLabel(stage.key)}>{stage.label}</div>
+                <div style={s.stageLabel}>{stage.label}</div>
               </div>
               <div style={s.count(stage.key)}>{stage.count}</div>
               <div style={s.desc}>{stage.desc}</div>
@@ -149,11 +144,11 @@ window.PortalPipeline = function PortalPipeline({ tenantId }) {
         <div style={{ marginTop: 28 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--t1)', marginBottom: 4 }}>Enrolled — ready for you</div>
           <div style={{ fontSize: 12, color: 'var(--t3)', marginBottom: 14 }}>These students confirmed their spot. They're yours now.</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div>
             {enrolled.map((e, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '14px 18px', background: COLORS.enrolled.bg, border: `1px solid ${COLORS.enrolled.border}`, borderRadius: 10 }}>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '14px 0', borderBottom: '1px solid var(--border)' }}>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: COLORS.enrolled.text }}>{e.student_name || 'Student'}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{e.student_name || 'Student'}</div>
                   {e.parent_name && <div style={{ fontSize: 12, color: 'var(--t3)' }}>Parent: {e.parent_name}</div>}
                 </div>
                 <div style={{ textAlign: 'right' }}>

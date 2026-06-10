@@ -7,6 +7,32 @@ window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
 
   React.useEffect(() => {
     async function load() {
+      if (tenantId === 'preview') {
+        const sample = {
+          name: 'Maple Street Music',
+          plan_tier: 'studio',
+          status: 'active',
+          config: {
+            director_name: 'Dana Reyes',
+            director_title: 'Owner',
+            location_name: 'Main Studio',
+            monthly_price_standard: 160,
+            monthly_price_military: 140,
+          },
+        };
+        setData(sample);
+        setForm({
+          name: sample.name,
+          director_name: sample.config.director_name,
+          location_name: sample.config.location_name,
+          director_title: sample.config.director_title,
+          monthly_price_standard: sample.config.monthly_price_standard,
+          monthly_price_military: sample.config.monthly_price_military,
+        });
+        setLoading(false);
+        return;
+      }
+
       const { data: tenant } = await window.sb
         .from('agent_tenants')
         .select('name, plan_tier, status, config')
@@ -60,16 +86,12 @@ window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
     page: { padding: '32px 36px', overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
     heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
     sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 28 },
-    section: {
-      background: 'var(--surface)', border: '1px solid var(--border)',
-      borderRadius: 10, marginBottom: 16, overflow: 'hidden',
-    },
+    section: { marginBottom: 32 },
     sectionHead: {
-      padding: '14px 20px', borderBottom: '1px solid var(--border)',
-      fontSize: 12, fontWeight: 700, color: 'var(--t2)',
-      letterSpacing: '0.06em', textTransform: 'uppercase',
+      paddingBottom: 10, marginBottom: 18, borderBottom: '1px solid var(--border)',
+      fontSize: 11, fontWeight: 700, color: 'var(--t3)',
+      letterSpacing: '0.08em', textTransform: 'uppercase',
     },
-    sectionBody: { padding: '18px 20px' },
     grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 },
     fieldWrap: { marginBottom: 14 },
     label: { display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--t2)', marginBottom: 5 },
@@ -134,57 +156,53 @@ window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
 
       <div style={s.section}>
         <div style={s.sectionHead}>School Info</div>
-        <div style={s.sectionBody}>
-          <div style={s.grid2}>
-            <div style={s.fieldWrap}>
-              <label style={s.label}>School Name</label>
-              <input style={s.input} value={form.name} onChange={e => set('name', e.target.value)} />
-            </div>
-            <div style={s.fieldWrap}>
-              <label style={s.label}>Location Name</label>
-              <input style={s.input} value={form.location_name} onChange={e => set('location_name', e.target.value)} placeholder="e.g. Main Campus" />
-            </div>
-            <div style={s.fieldWrap}>
-              <label style={s.label}>Director / Owner Name</label>
-              <input style={s.input} value={form.director_name} onChange={e => set('director_name', e.target.value)} />
-            </div>
-            <div style={s.fieldWrap}>
-              <label style={s.label}>Title</label>
-              <input style={s.input} value={form.director_title} onChange={e => set('director_title', e.target.value)} placeholder="e.g. Owner" />
-            </div>
+        <div style={s.grid2}>
+          <div style={s.fieldWrap}>
+            <label style={s.label}>School Name</label>
+            <input style={s.input} value={form.name} onChange={e => set('name', e.target.value)} />
+          </div>
+          <div style={s.fieldWrap}>
+            <label style={s.label}>Location Name</label>
+            <input style={s.input} value={form.location_name} onChange={e => set('location_name', e.target.value)} placeholder="e.g. Main Campus" />
+          </div>
+          <div style={s.fieldWrap}>
+            <label style={s.label}>Director / Owner Name</label>
+            <input style={s.input} value={form.director_name} onChange={e => set('director_name', e.target.value)} />
+          </div>
+          <div style={s.fieldWrap}>
+            <label style={s.label}>Title</label>
+            <input style={s.input} value={form.director_title} onChange={e => set('director_title', e.target.value)} placeholder="e.g. Owner" />
           </div>
         </div>
       </div>
 
       <div style={s.section}>
         <div style={s.sectionHead}>Pricing</div>
-        <div style={s.sectionBody}>
-          <div style={s.grid2}>
-            <div style={s.fieldWrap}>
-              <label style={s.label}>Standard / month</label>
-              <div style={s.priceWrap}>
-                <span style={s.priceSymbol}>$</span>
-                <input
-                  style={s.priceInput}
-                  type="number"
-                  value={form.monthly_price_standard}
-                  onChange={e => set('monthly_price_standard', e.target.value)}
-                  placeholder="160"
-                />
-              </div>
+        <div style={s.grid2}>
+          <div style={s.fieldWrap}>
+            <label style={s.label}>Standard / month</label>
+            <div style={s.priceWrap}>
+              <span style={s.priceSymbol}>$</span>
+              <input
+                style={s.priceInput}
+                type="number"
+                value={form.monthly_price_standard}
+                onChange={e => set('monthly_price_standard', e.target.value)}
+                placeholder="160"
+              />
             </div>
-            <div style={s.fieldWrap}>
-              <label style={s.label}>Military discount / month</label>
-              <div style={s.priceWrap}>
-                <span style={s.priceSymbol}>$</span>
-                <input
-                  style={s.priceInput}
-                  type="number"
-                  value={form.monthly_price_military}
-                  onChange={e => set('monthly_price_military', e.target.value)}
-                  placeholder="140"
-                />
-              </div>
+          </div>
+          <div style={s.fieldWrap}>
+            <label style={s.label}>Military discount / month</label>
+            <div style={s.priceWrap}>
+              <span style={s.priceSymbol}>$</span>
+              <input
+                style={s.priceInput}
+                type="number"
+                value={form.monthly_price_military}
+                onChange={e => set('monthly_price_military', e.target.value)}
+                placeholder="140"
+              />
             </div>
           </div>
         </div>

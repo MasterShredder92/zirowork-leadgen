@@ -10,6 +10,15 @@ window.PortalUpload = function PortalUpload({ tenantId, userId }) {
   React.useEffect(() => { loadUploads(); }, []);
 
   async function loadUploads() {
+    if (tenantId === 'preview') {
+      const day = 86400000;
+      setUploads([
+        { id: 'p1', file_name: 'fall-2026-pricing.pdf', description: 'Updated tuition', created_at: new Date(Date.now() - 2 * day).toISOString() },
+        { id: 'p2', file_name: 'teacher-schedule.xlsx', description: 'New Tue/Thu slots', created_at: new Date(Date.now() - 5 * day).toISOString() },
+        { id: 'p3', file_name: 'logo.png', description: 'For the landing page', created_at: new Date(Date.now() - 9 * day).toISOString() },
+      ]);
+      return;
+    }
     const { data } = await window.sb
       .from('client_uploads')
       .select('id, file_name, description, created_at')
@@ -30,6 +39,15 @@ window.PortalUpload = function PortalUpload({ tenantId, userId }) {
     if (!file || !desc.trim()) return;
     setUploading(true);
     setSuccess(false);
+
+    if (tenantId === 'preview') {
+      setFile(null);
+      setDesc('');
+      setUploading(false);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 4000);
+      return;
+    }
 
     const path = `${tenantId}/${Date.now()}-${file.name}`;
 
@@ -68,12 +86,15 @@ window.PortalUpload = function PortalUpload({ tenantId, userId }) {
     heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
     sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 28 },
     dropzone: {
-      border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--bmed)'}`,
+      border: `1px dashed ${dragging ? 'var(--accent)' : 'var(--bmed)'}`,
       borderRadius: 10, padding: '36px 24px', textAlign: 'center',
-      background: dragging ? 'var(--accent-bg)' : 'var(--surface)',
+      background: dragging ? 'var(--accent-bg)' : 'var(--bg)',
       cursor: 'pointer', transition: 'all 0.15s ease', marginBottom: 16,
     },
-    dropIcon: { fontSize: 28, marginBottom: 10, lineHeight: 1 },
+    dropIcon: {
+      marginBottom: 10, lineHeight: 0, display: 'flex', justifyContent: 'center',
+      color: dragging ? 'var(--accent)' : 'var(--t4)',
+    },
     dropText: { fontSize: 13, color: 'var(--t2)', marginBottom: 4 },
     dropSub: { fontSize: 11, color: 'var(--t4)' },
     fileName: {
@@ -127,7 +148,11 @@ window.PortalUpload = function PortalUpload({ tenantId, userId }) {
         onDrop={onDrop}
         onClick={() => inputRef.current.click()}
       >
-        <div style={s.dropIcon}>📎</div>
+        <div style={s.dropIcon}>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M20 11.5l-8 8a5 5 0 01-7-7l8.5-8.5a3.5 3.5 0 015 5L9.5 18a1.75 1.75 0 01-2.5-2.5l7.5-7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
         <div style={s.dropText}>Drop a file here or click to browse</div>
         <div style={s.dropSub}>PDF, image, spreadsheet, doc — anything works</div>
         {file && <div style={s.fileName}>✓ {file.name}</div>}
