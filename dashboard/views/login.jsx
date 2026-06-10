@@ -88,7 +88,7 @@ window.PortalLogin = function PortalLogin({ onLogin }) {
     <div style={s.wrap}>
       <div style={s.card}>
         <div style={s.logo}>
-          <div style={s.logoMark} />
+          <div className="zw-logo" style={{ width: 30, height: 30 }} />
           <div>
             <div style={s.logoText}>ZiroWork</div>
             <div style={s.logoSub}>Client Portal</div>

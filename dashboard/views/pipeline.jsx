@@ -85,7 +85,7 @@ window.PortalPipeline = function PortalPipeline({ tenantId }) {
       letterSpacing: '0.06em', textTransform: 'uppercase',
     },
     count: (key) => ({
-      fontSize: 30, fontWeight: 700, color: COLORS[key].text,
+      fontSize: 30, fontWeight: 700, color: 'var(--t1)',
       letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 8,
       fontVariantNumeric: 'tabular-nums',
     }),
