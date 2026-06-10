@@ -451,14 +451,14 @@ CLI is already linked. Should take ~30 seconds each.
 |---|---|---|
 | score-and-send.ts lead sync fix | A1 | ✅ |
 | supabase/config.toml | A2 | ✅ |
-| Run migration 016 (agent_tenants.config) | A3 | ⬜ MANUAL — SQL editor |
+| Run migration 016 (agent_tenants.config) | A3 | ✅ |
 | seed_adkins_tenant.sql created | A4 | ✅ |
 | seed_adkins_client.sql created | A5 | ✅ |
 | ADKINS_ONBOARDING.md created | A6 | ✅ |
 | setup_pgcron.sql created | A7 | ✅ |
 | Edge Function secrets set (Dashboard) | B1 | ⬜ MANUAL — needs creds |
-| Functions deployed | B2 | ⬜ CLI — run when ready |
-| pg_cron enabled + scheduled | B3 | ⬜ MANUAL — Dashboard + SQL editor |
+| Functions deployed | B2 | ✅ all 9 live |
+| pg_cron enabled + scheduled | B3 | ✅ 3 jobs active |
 | Adkins tenant + client seeds run | B4 | ⬜ MANUAL — SQL editor |
 | End-to-end smoke test | B5 | ⬜ MANUAL — curl POST to Edge Function |
 | SMS_ENABLED=true | Final | ⬜ MANUAL — Dashboard secrets |

@@ -25,6 +25,8 @@ On Mac/Linux: `openssl rand -hex 16`
 
 ## Step 1 — Run Migration 016 (Platform)
 
+**ALREADY DONE — `agent_tenants.config` column exists live.**
+
 In Platform Supabase SQL editor (txpgyuetfsrzfxxopwzf):
 
 ```sql
@@ -57,6 +59,8 @@ Repeat the same secrets for **process-pending**.
 
 ## Step 3 — Deploy Edge Functions
 
+**ALREADY DONE — all 9 edge functions are deployed and live.** Re-run only if you change function code.
+
 From `99-agents/` in the terminal (CLI already linked):
 
 ```bash
@@ -67,6 +71,8 @@ supabase functions deploy process-pending --project-ref txpgyuetfsrzfxxopwzf
 ---
 
 ## Step 4 — Enable pg_cron + Schedule
+
+**ALREADY DONE — pg_cron is enabled and 3 jobs are active (process-pending every 5 min, send-followup hourly, monthly-report 1st of month 6am).**
 
 1. Go to: https://supabase.com/dashboard/project/txpgyuetfsrzfxxopwzf/integrations
 2. Find **pg_cron** → Enable

@@ -41,9 +41,9 @@ Webhook URL: `https://txpgyuetfsrzfxxopwzf.supabase.co/functions/v1/on-new-lead/
 
 ---
 
-### 0-A: Create missing platform CRM tables `[BOTH]`
+### 0-A: Create missing platform CRM tables `[BOTH]` — ✅ DONE (all CRM + agent tables live)
 **WHAT:** Agent writes `99-agents/database/017_platform_crm_tables.sql`. Zach runs it in platform SQL editor.
-**WHY:** 11 CRM tables don't exist (`clients`, `leads`, `campaigns`, `conversations`, `bookings`, `enrollments`, `pages`, `automation_rules`, `assets`, `integrations`, `client_reports`). Every Edge Function insert fails without them.
+**WHY:** The CRM tables (`clients`, `leads`, `campaigns`, `conversations`, `bookings`, `enrollments`, `pages`, `automation_rules`, `assets`, `integrations`, `client_reports`) must exist or every Edge Function insert fails. (All now live.)
 **WHERE:** Supabase dashboard → project `txpgyuetfsrzfxxopwzf` → SQL Editor → New query → paste → Run.
 **VERIFY:** All 11 tables appear in Table Editor with no errors.
 
@@ -134,18 +134,18 @@ if (req.headers.get('authorization') !== `Bearer ${Deno.env.get('SUPABASE_SERVIC
 
 ---
 
-### 1-B: Deploy both Edge Functions `[BOTH]`
+### 1-B: Deploy both Edge Functions `[BOTH]` — ✅ DONE (all 9 functions deployed and live)
 **WHAT:** From `99-agents/` directory, run:
 ```bash
 supabase functions deploy on-new-lead --project-ref txpgyuetfsrzfxxopwzf
 supabase functions deploy process-pending --project-ref txpgyuetfsrzfxxopwzf
 ```
-**WHY:** Functions are written but not deployed. Nothing runs until they're deployed.
+**WHY:** Functions must be deployed before anything runs. (Now deployed — re-run only after code changes.)
 **WHO:** Agent can run this command. Supabase CLI is already linked.
 
 ---
 
-### 1-C: Enable pg_cron and schedule the processor `[ZACH]`
+### 1-C: Enable pg_cron and schedule the processor `[ZACH]` — ✅ DONE (process-pending-leads active, every 5 min)
 **WHAT:**
 1. Supabase dashboard → Integrations → enable `pg_cron` extension
 2. SQL editor → paste and run `99-agents/database/setup_pgcron.sql`
@@ -210,7 +210,7 @@ curl -X POST \
 
 ---
 
-### 2-C: Deploy `on-reply` function `[BOTH]`
+### 2-C: Deploy `on-reply` function `[BOTH]` — ✅ DONE (deployed and live)
 ```bash
 supabase functions deploy on-reply --project-ref txpgyuetfsrzfxxopwzf
 ```
@@ -316,7 +316,7 @@ supabase functions deploy on-reply --project-ref txpgyuetfsrzfxxopwzf
 
 ---
 
-### 4-C: Deploy intake-form function `[BOTH]`
+### 4-C: Deploy intake-form function `[BOTH]` — ✅ DONE (deployed and live)
 ```bash
 supabase functions deploy intake-form --project-ref txpgyuetfsrzfxxopwzf
 ```
@@ -359,7 +359,7 @@ ALTER TABLE leads ADD COLUMN IF NOT EXISTS opted_out boolean NOT NULL DEFAULT fa
 
 ---
 
-### 5-C: Add pg_cron entry for follow-ups `[ZACH]`
+### 5-C: Add pg_cron entry for follow-ups `[ZACH]` — ✅ DONE (send-followup-sequences active, hourly)
 **WHAT:** Run in SQL editor:
 ```sql
 SELECT cron.schedule(
@@ -377,7 +377,7 @@ SELECT cron.schedule(
 
 ---
 
-### 5-D: Deploy `send-followup` function `[BOTH]`
+### 5-D: Deploy `send-followup` function `[BOTH]` — ✅ DONE (deployed and live)
 ```bash
 supabase functions deploy send-followup --project-ref txpgyuetfsrzfxxopwzf
 ```
@@ -495,7 +495,7 @@ supabase functions deploy send-followup --project-ref txpgyuetfsrzfxxopwzf
 
 ---
 
-### 8-A: Build monthly client report generator `[AGENT]`
+### 8-A: Build monthly client report generator `[AGENT]` — ✅ DONE (monthly-report deployed; generate-monthly-reports cron active, 1st of month 6am)
 **WHAT:** Create `99-agents/supabase/functions/monthly-report/index.ts`
 - Triggered by pg_cron on the 1st of each month
 - For each active tenant: query leads, enrollments, message counts, response time
