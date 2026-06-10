@@ -7,7 +7,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
 
   const BLANK = {
     studio_name: '', city: '', state: '', area_code: '',
-    studio_phone: '', website: '', email: '', address: '', hours: '',
+    studio_phone: '', website: '', email: '', password: '', address: '', hours: '',
     instruments: [], program_prices: {},
     logo_url: '', tagline: '', offer: '', testimonial: '',
     testimonials: ['', '', ''], photos: [],
@@ -125,6 +125,8 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   const blockers = [
     !form.studio_name             && 'Studio name is required',
     form.instruments.length === 0 && 'At least one instrument required — needed to build landing pages',
+    standalone && !form.email                                  && 'Email is required to create your portal login',
+    standalone && (!form.password || form.password.length < 8) && 'A portal password (8+ characters) is required',
   ].filter(Boolean);
 
   const willCreate = [
@@ -216,7 +218,10 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         <div>{fLabel('Area Code', true)}<input style={inp} value={form.area_code} onChange={e => set('area_code', e.target.value)} placeholder="531" maxLength={3} /></div>
         <div>{fLabel('Studio Phone')}<input style={inp} value={form.studio_phone} onChange={e => set('studio_phone', e.target.value)} placeholder="(531) 270-0848" /></div>
       </div>
-      <div style={{ marginBottom: 14 }}>{fLabel('Booking / Contact Email')}<input style={inp} value={form.email} onChange={e => set('email', e.target.value)} placeholder="hello@yourstudio.com" /></div>
+      <div style={{ marginBottom: 14 }}>{fLabel('Booking / Contact Email', standalone)}<input style={inp} value={form.email} onChange={e => set('email', e.target.value)} placeholder="hello@yourstudio.com" /></div>
+      {standalone && (
+        <div style={{ marginBottom: 14 }}>{fLabel('Portal Password', true)}<input style={inp} type="password" value={form.password} onChange={e => set('password', e.target.value)} placeholder="Create a password (8+ characters)" /><div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>You'll log into your ZiroWork portal with your email + this password.</div></div>
+      )}
       <div style={{ marginBottom: 14 }}>{fLabel('Street Address')}<input style={inp} value={form.address} onChange={e => set('address', e.target.value)} placeholder="1234 Music Ave, Suite 200" /></div>
       <div style={{ marginBottom: 14 }}>{fLabel('Hours')}<input style={inp} value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="Mon–Fri 2–8pm · Sat 9am–2pm" /></div>
     </div>
@@ -564,15 +569,32 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         setSaveError('Profile saved, but landing-page setup failed — contact support before launch.');
         return;
       }
+
+      // Self-serve only: create the portal login + tenant link, then sign them in
+      // for instant access. (CRM/manual path skips this — Zach has no school password.)
+      if (standalone && form.email && form.password) {
+        try {
+          const resp = await fetch('https://txpgyuetfsrzfxxopwzf.supabase.co/functions/v1/complete-onboarding', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: form.email, password: form.password, tenant_id: clientId, full_name: form.studio_name }),
+          });
+          const out = await resp.json().catch(() => ({}));
+          if (!resp.ok || out.error) {
+            setSaveError(out.error === 'email_exists'
+              ? 'That email already has an account — log in at /dashboard with it.'
+              : 'Profile created, but portal login setup failed — contact support.');
+            return;
+          }
+          await window.sb.auth.signInWithPassword({ email: form.email, password: form.password });
+        } catch {
+          setSaveError('Profile created, but portal login setup failed — contact support.');
+          return;
+        }
+      }
     }
     onSuccess && onSuccess(form);
     setSubmitted(true);
-  };
-
-  const resetForm = () => {
-    setStep(1); setSubmitted(false); setSaving(false); setSaveError(null);
-    setForm(BLANK); setScraping(false); setScrapeMsg(''); setScrapeReady(false); setScrapedMeta({});
-    setPhotoUploading(false); setPhotoError('');
   };
 
   if (submitted) {
@@ -586,16 +608,16 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         </div>
         <div style={{ fontSize: 13, color: T.t3, marginBottom: 20, lineHeight: 1.6 }}>
           {standalone
-            ? "ZiroWork will reach out within 24 hours to confirm your setup and get your campaigns live."
+            ? "Your account is live and your landing pages are ready. Head to your portal to see everything."
             : "Profile created. Complete the checklist below to get this client fully live."}
         </div>
         {blockers.length > 0 && !standalone && (
           <div style={{ fontSize: 12, color: '#F59E0B', marginBottom: 16 }}>{blockers.length} item{blockers.length > 1 ? 's' : ''} still needed before launch.</div>
         )}
         <button
-          onClick={standalone ? resetForm : () => onCancel && onCancel()}
+          onClick={standalone ? () => { window.location.href = '/dashboard'; } : () => onCancel && onCancel()}
           style={{ padding: '10px 28px', background: T.accent, color: '#fff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {standalone ? 'Onboard Another School' : 'Done'}
+          {standalone ? 'Go to my portal →' : 'Done'}
         </button>
       </div>
     );
@@ -645,7 +667,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
             {saveError && <div style={{ fontSize: 11, color: '#EF4444' }}>{saveError}</div>}
             <button
-              disabled={saving}
+              disabled={saving || (standalone && blockers.length > 0)}
               onClick={handleSubmit}
               style={{ padding: '8px 22px', background: '#22C55E', color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {saving ? 'Saving...' : 'Create Profile'}
