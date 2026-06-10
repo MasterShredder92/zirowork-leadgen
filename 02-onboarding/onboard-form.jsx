@@ -13,7 +13,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     testimonials: ['', '', ''], photos: [],
     teachers: [{ name: '', bio: '' }],
     slots: [],
-    ai_qualify: true, ai_enroll: true,
     fb_pixel_id: '', gtm_id: '', twilio_phone_number: '',
     about: '',
   };
@@ -27,10 +26,9 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     { n: 1, label: 'Studio Info',     required: true  },
     { n: 2, label: 'Programs',        required: true  },
     { n: 3, label: 'Brand Assets',    required: false },
-    { n: 4, label: 'AI Behavior',     required: false },
-    { n: 5, label: 'Tracking Pixels', required: false },
-    { n: 6, label: 'Twilio',          required: false },
-    { n: 7, label: 'Review & Launch', required: false },
+    { n: 4, label: 'Tracking Pixels', required: false },
+    { n: 5, label: 'Twilio',          required: false },
+    { n: 6, label: 'Review & Launch', required: false },
   ];
 
   const [step, setStep] = useState(1);
@@ -418,26 +416,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     </div>
   );
 
-  const S6 = () => (
-    <div>
-      {fLabel('AI Behavior')}
-      {[
-        { key: 'ai_qualify', label: 'AI qualifies leads automatically', sub: 'Asks about program, schedule, and student age' },
-        { key: 'ai_enroll',  label: 'AI sends enrollment pitch and payment link', sub: 'Moves qualified leads straight to booking' },
-      ].map(opt => (
-        <div key={opt.key} onClick={() => set(opt.key, !form[opt.key])} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '12px 0', cursor: 'pointer', borderBottom: `1px solid ${T.border}` }}>
-          <div style={{ width: 18, height: 18, marginTop: 1, borderRadius: 4, background: form[opt.key] ? T.accent : 'transparent', border: `2px solid ${form[opt.key] ? T.accent : T.border}`, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {form[opt.key] && L.Check && <L.Check size={10} color="#fff" strokeWidth={3} />}
-          </div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: T.t1 }}>{opt.label}</div>
-            <div style={{ fontSize: 11, color: T.t4, marginTop: 2 }}>{opt.sub}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
   const S7 = () => (
     <div>
       <div style={{ fontSize: 12, color: T.t3, marginBottom: 16, lineHeight: 1.6 }}>Optional — add these after your pages are live. Find them in your ad platform dashboards.</div>
@@ -495,7 +473,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     </div>
   );
 
-  const STEP_CONTENT = [S1, S2, S3, S6, S7, S8, S9];
+  const STEP_CONTENT = [S1, S2, S3, S7, S8, S9];
   const currentStep = STEPS[step - 1];
   const StepComponent = STEP_CONTENT[step - 1];
 
