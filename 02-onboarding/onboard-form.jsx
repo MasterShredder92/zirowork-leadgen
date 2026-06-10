@@ -196,6 +196,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         </div>
         {scrapeMsg && <div style={{ fontSize: 11, marginTop: 5, color: scrapeMsg.startsWith('Could') ? '#ef4444' : T.accent }}>{scrapeMsg}</div>}
       </div>
+      )}
 
       {scrapeReady && (
         <div style={{ marginBottom: 16, padding: '12px 14px', background: T.accent + '18', border: `1px solid ${T.accent}50`, borderRadius: 8 }}>
@@ -614,6 +615,44 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     onSuccess && onSuccess(form);
     setSubmitted(true);
   };
+
+  if (standalone && phase === 'welcome' && !submitted) {
+    return (
+      <div style={{ background: T.cardBg || 'var(--surface)', borderRadius: 16, width: '100%', maxWidth: 480, border: `1px solid ${T.border}`, padding: '48px 40px', textAlign: 'center' }}>
+        <div style={{ width: 44, height: 44, borderRadius: 12, background: T.accent, margin: '0 auto 22px' }} />
+        <div style={{ fontSize: 24, fontWeight: 800, color: T.t1, letterSpacing: '-0.02em', marginBottom: 10 }}>Let's get your school set up</div>
+        <div style={{ fontSize: 14, color: T.t3, lineHeight: 1.6, maxWidth: 360, margin: '0 auto 26px' }}>Paste your website and we'll pull in your programs, photos, and details automatically — so you barely have to type.</div>
+        <input
+          style={{ ...inp, padding: '13px 16px', fontSize: 15, textAlign: 'center', marginBottom: 12 }}
+          value={form.website}
+          onChange={e => { set('website', e.target.value); setScrapeMsg(''); }}
+          onKeyDown={e => { if (e.key === 'Enter') startFromWebsite(); }}
+          placeholder="yourstudio.com"
+          autoFocus
+        />
+        {scraping ? (
+          <div style={{ padding: '10px 0 4px' }}>
+            <div style={{ width: 28, height: 28, border: `3px solid ${T.border}`, borderTopColor: T.accent, borderRadius: '50%', margin: '0 auto 12px', animation: 'zwspin 0.8s linear infinite' }} />
+            <div style={{ fontSize: 13, color: T.accent, fontWeight: 600 }}>{loadMsg}</div>
+            <style>{`@keyframes zwspin { to { transform: rotate(360deg); } }`}</style>
+          </div>
+        ) : (
+          <button
+            onClick={startFromWebsite}
+            disabled={!form.website}
+            style={{ width: '100%', padding: '13px', background: T.accent, color: '#fff', border: 'none', borderRadius: 9, fontSize: 15, fontWeight: 700, cursor: form.website ? 'pointer' : 'not-allowed', opacity: form.website ? 1 : 0.45, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            Get started →
+          </button>
+        )}
+        {scrapeMsg && !scraping && <div style={{ fontSize: 12, marginTop: 10, color: scrapeMsg.startsWith('Could') ? '#EF4444' : T.t3 }}>{scrapeMsg}</div>}
+        <div style={{ marginTop: 18 }}>
+          <button onClick={() => { setScrapeMsg(''); setStep(1); setPhase('wizard'); }} style={{ background: 'none', border: 'none', color: T.t4, fontSize: 12, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", textDecoration: 'underline' }}>
+            I don't have a website — set up manually
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (submitted) {
     return (
