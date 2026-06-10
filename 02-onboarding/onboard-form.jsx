@@ -102,6 +102,8 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         if (mapped.length) updates.teachers = mapped;
       }
 
+      if (data.google_photos?.length && (form.photos || []).length === 0) updates.photos = data.google_photos.slice(0, 4);
+
       setForm(f => ({ ...f, ...updates }));
       setScrapedMeta({
         platform:         data.platform         || null,
@@ -113,6 +115,8 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         primary_color:    data.primary_color    || null,
         accent_color:     data.accent_color     || null,
         map_url:          data.map_url          || null,
+        google_rating:        data.google_rating       || null,
+        google_review_count:  data.google_review_count || null,
         scraped_at:       new Date().toISOString(),
       });
 
@@ -586,6 +590,8 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           primary_color:    scrapedMeta.primary_color    || null,
           accent_color:     scrapedMeta.accent_color     || null,
           map_url:          scrapedMeta.map_url          || null,
+          google_rating:        scrapedMeta.google_rating       || null,
+          google_review_count:  scrapedMeta.google_review_count || null,
           scraped_at:       scrapedMeta.scraped_at       || null,
         },
       }], { onConflict: 'tenant_id' });

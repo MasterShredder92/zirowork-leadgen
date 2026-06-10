@@ -1,5 +1,6 @@
 const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY')!;
 const FIRECRAWL_API_KEY = Deno.env.get('FIRECRAWL_API_KEY') ?? '';
+const GOOGLE_PLACES_API_KEY = Deno.env.get('GOOGLE_PLACES_API_KEY') ?? '';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -253,6 +254,72 @@ function parseClaudeJson(raw: string): Record<string, unknown> {
   throw new Error('unbalanced JSON in model output');
 }
 
+// Google Places (New) — the business's Google Business Profile: authoritative per-location
+// hours, reviews, rating, photos, verified address/phone. Only accept a result we can match
+// to this business (city in address, or website domain equals the scraped site).
+// deno-lint-ignore no-explicit-any
+async function placesLookup(name: unknown, city: unknown, state: unknown, siteHost: string): Promise<any | null> {
+  if (!GOOGLE_PLACES_API_KEY || typeof name !== 'string' || !name) return null;
+  try {
+    const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': GOOGLE_PLACES_API_KEY,
+        'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.websiteUri,places.regularOpeningHours.weekdayDescriptions,places.rating,places.userRatingCount,places.googleMapsUri,places.reviews,places.photos',
+      },
+      body: JSON.stringify({ textQuery: [name, city, state].filter(Boolean).join(' '), maxResultCount: 3 }),
+    });
+    if (!res.ok) return null;
+    const { places } = await res.json();
+    if (!places?.length) return null;
+    const cityStr = typeof city === 'string' ? city.toLowerCase() : '';
+    // deno-lint-ignore no-explicit-any
+    return places.find((p: any) => cityStr && (p.formattedAddress || '').toLowerCase().includes(cityStr))
+      // deno-lint-ignore no-explicit-any
+      || places.find((p: any) => {
+        try { return siteHost && new URL(p.websiteUri).hostname.replace(/^www\./, '') === siteHost; } catch { return false; }
+      })
+      || null;
+  } catch { return null; }
+}
+
+function condenseHours(weekdayDescriptions: string[]): string {
+  return weekdayDescriptions
+    .map(d => d.replace(/^(\w{3})\w+/, '$1').replace(/:00/g, '').replace(/[   ]/g, ' '))
+    .join(' · ');
+}
+
+// deno-lint-ignore no-explicit-any
+function reviewQuotes(place: any): string[] {
+  return (place.reviews || [])
+    // deno-lint-ignore no-explicit-any
+    .filter((r: any) => (r.rating ?? 0) >= 4 && r.text?.text && r.text.text.length >= 40 && r.text.text.length <= 320)
+    .slice(0, 3)
+    // deno-lint-ignore no-explicit-any
+    .map((r: any) => {
+      const text = r.text.text.replace(/\s+/g, ' ').trim();
+      const author = r.authorAttribution?.displayName;
+      return author ? `${text} — ${author}` : text;
+    });
+}
+
+// skipHttpRedirect returns the bare googleusercontent URL — safe to store publicly (no API key in it).
+// deno-lint-ignore no-explicit-any
+async function placePhotoUrls(place: any, max = 4): Promise<string[]> {
+  // deno-lint-ignore no-explicit-any
+  const names: string[] = (place.photos || []).slice(0, max).map((p: any) => p.name).filter(Boolean);
+  const urls = await Promise.all(names.map(async (n) => {
+    try {
+      const r = await fetch(`https://places.googleapis.com/v1/${n}/media?maxWidthPx=1200&skipHttpRedirect=true&key=${GOOGLE_PLACES_API_KEY}`);
+      if (!r.ok) return '';
+      const j = await r.json();
+      return j.photoUri || '';
+    } catch { return ''; }
+  }));
+  return urls.filter(Boolean);
+}
+
 // Anti-hallucination gate: extracted phone/address must literally appear in the grounding text.
 function groundIdentityFields(extracted: Record<string, unknown>, groundText: string) {
   const digits = (s: string) => s.replace(/\D/g, '');
@@ -340,7 +407,30 @@ Deno.serve(async (req) => {
     groundIdentityFields(extracted, isLocationPage ? mainPage.text : mainPage.text + '\n' + aboutPage.text);
 
     extracted.logo_url = logoUrl || null;
-    extracted.map_url = findMapUrl(mainPage.html) || null;
+
+    // Layer 3: Google Business Profile — fills what the website can't, never overwrites site data
+    let siteHost = '';
+    try { siteHost = new URL(url).hostname.replace(/^www\./, ''); } catch { /* keep '' */ }
+    const place = await placesLookup(extracted.school_name, extracted.city, extracted.state, siteHost);
+    if (place) {
+      if (!extracted.phone && place.nationalPhoneNumber) extracted.phone = place.nationalPhoneNumber;
+      if (!extracted.address && place.formattedAddress) extracted.address = place.formattedAddress;
+      if (!extracted.hours && place.regularOpeningHours?.weekdayDescriptions?.length) {
+        extracted.hours = condenseHours(place.regularOpeningHours.weekdayDescriptions);
+      }
+      extracted.google_rating = place.rating ?? null;
+      extracted.google_review_count = place.userRatingCount ?? null;
+      const quotes = reviewQuotes(place);
+      if (quotes.length) {
+        extracted.testimonials = [...new Set([...(Array.isArray(extracted.testimonials) ? extracted.testimonials : []), ...quotes])];
+      }
+      extracted.google_photos = await placePhotoUrls(place);
+    } else {
+      extracted.google_rating = null;
+      extracted.google_review_count = null;
+      extracted.google_photos = [];
+    }
+    extracted.map_url = (place?.googleMapsUri) || findMapUrl(mainPage.html) || null;
 
     return new Response(JSON.stringify(extracted), { status: 200, headers: CORS });
   } catch (err) {

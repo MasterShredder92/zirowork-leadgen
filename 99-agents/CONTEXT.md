@@ -31,7 +31,7 @@ supabase/                — THE LIVE BACKEND (Deno edge functions)
     send-followup/       — drip follow-ups to 'new' leads (capped, opt-out aware)
     enrollment-handoff/  — enrollment confirmation + client-portal handoff
     monthly-report/      — per-tenant monthly report generation
-    scrape-school/       — school profile from a pasted URL (Firecrawl fetch w/ plain-fetch fallback → JSON-LD + logo/stylesheet color hints → Claude extract, location-aware; needs FIRECRAWL_API_KEY secret)
+    scrape-school/       — school profile from a pasted URL, 3 layers: Firecrawl fetch (plain-fetch fallback) → JSON-LD + logo/stylesheet color hints → Claude extract (location-aware) → Google Places merge (hours, reviews→testimonials, rating, photos, map link; fills gaps only). Secrets: ANTHROPIC_API_KEY, FIRECRAWL_API_KEY, GOOGLE_PLACES_API_KEY
     complete-onboarding/ — self-serve onboarding: creates the school's portal auth user + client_users link (service role)
 database/                — SQL migrations + platform/Adkins seed scripts (run in order)
 knowledge/               — DOCTRINE LAYER (agent methodology + voice — DO NOT alter brand speak)
