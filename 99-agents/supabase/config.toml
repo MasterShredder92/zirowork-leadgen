@@ -10,3 +10,6 @@ verify_jwt = false
 
 [functions.process-pending]
 verify_jwt = false
+
+[functions.complete-onboarding]
+verify_jwt = false
