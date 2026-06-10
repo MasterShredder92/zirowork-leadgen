@@ -3,7 +3,7 @@
 React 18 + Babel SPAs. No bundler. Supabase live.
 **ONE repo** (`github.com/MasterShredder92/zirowork-leadgen`), **ONE Vercel project** (Root Directory `.`).
 Surfaces, all in this repo, routed by root `vercel.json`:
-operator CRM (`/`) · student landing pages (`/schools`) · client portal (`/dashboard`) · public self-serve onboarding (`onboard.html`).
+operator CRM (`/`) · student landing pages (`/schools`) · client portal (`/dashboard`) · public self-serve onboarding (`/onboarding` → `onboard.html`).
 Doctrine / SSOT: `ZiroWork-Client-Flow` + `94-knowledge/northstar-ideology.md`.
 
 ---
@@ -80,7 +80,7 @@ zirowork-leadgen/
 │  PUBLIC SURFACES — same Vercel project, routed by vercel.json
 ├── schools/                — student landing pages  → /schools/{slug}/{instrument}
 ├── dashboard/              — client portal           → /dashboard
-├── onboard.html            — public self-serve onboarding (renders 02-onboarding OnboardForm)
+├── onboard.html            — public self-serve onboarding, served at /onboarding (renders 02-onboarding OnboardForm)
 ├── onboarding/             — scaffold (future onboarding section — empty)
 ├── www/                    — scaffold (future marketing site — empty)
 ├── legal/                  — static legal pages

@@ -13,7 +13,7 @@ One Vercel project (Root Directory `.`), routed by root `vercel.json`:
 | `/` | `index.html` + `00-…16-` numbered folders | Operator CRM (internal) |
 | `/schools/{slug}/{instrument}` | `schools/` | Student landing pages |
 | `/dashboard` | `dashboard/` | Client portal |
-| `/onboard.html` | `onboard.html` + `02-onboarding/onboard-form.jsx` | Public self-serve onboarding |
+| `/onboarding` | `onboard.html` + `02-onboarding/onboard-form.jsx` | Public self-serve onboarding |
 
 ## Running locally
 
