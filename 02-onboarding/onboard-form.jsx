@@ -112,6 +112,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         testimonials:     data.testimonials?.length ? data.testimonials : null,
         primary_color:    data.primary_color    || null,
         accent_color:     data.accent_color     || null,
+        map_url:          data.map_url          || null,
         scraped_at:       new Date().toISOString(),
       });
 
@@ -584,6 +585,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           photos:           (form.photos || []).length > 0 ? form.photos : null,
           primary_color:    scrapedMeta.primary_color    || null,
           accent_color:     scrapedMeta.accent_color     || null,
+          map_url:          scrapedMeta.map_url          || null,
           scraped_at:       scrapedMeta.scraped_at       || null,
         },
       }], { onConflict: 'tenant_id' });

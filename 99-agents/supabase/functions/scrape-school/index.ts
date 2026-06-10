@@ -191,6 +191,21 @@ function findLogoUrl(html: string, pageUrl: string, jsonLd: string): string {
   return '';
 }
 
+// Google Maps on the page → a clean directions link. Share/place links win; embed iframes yield exact coordinates.
+function findMapUrl(html: string): string {
+  const link = html.match(/https?:\/\/(?:maps\.app\.goo\.gl|goo\.gl\/maps|www\.google\.com\/maps\/(?:place|dir|search))[^"'\s<)\\]*/i);
+  if (link) return link[0].replace(/&amp;/g, '&');
+  const embed = html.match(/<iframe[^>]+src=["']([^"']*google\.com\/maps\/embed[^"']*)["']/i);
+  if (embed) {
+    const src = embed[1].replace(/&amp;/g, '&');
+    const lng = src.match(/!2d(-?\d+\.\d+)/)?.[1];
+    const lat = src.match(/!3d(-?\d+\.\d+)/)?.[1];
+    if (lat && lng) return `https://www.google.com/maps?q=${lat},${lng}`;
+    return src;
+  }
+  return '';
+}
+
 // SVG logo → exact fill colors. Raster logo → base64 for Claude vision.
 async function fetchLogo(logoUrl: string): Promise<{ svgHints?: string; image?: { mediaType: string; data: string } }> {
   try {
@@ -325,6 +340,7 @@ Deno.serve(async (req) => {
     groundIdentityFields(extracted, isLocationPage ? mainPage.text : mainPage.text + '\n' + aboutPage.text);
 
     extracted.logo_url = logoUrl || null;
+    extracted.map_url = findMapUrl(mainPage.html) || null;
 
     return new Response(JSON.stringify(extracted), { status: 200, headers: CORS });
   } catch (err) {
