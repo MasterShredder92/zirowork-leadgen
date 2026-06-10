@@ -19,3 +19,15 @@ verify_jwt = false
 
 [functions.enrollment-handoff]
 verify_jwt = false
+
+[functions.on-reply]
+verify_jwt = false
+
+[functions.send-followup]
+verify_jwt = false
+
+[functions.monthly-report]
+verify_jwt = false
+
+[functions.intake-form]
+verify_jwt = false

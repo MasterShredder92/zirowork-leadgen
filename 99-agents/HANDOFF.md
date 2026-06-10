@@ -1,7 +1,7 @@
 # ZiroWork Agent Backend — Handoff Log
 
 **Date:** 2026-06-06
-**Status:** Edge Functions written. Deploy + Adkins onboarding = last mile.
+**Status:** Edge Functions DEPLOYED (all 9 live). Tables live. pg_cron active. Adkins onboarding = last mile.
 **Completion:** ~78% to first real customer (Adkins Music Lessons)
 
 ---
@@ -41,7 +41,7 @@ Group B requires Zach to provide credentials — prompt him for the 4 values lis
 clients, campaigns, leads, conversations, escalations, bookings, enrollments,
 pages, automation_rules, assets, integrations, client_reports, operator_tasks
 
-### Edge Functions (WRITTEN, NOT YET DEPLOYED)
+### Edge Functions (DEPLOYED — all 9 live; this snapshot lists the original core)
 
 ```
 99-agents/supabase/functions/
