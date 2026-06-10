@@ -155,7 +155,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   const willCreate = [
     form.area_code
       ? `Phone number (${form.area_code} area code) auto-provisioned via Twilio`
-      : 'Phone number — add area code to auto-provision',
+      : 'Phone number — add your studio phone to auto-provision',
     form.instruments.length > 0 && `${form.instruments.length} landing page template${form.instruments.length > 1 ? 's' : ''} (${form.instruments.join(', ')})`,
     form.instruments.length > 0 && `${form.instruments.length} campaign shell${form.instruments.length > 1 ? 's' : ''} ready to activate`,
     'Default automation rules (qualify + enroll)',
@@ -238,9 +238,15 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         <div>{fLabel('City', true)}<input style={inp} value={form.city} onChange={e => set('city', e.target.value)} placeholder="Austin" /></div>
         <div>{fLabel('State', true)}<input style={inp} value={form.state} onChange={e => set('state', e.target.value)} placeholder="TX" maxLength={2} /></div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: 10, marginBottom: 14 }}>
-        <div>{fLabel('Area Code', true)}<input style={inp} value={form.area_code} onChange={e => set('area_code', e.target.value)} placeholder="531" maxLength={3} /></div>
-        <div>{fLabel('Studio Phone')}<input style={inp} value={form.studio_phone} onChange={e => set('studio_phone', e.target.value)} placeholder="(531) 270-0848" /></div>
+      <div style={{ marginBottom: 14 }}>
+        {fLabel('Studio Phone', true)}
+        <input style={inp} value={form.studio_phone} onChange={e => {
+          const v = e.target.value;
+          let d = v.replace(/\D/g, '');
+          if (d.length === 11 && d[0] === '1') d = d.slice(1);
+          setForm(f => ({ ...f, studio_phone: v, area_code: d.length >= 10 ? d.slice(0, 3) : '' }));
+        }} placeholder="(531) 270-0848" />
+        <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>Your ZiroWork number is auto-provisioned in this area code.</div>
       </div>
       <div style={{ marginBottom: 14 }}>{fLabel('Booking / Contact Email', standalone)}<input style={inp} value={form.email} onChange={e => set('email', e.target.value)} placeholder="hello@yourstudio.com" /></div>
       {standalone && (
