@@ -1,6 +1,6 @@
 // Router.jsx — ZiroWork Operator CRM
 // Routes remapped to operator pages. Old school-CRM routes removed.
-const TWEAK_DEFAULTS = { accent: '#E04D27', density: 'comfortable' };
+const TWEAK_DEFAULTS = { accent: '#FD802E', density: 'comfortable' };
 
 function App() {
   const { useState, useEffect, useRef } = React;
@@ -131,7 +131,7 @@ function App() {
         window.TweakSection && React.createElement(window.TweakSection, { label: 'Accent' }),
         window.TweakColor && React.createElement(window.TweakColor, {
           label: 'Color', value: tweaks.accent,
-          options: ['#E04D27', '#4338CA', '#065F46', '#1D4ED8', '#92400E'],
+          options: ['#FD802E', '#4338CA', '#065F46', '#1D4ED8', '#92400E'],
           onChange: v => setTweak('accent', v),
         })
       )}

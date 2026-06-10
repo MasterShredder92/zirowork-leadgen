@@ -43,25 +43,30 @@ function InsightsView({ onNavigate }) {
   ];
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px' }}>
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Insights</div>
-        <div style={{ fontSize: 13, color: T.t3 }}>What patterns, playbooks, and benchmarks help ZiroWork operate better?</div>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Insights</h1>
+        <div style={{ fontSize: 12, color: T.t3 }}>What patterns, playbooks, and benchmarks help ZiroWork operate better?</div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
+      {/* Scrollable content — flat rows, hairline separated, accent strip indicator */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 24px' }}>
         {PLAYBOOKS.map(p => (
-          <div key={p.id} style={{ padding: '20px 22px', background: T.cardBg || 'var(--surface)', border: `1px solid ${T.border}`, borderLeft: `3px solid ${p.accent}`, borderRadius: 10, cursor: 'pointer' }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = p.accent}
-            onMouseLeave={e => e.currentTarget.style.borderColor = T.border}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-              <span style={{ fontSize: 9, fontWeight: 700, color: p.accent, background: p.accent + '18', padding: '2px 7px', borderRadius: 20, letterSpacing: '0.06em' }}>{p.category}</span>
-              <span style={{ fontSize: 10, color: T.t4 }}>{p.tag}</span>
-            </div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: T.t1, marginBottom: 8, lineHeight: 1.4 }}>{p.title}</div>
-            <div style={{ fontSize: 12, color: T.t3, lineHeight: 1.6, marginBottom: 12 }}>{p.excerpt}</div>
-            <div style={{ fontSize: 11, color: T.t4, display: 'flex', alignItems: 'center', gap: 4 }}>
-              {L.Clock && <L.Clock size={11} />} {p.read} read
+          <div key={p.id} style={{ display: 'flex', gap: 16, padding: '20px 8px', margin: '0 -8px', borderBottom: `1px solid ${T.border}`, cursor: 'pointer', borderRadius: 6, transition: 'background 0.15s' }}
+            onMouseEnter={e => e.currentTarget.style.background = T.hover}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+            <div style={{ width: 3, alignSelf: 'stretch', background: p.accent, borderRadius: 2, flexShrink: 0 }} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                <span style={{ fontSize: 9, fontWeight: 700, color: p.accent, background: p.accent + '18', padding: '2px 7px', borderRadius: 20, letterSpacing: '0.06em' }}>{p.category}</span>
+                <span style={{ fontSize: 10, color: T.t4 }}>{p.tag}</span>
+              </div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: T.t1, marginBottom: 8, lineHeight: 1.4 }}>{p.title}</div>
+              <div style={{ fontSize: 12, color: T.t3, lineHeight: 1.6, marginBottom: 12, maxWidth: 720 }}>{p.excerpt}</div>
+              <div style={{ fontSize: 11, color: T.t4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                {L.Clock && <L.Clock size={11} strokeWidth={1.75} />} {p.read} read
+              </div>
             </div>
           </div>
         ))}

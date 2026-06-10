@@ -69,46 +69,53 @@ function CommandCenterView({ onNavigate }) {
   const healthColor = h => ({ healthy: '#22C55E', at_risk: '#EF4444', stuck: '#F59E0B' }[h] || '#6B7280');
   const healthLabel = h => ({ healthy: 'Healthy', at_risk: 'At Risk', stuck: 'Stuck', onboarding: 'Onboarding' }[h] || '—');
 
-  const cell = { padding: '10px 14px', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}` };
+  // Flush-left table cells: first column hugs the left margin, last hugs the right (Attio table look)
+  const cell = { padding: '11px 16px', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
+  const firstCell = { ...cell, paddingLeft: 0 };
+  const lastCell = { ...cell, paddingRight: 0 };
+  const numCell = { ...cell, textAlign: 'right', color: T.t2, fontVariantNumeric: 'tabular-nums' };
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px' }}>
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Command Center</div>
-        <div style={{ fontSize: 13, color: T.t3 }}>What needs attention right now across all clients?</div>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Command Center</h1>
+        <div style={{ fontSize: 12, color: T.t3 }}>What needs attention right now across all clients</div>
       </div>
 
-      {/* KPI Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 32 }}>
+      {/* KPI band — inline stats, no boxes */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 28, padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         {kpis.map(k => {
           const Icon = L[k.icon];
           return (
             <div key={k.label} onClick={() => onNavigate && onNavigate(k.nav)}
-              style={{ padding: '18px 20px', background: T.cardBg || 'var(--surface)', border: `1px solid ${T.border}`, borderRadius: 10, cursor: 'pointer', transition: 'border-color 0.15s' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = T.accent}
-              onMouseLeave={e => e.currentTarget.style.borderColor = T.border}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                {Icon && <Icon size={14} color={T.t3} strokeWidth={1.7} />}
-                <span style={{ fontSize: 11, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600 }}>{k.label}</span>
+              style={{ cursor: 'pointer' }}
+              onMouseEnter={e => { const v = e.currentTarget.querySelector('[data-kpi-value]'); if (v) v.style.color = T.accent; }}
+              onMouseLeave={e => { const v = e.currentTarget.querySelector('[data-kpi-value]'); if (v) v.style.color = T.t1; }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                {Icon && <Icon size={12} color={T.t4} strokeWidth={1.75} />}
+                <span style={{ fontSize: 10, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>{k.label}</span>
               </div>
-              <div style={{ fontSize: 26, fontWeight: 700, color: T.t1, letterSpacing: '-0.5px' }}>{k.value}</div>
+              <div data-kpi-value style={{ fontSize: 28, fontWeight: 700, color: T.t1, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums', transition: 'color 0.15s' }}>{k.value}</div>
             </div>
           );
         })}
       </div>
 
-      {/* Attention Items */}
-      {attention.length > 0 && (
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Needs Attention</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {/* Scrollable content */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
+
+        {/* Needs Attention — flat rows, hairline separated */}
+        {attention.length > 0 && (
+          <div style={{ marginBottom: 32 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 2 }}>Needs Attention</div>
             {attention.map((a, i) => {
               const Icon = L[a.icon];
               return (
                 <div key={i} onClick={() => onNavigate && onNavigate(a.nav)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: T.cardBg || 'var(--surface)', border: `1px solid ${T.border}`, borderRadius: 8, cursor: 'pointer' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 8px', margin: '0 -8px', borderBottom: `1px solid ${T.border}`, cursor: 'pointer', borderRadius: 6, transition: 'background 0.15s' }}
                   onMouseEnter={e => e.currentTarget.style.background = T.hover}
-                  onMouseLeave={e => e.currentTarget.style.background = T.cardBg || 'var(--surface)'}>
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                   {Icon && <Icon size={15} color={a.color} strokeWidth={1.8} />}
                   <span style={{ fontSize: 13, color: T.t1 }}>{a.label}</span>
                   {L.ArrowRight && <L.ArrowRight size={13} color={T.t4} style={{ marginLeft: 'auto' }} />}
@@ -116,59 +123,66 @@ function CommandCenterView({ onNavigate }) {
               );
             })}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Client Health Table */}
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Client Overview</div>
-          <button onClick={() => onNavigate && onNavigate('clients')}
-            style={{ fontSize: 12, color: T.accent, background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-            View all →
-          </button>
-        </div>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              {['Client', 'Status', 'Leads 30d', 'Trials 30d', 'Enrolled 30d', 'Escalations'].map(h => (
-                <th key={h} style={{ ...cell, color: T.t4, fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'left' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {clients.map(c => (
-              <tr key={c.id} onClick={() => onNavigate && onNavigate('clients')}
-                style={{ cursor: 'pointer' }}
-                onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
-                onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
-                <td style={cell}>
-                  <div style={{ fontWeight: 500, color: T.t1 }}>{c.name}</div>
-                  <div style={{ fontSize: 11, color: T.t4 }}>{c.city}, {c.state}</div>
-                </td>
-                <td style={cell}>
-                  {c.health ? (
-                    <span style={{ fontSize: 11, fontWeight: 600, color: healthColor(c.health), background: healthColor(c.health) + '1A', padding: '2px 8px', borderRadius: 20 }}>
-                      {healthLabel(c.health)}
-                    </span>
-                  ) : (
-                    <span style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', background: 'rgba(107,114,128,0.12)', padding: '2px 8px', borderRadius: 20 }}>
-                      Onboarding
-                    </span>
-                  )}
-                </td>
-                <td style={cell}>{c.leads_30d ?? leads.filter(l => l.client_id === c.id).length}</td>
-                <td style={cell}>{c.trials_30d ?? bookings.filter(b => b.client_id === c.id).length}</td>
-                <td style={cell}>{c.enrollments_30d ?? enrollments.filter(e => e.client_id === c.id && e.outcome === 'enrolled').length}</td>
-                <td style={cell}>
-                  {c.open_escalations > 0
-                    ? <span style={{ color: '#EF4444', fontWeight: 600 }}>{c.open_escalations}</span>
-                    : <span style={{ color: T.t4 }}>—</span>}
-                </td>
+        {/* Client Overview — borderless table */}
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 2 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Client Overview</div>
+            <button onClick={() => onNavigate && onNavigate('clients')}
+              style={{ fontSize: 12, color: T.accent, background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              View all →
+            </button>
+          </div>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                {[
+                  { label: 'Client', align: 'left' },
+                  { label: 'Status', align: 'left' },
+                  { label: 'Leads 30d', align: 'right' },
+                  { label: 'Trials 30d', align: 'right' },
+                  { label: 'Enrolled 30d', align: 'right' },
+                  { label: 'Escalations', align: 'right' },
+                ].map((h, i, arr) => (
+                  <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {clients.map(c => (
+                <tr key={c.id} onClick={() => onNavigate && onNavigate('clients')}
+                  style={{ cursor: 'pointer' }}
+                  onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
+                  onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
+                  <td style={firstCell}>
+                    <div style={{ fontWeight: 500, color: T.t1 }}>{c.name}</div>
+                    <div style={{ fontSize: 11, color: T.t4 }}>{c.city}, {c.state}</div>
+                  </td>
+                  <td style={cell}>
+                    {c.health ? (
+                      <span style={{ fontSize: 11, fontWeight: 600, color: healthColor(c.health), background: healthColor(c.health) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                        {healthLabel(c.health)}
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', background: 'rgba(107,114,128,0.12)', padding: '2px 8px', borderRadius: 20 }}>
+                        Onboarding
+                      </span>
+                    )}
+                  </td>
+                  <td style={numCell}>{c.leads_30d ?? leads.filter(l => l.client_id === c.id).length}</td>
+                  <td style={numCell}>{c.trials_30d ?? bookings.filter(b => b.client_id === c.id).length}</td>
+                  <td style={numCell}>{c.enrollments_30d ?? enrollments.filter(e => e.client_id === c.id && e.outcome === 'enrolled').length}</td>
+                  <td style={lastCell}>
+                    {c.open_escalations > 0
+                      ? <span style={{ color: '#EF4444', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{c.open_escalations}</span>
+                      : <span style={{ color: T.t4 }}>—</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

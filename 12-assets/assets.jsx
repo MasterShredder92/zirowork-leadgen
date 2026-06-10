@@ -28,20 +28,23 @@ function AssetsView({ onNavigate }) {
   };
 
   const filtered = filter === 'all' ? assets : assets.filter(a => a.type === filter);
-  const cell = { padding: '12px 14px', fontSize: 13, color: 'var(--text-2)', borderBottom: `1px solid ${T.border}` };
+  const cell = { padding: '12px 0', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}` };
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Assets</div>
-          <div style={{ fontSize: 13, color: T.t3 }}>What logos, photos, teacher bios, testimonials, offers, and brand voice are available?</div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Assets</h1>
+          <div style={{ fontSize: 12, color: T.t3 }}>What logos, photos, teacher bios, testimonials, offers, and brand voice are available?</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {L.Upload && <L.Upload size={14} />} Upload
+        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          {L.Upload && <L.Upload size={14} strokeWidth={1.75} />} Upload
         </button>
       </div>
 
+      {/* Scrollable content */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
       <div style={{ display: 'flex', gap: 6, marginBottom: 20, flexWrap: 'wrap' }}>
         {types.map(t => {
           const active = filter === t;
@@ -58,7 +61,7 @@ function AssetsView({ onNavigate }) {
         <thead>
           <tr>
             {['Client', 'Type', 'Name', 'Status'].map(h => (
-              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'left' }}>{h}</th>
+              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: 'left' }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -85,6 +88,7 @@ function AssetsView({ onNavigate }) {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

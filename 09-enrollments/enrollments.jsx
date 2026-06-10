@@ -16,7 +16,11 @@ function EnrollmentsView({ onNavigate }) {
   const enrolled = enrollments.filter(e => e.outcome === 'enrolled');
   const totalRevenue = enrolled.reduce((s, e) => s + (e.weekly_rate_cents || 0), 0);
 
-  const cell = { padding: '12px 14px', fontSize: 13, color: 'var(--text-2)', borderBottom: `1px solid ${T.border}` };
+  const green = T.isDark ? '#4ADE80' : '#15803D';
+
+  const cell = { padding: '11px 16px', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
+  const firstCell = { ...cell, paddingLeft: 0 };
+  const lastCell = { ...cell, paddingRight: 0, textAlign: 'right' };
 
   async function confirmEnroll(en) {
     if (!window.sb) return;
@@ -47,25 +51,28 @@ function EnrollmentsView({ onNavigate }) {
   }
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 24 }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Enrollments</div>
-          <div style={{ fontSize: 13, color: T.t3 }}>What became revenue and what was lost?</div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Enrollments</h1>
+          <div style={{ fontSize: 12, color: T.t3 }}>What became revenue and what was lost?</div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 11, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Weekly Revenue Added</div>
-          <div style={{ fontSize: 24, fontWeight: 700, color: '#22C55E', letterSpacing: '-0.4px' }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>Weekly Revenue Added</div>
+          <div style={{ fontSize: 28, fontWeight: 700, color: green, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums' }}>
             ${(totalRevenue / 100).toFixed(0)}<span style={{ fontSize: 13, color: T.t3, fontWeight: 400 }}>/wk</span>
           </div>
         </div>
       </div>
 
+      {/* Scrollable content */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 24px 20px' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
-            {['Parent / Student', 'Client', 'Program', 'Outcome', 'Weekly Rate', 'Date', ''].map(h => (
-              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'left' }}>{h}</th>
+            {['Parent / Student', 'Client', 'Program', 'Outcome', 'Weekly Rate', 'Date', ''].map((h, i, arr) => (
+              <th key={h} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -74,7 +81,7 @@ function EnrollmentsView({ onNavigate }) {
             <tr key={e.id}
               onMouseEnter={r => { [...r.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
               onMouseLeave={r => { [...r.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
-              <td style={cell}>
+              <td style={firstCell}>
                 <div style={{ fontWeight: 500, color: T.t1 }}>{e.parent_name}</div>
                 <div style={{ fontSize: 11, color: T.t4 }}>{e.student_name}</div>
               </td>
@@ -93,9 +100,9 @@ function EnrollmentsView({ onNavigate }) {
                 {e.weekly_rate_cents ? '$' + (e.weekly_rate_cents / 100).toFixed(0) + '/wk' : <span style={{ color: T.t4 }}>—</span>}
               </td>
               <td style={cell}>{e.enrolled_at || <span style={{ color: T.t4 }}>—</span>}</td>
-              <td style={cell}>
+              <td style={lastCell}>
                 {(e.outcome === 'pending' || e.outcome === 'follow_up') && enrollingId !== e.id && (
-                  <div style={{ display: 'flex', gap: 6 }}>
+                  <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
                     <button onClick={() => { setEnrollingId(e.id); setRateInput(''); }}
                       style={{ padding: '3px 10px', border: '1px solid #22C55E40', borderRadius: 6, background: '#22C55E0D', fontSize: 11, color: '#22C55E', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                       Enrolled
@@ -107,7 +114,7 @@ function EnrollmentsView({ onNavigate }) {
                   </div>
                 )}
                 {enrollingId === e.id && (
-                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center', justifyContent: 'flex-end' }}>
                     <input
                       type="number"
                       min="0"
@@ -132,6 +139,7 @@ function EnrollmentsView({ onNavigate }) {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

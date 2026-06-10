@@ -13,7 +13,7 @@ function IntegrationsView({ onNavigate }) {
   const broken = integrations.filter(i => i.status === 'broken').length;
   const missing = integrations.filter(i => i.status === 'not_connected').length;
 
-  const cell = { padding: '12px 14px', fontSize: 13, color: 'var(--text-2)', borderBottom: `1px solid ${T.border}` };
+  const cell = { padding: '12px 0', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}` };
 
   async function markConnected(id) {
     if (!window.sb) return;
@@ -22,32 +22,38 @@ function IntegrationsView({ onNavigate }) {
   }
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px' }}>
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Integrations</div>
-        <div style={{ fontSize: 13, color: T.t3 }}>Which forms, phone numbers, SMS, payment links, calendars, and email routes are connected or broken?</div>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Integrations</h1>
+        <div style={{ fontSize: 12, color: T.t3 }}>Which forms, phone numbers, SMS, payment links, calendars, and email routes are connected or broken?</div>
       </div>
 
+      {/* Summary band — inline stats, no boxes */}
       {(broken > 0 || missing > 0) && (
-        <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
+        <div style={{ display: 'flex', gap: 40, padding: '16px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
           {broken > 0 && (
-            <div style={{ padding: '10px 16px', background: '#EF44440D', border: '1px solid #EF444430', borderRadius: 8, fontSize: 12, color: '#EF4444', fontWeight: 500 }}>
-              {broken} broken connection{broken > 1 ? 's' : ''}
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Broken</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: '#EF4444', fontVariantNumeric: 'tabular-nums' }}>{broken}</div>
             </div>
           )}
           {missing > 0 && (
-            <div style={{ padding: '10px 16px', background: '#F59E0B0D', border: '1px solid #F59E0B30', borderRadius: 8, fontSize: 12, color: '#F59E0B', fontWeight: 500 }}>
-              {missing} not connected
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Not Connected</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: '#F59E0B', fontVariantNumeric: 'tabular-nums' }}>{missing}</div>
             </div>
           )}
         </div>
       )}
 
+      {/* Scrollable content */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
             {['Client', 'Type', 'Detail', 'Status', ''].map(h => (
-              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'left' }}>{h}</th>
+              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: 'left' }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -75,6 +81,7 @@ function IntegrationsView({ onNavigate }) {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

@@ -30,6 +30,21 @@ Doctrine / SSOT: `ZiroWork-Client-Flow` + `94-knowledge/northstar-ideology.md`.
 
 ---
 
+## Keep Docs In Sync (anti-stale)
+
+These docs describe the repo and MUST be updated in the **same change** that makes them stale — that's part of "done," not optional:
+
+| If you change… | Update… |
+|---|---|
+| operator folder structure, routing, globals, or surfaces | this `CLAUDE.md` (tree + tables) + `94-knowledge/architecture.md` |
+| `schools/` · `dashboard/` · `onboard.html` · `vercel.json` routing | this `CLAUDE.md` + `README.md` |
+| edge functions / backend layout in `99-agents/` | `99-agents/CONTEXT.md` (never alter agent names, voice, or brand speak) |
+| a folder's files or load list | that folder's `CONTEXT.md` |
+
+Each of these docs carries a `> Keep this in sync:` header. **A stale doc is a defect.**
+
+---
+
 ## Repo Tree
 
 One repo, one Vercel project (root dir `.`). Operator folder number = CRM sidebar nav position.

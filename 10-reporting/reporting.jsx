@@ -52,14 +52,18 @@ function ReportingView({ onNavigate }) {
     return new Date(d.getFullYear(), d.getMonth(), 1).toISOString();
   }, []);
 
+  const green = T.isDark ? '#4ADE80' : '#15803D';
+
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px' }}>
-      <div style={{ marginBottom: 28 }}>
-        <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Reporting</div>
-        <div style={{ fontSize: 13, color: T.t3 }}>Why should each client keep paying ZiroWork?</div>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Reporting</h1>
+        <div style={{ fontSize: 12, color: T.t3 }}>Why should each client keep paying ZiroWork?</div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
+      {/* Scrollable content */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
         {live.map(client => {
           const mrr = client.mrr_cents ? '$' + (client.mrr_cents / 100).toFixed(0) + '/mo' : '—';
 
@@ -125,39 +129,35 @@ function ReportingView({ onNavigate }) {
           }
 
           return (
-            <div key={client.id} style={{ padding: '20px 24px', background: T.cardBg || 'var(--surface)', border: `1px solid ${T.border}`, borderRadius: 10 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
+            <div key={client.id} style={{ paddingTop: 4, marginBottom: 32 }}>
+              {/* Client heading — label over hairline */}
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 16 }}>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: T.t1, marginBottom: 2 }}>{client.name}</div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: T.t1 }}>{client.name}</div>
                   <div style={{ fontSize: 11, color: T.t4 }}>{client.city}</div>
                 </div>
                 {L.ExternalLink && (
                   <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.t4, padding: 4 }}>
-                    <L.ExternalLink size={14} />
+                    <L.ExternalLink size={14} strokeWidth={1.75} />
                   </button>
                 )}
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 8px', marginBottom: 16 }}>
+              {/* Inline stat band — no per-stat box */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 28 }}>
                 {[
                   { label: 'Leads (mo)', value: clientLeads },
                   { label: 'Avg Response', value: avgResp },
                   { label: 'Enrolled (mo)', value: enrolled },
                   { label: 'SMS Reply Rate', value: smsRespRate },
+                  { label: 'Revenue / ROI', value: roiMultiple, sub: revenueStr ? revenueStr + ' est. monthly' : null, accent: true },
                 ].map(stat => (
                   <div key={stat.label}>
-                    <div style={{ fontSize: 10, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>{stat.label}</div>
-                    <div style={{ fontSize: 18, fontWeight: 700, color: T.t1 }}>{stat.value}</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>{stat.label}</div>
+                    <div style={{ fontSize: 28, fontWeight: 700, color: stat.accent ? green : T.t1, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums' }}>{stat.value}</div>
+                    {stat.sub && <div style={{ fontSize: 11, color: T.t4, marginTop: 3 }}>{stat.sub}</div>}
                   </div>
                 ))}
-              </div>
-
-              <div style={{ padding: '10px 12px', background: '#22C55E10', border: '1px solid #22C55E30', borderRadius: 7 }}>
-                <div style={{ fontSize: 10, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 2 }}>Revenue Generated</div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: '#22C55E' }}>
-                  {roiMultiple} ROI
-                  {revenueStr && <span style={{ fontSize: 11, fontWeight: 400, color: T.t4, marginLeft: 6 }}>{revenueStr} est. monthly</span>}
-                </div>
               </div>
             </div>
           );

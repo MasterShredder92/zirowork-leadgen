@@ -1,6 +1,8 @@
 # ZiroWork — Architecture Reference
 
-Component patterns, theme system, navigation routing, and design decisions for the Music Academy OS.
+> Keep this in sync: update this file whenever the operator folder structure, routing, globals, or surfaces change. Ground truth = root `CLAUDE.md`.
+
+Component patterns, theme system, navigation routing, data layer, and design decisions for the ZiroWork Operator CRM.
 
 ---
 
@@ -8,9 +10,10 @@ Component patterns, theme system, navigation routing, and design decisions for t
 
 The task specifically involves one of these:
 - **Theme tokens** — colors, spacing, `window.T`, light/dark values
-- **Status colors** — `getStudentStatusColors`, `getBadgeColors`, badge patterns
-- **Navigation** — adding/changing routes, the renderMain() switch, view keys
-- **Drag-and-drop** — any component using HTML5 drag events
+- **Status / badge colors** — theme-aware badge patterns
+- **Navigation** — adding/changing routes, the `renderMain()` switch, view keys
+- **Data layer** — hooks, `window.SEED_DATA` fallback, live Supabase wiring
+- **Surfaces** — the public `schools/` / `dashboard/` apps, `onboard.html`, or `vercel.json` routing
 
 For a routine component edit (layout, text, logic) — you do not need this file. Close it and proceed.
 
@@ -20,7 +23,7 @@ For a routine component edit (layout, text, logic) — you do not need this file
 
 - **Edit only the file and lines the task specifies.** Do not touch adjacent code, comments, or formatting.
 - **Do not refactor things that aren't broken.** Match existing style even if you'd do it differently.
-- **Follow the Code Rules section below. No exceptions.** Every component binds to window. No flattening Supabase data. No god files.
+- **Follow the Code Rules section below. No exceptions.** Every view/hook/util binds to `window`. No god files.
 - **If the task is ambiguous — stop and ask.** Do not fill in scope gaps with your own judgment.
 - **No new abstractions.** If it wasn't asked for, don't build it.
 
@@ -29,9 +32,32 @@ For a routine component edit (layout, text, logic) — you do not need this file
 ## Stack
 
 - React 18 + Babel (inline JSX, no bundler — loaded via `<script type="text/babel">`)
-- Dual light/dark theme via `theme.js` → `window.T`
+- Dual light/dark theme via `92-design/theme.js` → `window.T`
 - Font: Plus Jakarta Sans
+- Data: async hooks over the live Supabase JS client (`window.sb`), with `window.SEED_DATA` as a no-credentials dev fallback
 - No build step. Open `index.html` directly in a browser or serve with any static server.
+
+---
+
+## No-Bundler / Global-Scope Model
+
+There is **no bundler and no import system**. Every script is loaded in order by `index.html` and `window` is the module system.
+
+- Plain `.js` files (theme, design tokens, hooks) load as ordinary `<script>` and run immediately.
+- `.jsx` view/shell files load as `<script type="text/babel">` and are transpiled in the browser by `@babel/standalone`.
+- Each file must expose what it provides on `window` at the bottom, or nothing else can reach it.
+
+**Script load order matters** (see `index.html`):
+1. React / ReactDOM / Babel standalone (CDN)
+2. `92-design/theme.js`, `92-design/design-tokens.js`, `92-design/icons.jsx`
+3. `vis-network` (Studio Map) + Supabase client (`window.sb` is created here)
+4. `93-hooks/*` data layer
+5. `92-design/design-tweaks.jsx`
+6. `90-shell/sidebar.jsx`, `workspace-overlay.jsx`, `user-menu.jsx`
+7. Every numbered view `00-command-center … 16-studio-map`
+8. **Last:** `90-shell/Header.jsx`, `90-shell/Router.jsx`, `91-auth/Session.jsx`
+
+New page views must load **before** `90-shell/Router.jsx`, or their `window.<X>View` will be undefined when `renderMain()` runs.
 
 ---
 
@@ -40,39 +66,56 @@ For a routine component edit (layout, text, logic) — you do not need this file
 These apply to every file in this project. No exceptions.
 
 **1. Window binding — required on every file**
-There is no bundler, so there are no imports. `window` is the module system. Every component, hook, or utility must expose itself at the bottom of its file or nothing else can use it.
+No bundler, no imports. Every component, hook, or utility must expose itself at the bottom of its file:
 ```js
 window.MyComponent = MyComponent;
 ```
 If it's not on `window`, it doesn't exist to the rest of the app.
 
 **2. Supabase data is relational — keep it that way**
-Supabase returns nested JSON (e.g. `family.students[0].lessons`). Never write code that flattens it back into a flat array. Consume the shape Supabase gives you.
+Supabase returns the row shape you select. Don't flatten nested/related data back into a flat array — consume the shape Supabase gives you.
 
 **3. One file, one job**
-Don't combine unrelated features into one file. A view is a view. A hook is a hook. A utility is a utility. If a file does two things, split it.
+A view is a view. A hook is a hook. A utility is a utility. If a file does two things, split it.
 
 **4. Section anchors in multi-component files**
 Any file with more than one component or hook gets a single-line anchor before each one:
 ```js
 // ── ComponentName ──────────────────────────────────────────────────────
 ```
-No paragraphs, no block comments — just the anchor. It's a jump point for scanning and regex.
+No paragraphs, no block comments — just the anchor. A jump point for scanning and regex.
 
 ---
 
-## Folder Governance
+## Folder Governance (the ICM numbered-folder structure)
 
-Repo is organized as numbered CRM nav order. Each folder = one nav item.
+The operator app is organized as numbered folders in CRM nav order — **one folder per nav item**. Each numbered folder exports a single `window.<Name>View` consumed by the router. (Folder number = sidebar position.)
 
 ```
-00-dashboard/   01-schedule/   03-leads/      04-families/   05-students/
-06-teachers/    07-services/   08-invoices/   09-payroll/    10-financials/
-11-lifecycle/   12-recruitment/ 13-reports/   14-settings/   15-insights/
-90-shell/       91-auth/       92-design/     93-hooks/      94-knowledge/
+00-command-center/   window.CommandCenterView      route: command-center
+01-clients/          window.ClientsView            route: clients
+02-onboarding/       window.ClientOnboardingView   route: onboarding
+03-campaigns/        window.CampaignsView          route: campaigns
+04-pages/            window.PagesView              route: pages
+05-leads/            window.LeadsView              route: leads
+06-conversations/    window.ConversationsView      route: conversations
+07-escalations/      window.EscalationsView        route: escalations
+08-bookings/         window.BookingsView           route: bookings
+09-enrollments/      window.EnrollmentsView        route: enrollments
+10-reporting/        window.ReportingView          route: reporting
+11-automation-rules/ window.AutomationRulesView    route: automation-rules
+12-assets/           window.AssetsView             route: assets
+13-integrations/     window.IntegrationsView       route: integrations
+14-settings/         window.SettingsView           route: settings
+15-insights/         window.InsightsView           route: insights
+16-studio-map/       window.StudioMapView          route: studio-map
+
+90-shell/   91-auth/   92-design/   93-hooks/   94-knowledge/   96-public/
 ```
 
-Full tree with `window.X` globals and route keys → root `CLAUDE.md`.
+Full tree with every `window.X` global and route key → root `CLAUDE.md`.
+
+> Note: the root `CLAUDE.md` repo tree labels Studio Map as `02-studio-map/ — NOT BUILT YET`, while `index.html` loads it from `16-studio-map/studio-map.jsx` and the router maps `studio-map → window.StudioMapView`. `16-studio-map/` is the path the app actually loads. `UNVERIFIED`: build/wiring completeness of the Studio Map view.
 
 ---
 
@@ -80,50 +123,70 @@ Full tree with `window.X` globals and route keys → root `CLAUDE.md`.
 
 | File | Role |
 |---|---|
-| `index.html` | App shell — script loader, CSS vars, `<div id="root">` |
-| `92-design/theme.js` | Theme tokens, `window.toggleTheme()`, pixel-crawl animation |
-| `90-shell/sidebar.jsx` | Nav, command palette, theme toggle |
-| `90-shell/Router.jsx` | `renderMain()` switch — maps route keys to window globals |
-| `90-shell/Header.jsx` | Mobile top bar |
+| `index.html` | Operator SPA shell — script loader, CSS vars, `window.sb` init, `<div id="root">` |
+| `92-design/theme.js` | Theme tokens → `window.T`, `window.toggleTheme()`, fires `zw-theme-changed` |
+| `92-design/design-tokens.js` | Shared design primitives |
+| `92-design/design-tweaks.jsx` | Tweaks panel (`window.useTweaks`, `TweaksPanel`, accent picker) |
+| `92-design/icons.jsx` | Lucide React icon re-exports (`window.LucideReact`) |
+| `90-shell/sidebar.jsx` | Sidebar nav |
+| `90-shell/Header.jsx` | Mobile header (`window.MobileHeader`) + `window.ComingSoon` fallback |
+| `90-shell/user-menu.jsx` | User menu (`window.UserMenu`) |
 | `90-shell/workspace-overlay.jsx` | Shared overlay/modal shell |
-| `00-dashboard/dashboard.jsx` | Dashboard view + DSF canvas |
-| `01-schedule/calendar.jsx` | Weekly schedule grid |
-| `03-leads/leads.jsx` | Leads pipeline canvas |
-| `04-families/families.jsx` | Families table + drawer entry point |
-| `05-students/student-roster.jsx` | Studio-wide student table |
-| `05-students/student-profile.jsx` | Student profile, lessons, notes tabs |
-| `06-teachers/teachers.jsx` | Teachers CRM view |
-| `07-services/services.jsx` | Service catalog + pricing config |
-| `08-invoices/invoices.jsx` | Invoice table + status badges |
-| `09-payroll/payroll.jsx` | Payroll tracker |
-| `10-financials/financials.jsx` | Financials dashboard |
-| `11-lifecycle/lifecycle.jsx` | Visual lifecycle canvas |
-| `13-reports/reports.jsx` | Reports grid |
-| `14-settings/settings.jsx` | Studio settings |
-| `92-design/icons.jsx` | Lucide React icon re-exports |
+| `90-shell/Router.jsx` | `window.App` — state-based nav, `renderMain()` switch |
+| `91-auth/Session.jsx` | `window.Root` mount point; seeds `window.currentUser` / `window.currentOperator` (Phase 1: no auth) |
+| `93-hooks/use-local-data.js` | `window.SEED_DATA` + the `useClients`/`useLeads`/… data hooks |
+| `00-command-center … 16-studio-map` | One view file per numbered folder |
 
 ---
 
-## Navigation / Views
+## Navigation / Routing
+
+Routing is **state-based, not URL-based.** `window.App` (`90-shell/Router.jsx`) holds a `navHistory` stack in `useState`; the current view is the top of the stack. There is no router library and no URL hash.
+
+- `nav(view)` pushes a route key; `goBack()` pops it (also wired to a mobile left-edge swipe).
+- Every view receives an `onNavigate` prop (the `nav` function).
+- `renderMain()` is a `switch (view)` mapping each route key to its global, with a `ComingSoon` fallback when the view global is missing:
+
+```js
+case 'leads': return window.LeadsView
+  ? React.createElement(window.LeadsView, { onNavigate: nav })
+  : React.createElement(window.ComingSoon, { label: 'Leads' });
+```
+
+Adding a route = load the view file before `Router.jsx`, add a `case` in `renderMain()`, add a sidebar entry, and add a `MOBILE_TITLES` entry. Duplicate `case` keys silently overwrite each other.
 
 | View key | Component | Source |
 |---|---|---|
-| `dashboard` | `window.DashboardView` | `00-dashboard/dashboard.jsx` |
-| `calendar` | `window.CalendarView` | `01-schedule/calendar.jsx` |
-| `leads` | `window.LeadsView` | `03-leads/leads.jsx` |
-| `families` | `window.FamiliesView` | `04-families/families.jsx` |
-| `student-profile` | `window.StudentDetailPage` | `05-students/student-profile.jsx` |
-| `teachers` | `window.TeachersView` | `06-teachers/teachers.jsx` |
-| `services` | `window.ServicesView` | `07-services/services.jsx` |
-| `invoices` | `window.InvoicesView` | `08-invoices/invoices.jsx` |
-| `payroll` | `window.PayrollView` | `09-payroll/payroll.jsx` |
-| `financials` | `window.FinancialsView` | `10-financials/financials.jsx` |
-| `lifecycle` | `window.LifecycleView` | `11-lifecycle/lifecycle.jsx` |
-| `recruitment` | `window.RecruitmentView` | `12-recruitment/recruitment.jsx` (stub) |
-| `reports` | `window.ReportsView` | `13-reports/reports.jsx` |
+| `command-center` | `window.CommandCenterView` | `00-command-center/command-center.jsx` |
+| `clients` | `window.ClientsView` | `01-clients/clients.jsx` |
+| `onboarding` | `window.ClientOnboardingView` | `02-onboarding/onboarding.jsx` |
+| `campaigns` | `window.CampaignsView` | `03-campaigns/campaigns.jsx` |
+| `pages` | `window.PagesView` | `04-pages/pages.jsx` |
+| `leads` | `window.LeadsView` | `05-leads/leads.jsx` |
+| `conversations` | `window.ConversationsView` | `06-conversations/conversations.jsx` |
+| `escalations` | `window.EscalationsView` | `07-escalations/escalations.jsx` |
+| `bookings` | `window.BookingsView` | `08-bookings/bookings.jsx` |
+| `enrollments` | `window.EnrollmentsView` | `09-enrollments/enrollments.jsx` |
+| `reporting` | `window.ReportingView` | `10-reporting/reporting.jsx` |
+| `automation-rules` | `window.AutomationRulesView` | `11-automation-rules/automation-rules.jsx` |
+| `assets` | `window.AssetsView` | `12-assets/assets.jsx` |
+| `integrations` | `window.IntegrationsView` | `13-integrations/integrations.jsx` |
 | `settings` | `window.SettingsView` | `14-settings/settings.jsx` |
 | `insights` | `window.InsightsView` | `15-insights/insights.jsx` |
-| `studio-map` | `ComingSoon` | stub (02-studio-map/ not yet built) |
+| `studio-map` | `window.StudioMapView` | `16-studio-map/studio-map.jsx` |
+
+---
+
+## Data Layer
+
+Defined in `93-hooks/use-local-data.js`. Each table has a hook (`useClients`, `useCampaigns`, `useLeads`, `useConversations`, `useEscalations`, `useBookings`, `useEnrollments`, `useOperatorTasks`, `useClientReports`, `useAutomationRules`, `useAssets`, `useIntegrations`), all exposed on `window`.
+
+Every hook is built on `_useTable(table, seedKey, filters)`, which:
+- If `window.sb` is **absent** (dev, no credentials) → returns filtered rows from `window.SEED_DATA[seedKey]`.
+- If `window.sb` is **present** → selects from the live Supabase table (`order('created_at', desc)`, optional `.eq()` filters).
+- Returns `{ data, loading, error, refetch }`.
+
+Views consume them directly, e.g. `const leads = useLeads().data || [];`. Some views (e.g. Command Center KPIs) also issue ad-hoc `window.sb.from(...)` count queries for live aggregates.
 
 ---
 
@@ -131,79 +194,95 @@ Full tree with `window.X` globals and route keys → root `CLAUDE.md`.
 
 All components access theme via: `const T = window.T || {};`
 
-**Token reference:**
+`92-design/theme.js` builds a `dark` and `light` token object, picks one from `localStorage('zw-theme')` (default dark), and assigns it to `window.T`. `window.toggleTheme()` swaps the theme and fires a `zw-theme-changed` event; `window.App` listens and force-updates on it. CSS `:root` variables in `index.html` mirror the same palette for non-React surfaces and `prefers-color-scheme`.
 
-| Token | Dark | Light | Role |
-|---|---|---|---|
-| `T.t1` | `#F5F4F1` | `#1C1C1A` | Primary text |
-| `T.t2` | `#B0ADA9` | `#4A4A48` | Secondary text |
-| `T.t3` | `#7A7773` | `#717170` | Muted text |
-| `T.t4` | `#565350` | `#8C8C8A` | Subtle text |
-| `T.bg` | `#17161B` | `#FAFAF8` | Page background |
-| `T.cardBg` | `#21202A` | `#FFFFFF` | Card background |
-| `T.sidebarBg` | `#0F0E13` | `#F2F1EE` | Sidebar background |
-| `T.border` | `rgba(255,255,255,0.08)` | `rgba(0,0,0,0.07)` | Borders |
-| `T.borderMed` | `rgba(255,255,255,0.12)` | `rgba(0,0,0,0.11)` | Medium borders |
-| `T.hover` | `rgba(255,255,255,0.05)` | `rgba(0,0,0,0.04)` | Hover bg |
-| `T.accent` | `#E04D27` | `#C84520` | Accent color |
-| `T.isDark` | `true` | `false` | Theme boolean |
+**Representative tokens (dark):**
 
-Toggle: `window.toggleTheme()` — triggers pixel-crawl animation, fires `zw-theme-changed` event.
+| Token | Value | Role |
+|---|---|---|
+| `T.isDark` | `true` / `false` | Theme boolean |
+| `T.bg` | `#162833` | Page background |
+| `T.sidebarBg` | `#0F1E27` | Sidebar background |
+| `T.cardBg` / `T.surface` | `#233D4C` | Card / surface |
+| `T.t1` | `#F5F4F1` | Primary text |
+| `T.t2` | `#B0ADA9` | Secondary text |
+| `T.t3` | `#7A7773` | Muted text |
+| `T.t4` | `#565350` | Subtle text |
+| `T.border` | `rgba(255,255,255,0.08)` | Borders |
+| `T.borderMed` | `rgba(255,255,255,0.12)` | Medium borders |
+| `T.hover` | `rgba(255,255,255,0.05)` | Hover bg |
+| `T.accent` | `#FD802E` | Accent color |
+
+`theme.js` also defines status-badge, instrument-badge, avatar, and calendar token groups; read the file for the full set and the light-mode values. `UNVERIFIED`: exact light-mode hex for every token (read `theme.js` directly before relying on a specific value).
 
 ---
 
 ## Component Patterns
 
-### Theme-aware status badge colors
+### Standard view signature
 ```js
-function getStatusColors(isDark) {
-  return isDark ? {
-    active: { bg: 'rgba(34,197,94,0.15)', text: '#22C55E' },
-    // ...
-  } : {
-    active: { bg: '#D1F4E8', text: '#034636' },
-    // ...
-  };
+function LeadsView({ onNavigate }) {
+  const T = window.T || {};
+  const L = window.LucideReact || {};
+  const leads = useLeads().data || [];
+  // ...
 }
-const STATUS_COLORS = getStatusColors(T.isDark);
+window.LeadsView = LeadsView;
 ```
-**Never hardcode hex status colors.** Always use a theme-aware function. `getStudentStatusColors` is exported as `window.getStudentStatusColors` from `05-students/student-profile.jsx`.
+Views read theme from `window.T`, icons from `window.LucideReact`, data from the `93-hooks` hooks, and navigate via the injected `onNavigate`. Mutations write optimistically to local state, then persist via `window.sb` when present.
 
-### Drag-and-drop components
-Any component using HTML5 drag-and-drop **must be defined at module scope**, not inside a parent component. If defined inside, React unmounts/remounts DOM nodes on every render and kills the drag mid-flight.
-
-Use `dataTransfer.setData/getData` for ID handoff. Direct DOM manipulation for visual feedback to avoid re-renders during drag.
+### Theme-aware status / badge colors
+Never hardcode hex status colors inside a view. Use the badge token groups on `window.T` (e.g. `T.paidBg`/`T.paidText`, `T.pendingBg`/`T.pendingText`) or a theme-aware helper keyed on `T.isDark`, so both themes stay legible.
 
 ### Window globals pattern
-External `.jsx` files expose components globally. Always check before use:
+External `.jsx` files expose components globally. Always guard before use:
 ```js
-window.FamiliesView ? React.createElement(window.FamiliesView, props) : <ComingSoon />
+window.LeadsView
+  ? React.createElement(window.LeadsView, props)
+  : React.createElement(window.ComingSoon, { label: 'Leads' });
 ```
 
 ---
 
-## Leads Pipeline
+## Surfaces
 
-- Pipeline stages (in order): `new` → `contacted` → `qualified` → `trial_scheduled` → `trial_complete`
-- Exit events (not stages): `enrolled` (creates Student record), `lost` (archived with reason)
-- Board only shows open leads. Closed accessible via "Show Closed" toggle.
-- `daysInStage` is always server-computed from `stage_entered_at`.
-- Stale indicator: amber dot on cards with `daysInStage >= 5`.
+The operator CRM (`index.html`) is one of several independently-routed surfaces in this repo. Routing for the public surfaces is configured in `vercel.json`:
+
+```json
+{ "rewrites": [
+  { "source": "/schools/:path*",   "destination": "/schools/index.html" },
+  { "source": "/dashboard",        "destination": "/dashboard/index.html" },
+  { "source": "/dashboard/:path*", "destination": "/dashboard/index.html" }
+]}
+```
+
+| Surface | Path | Audience | Role |
+|---|---|---|---|
+| Operator CRM | `index.html` | Internal operators | The numbered-folder app this doc describes |
+| Client dashboard / portal | `dashboard/` (React SPA, own `index.html` + `app.jsx`) | Clients (music schools) | Client-facing portal; rewritten by `vercel.json` |
+| Public school pages | `schools/` (React SPA, own `index.html` + `app.jsx`, `pages/`, `widgets/`) | Prospective students/parents | Public, slug-based lead-gen / booking landing pages |
+| Onboarding | `onboard.html` (standalone) | New clients | Client self-setup form |
+
+> The root repo also contains separate `client-portal/` and `landing-pages/` SPAs with their own deploys (see root `CLAUDE.md`). `UNVERIFIED`: the exact relationship between `dashboard/`/`schools/` here and those top-level `client-portal/`/`landing-pages/` directories — confirm before treating them as the same surface.
 
 ---
 
-## Key Design Decisions
+## Key Globals
 
-### Light theme text contrast
-All gray text was darkened for WCAG AA compliance:
-- `t3: #717170` — 4.8:1 contrast (was `#ABABAB` at 2.3:1 — failing)
-- `t4: #8C8C8A` — 3.2:1 contrast (was `#C4C4C4`)
+| Symbol | File | Purpose |
+|---|---|---|
+| `window.T` | `92-design/theme.js` | Theme tokens — used by every view |
+| `window.toggleTheme` | `92-design/theme.js` | Swap theme, fire `zw-theme-changed` |
+| `window.SEED_DATA` | `93-hooks/use-local-data.js` | Dev seed-data fallback |
+| `window.sb` | `index.html` | Supabase JS client |
+| `window.currentUser` / `window.currentOperator` | `91-auth/Session.jsx` | Identity (Phase 1: hardcoded, no auth) |
+| `window.App` | `90-shell/Router.jsx` | Root component (state-based nav) |
+| `window.Root` | `91-auth/Session.jsx` | ReactDOM mount point |
+| `window.ComingSoon` | `90-shell/Header.jsx` | Fallback for missing/unbuilt views |
 
-### FamiliesView — 04-families/families.jsx
-Active `FamiliesView` lives at `04-families/families.jsx`. Edit that file only.
+---
 
-### `getBadgeColors` shared function
-Defined inline in `index.html`. Used by the inline family detail billing tab. Do not redefine locally.
+## Phase Status
 
-### `getStudentStatusColors` shared function
-Exported from `05-students/student-profile.jsx` as `window.getStudentStatusColors`. Used by `04-families/family-roster.jsx`. Do not redefine locally.
+- **Phase 1 — no auth.** `91-auth/Session.jsx` seeds a hardcoded operator and renders straight into the app.
+- **Phase 2 — Supabase live.** Data hooks read live tables when `window.sb` is configured (it is, in `index.html`), falling back to `SEED_DATA` only when absent. `UNVERIFIED`: which views are fully wired to live tables vs. still reading seed data.

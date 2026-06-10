@@ -107,13 +107,13 @@ function ConversationsView({ onNavigate }) {
   const selected = threads.find(t => t.key === selectedPhone);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ padding: '32px 40px 16px', flexShrink: 0 }}>
-        <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Conversations</div>
-        <div style={{ fontSize: 13, color: T.t3 }}>What is being said, what has AI handled, and what needs review?</div>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Conversations</h1>
+        <div style={{ fontSize: 12, color: T.t3 }}>What is being said, what has AI handled, and what needs review?</div>
       </div>
 
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', borderTop: `1px solid ${T.border}` }}>
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {/* Thread list */}
         <div style={{ width: 300, flexShrink: 0, borderRight: `1px solid ${T.border}`, overflowY: 'auto' }}>
           {loading && (

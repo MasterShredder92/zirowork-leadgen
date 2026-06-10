@@ -78,13 +78,13 @@ function LeadsView({ onNavigate }) {
   const stale = days => days >= 5;
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: T.bg }}>
       {/* Header */}
-      <div style={{ padding: '24px 32px 16px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Leads</div>
-            <div style={{ fontSize: 13, color: T.t3 }}>Who is in the pipeline and what is the next move?</div>
+            <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Leads</h1>
+            <div style={{ fontSize: 12, color: T.t3 }}>Who is in the pipeline and what is the next move?</div>
           </div>
           <select
             value={clientId || ''}
@@ -199,26 +199,26 @@ function LeadsView({ onNavigate }) {
       )}
 
       {/* Kanban */}
-      <div style={{ flex: 1, overflowX: 'auto', padding: '20px 32px' }}>
-        <div style={{ display: 'flex', gap: 16, height: '100%', minWidth: STAGES.length * 240 }}>
+      <div style={{ flex: 1, overflowX: 'auto', padding: '20px 24px' }}>
+        <div style={{ display: 'flex', gap: 24, height: '100%', minWidth: STAGES.length * 240 }}>
           {STAGES.map(stage => {
             const cols = byStage(stage.id);
             return (
-              <div key={stage.id} style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, padding: '0 4px' }}>
+              <div key={stage.id} style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingBottom: 8, marginBottom: 4, borderBottom: `1px solid ${T.border}` }}>
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: stage.color, flexShrink: 0 }} />
-                  <span style={{ fontSize: 12, fontWeight: 600, color: T.t2 }}>{stage.label}</span>
-                  <span style={{ marginLeft: 'auto', fontSize: 11, color: T.t4 }}>{cols.length}</span>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{stage.label}</span>
+                  <span style={{ marginLeft: 'auto', fontSize: 11, color: T.t4, fontVariantNumeric: 'tabular-nums' }}>{cols.length}</span>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, overflowY: 'auto' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
                   {cols.map(lead => (
                     <div key={lead.id} style={{
-                      padding: '12px 14px', background: T.cardBg || 'var(--surface)',
-                      border: `1px solid ${T.border}`, borderRadius: 9, cursor: 'pointer',
+                      padding: '12px 8px', margin: '0 -8px', borderBottom: `1px solid ${T.border}`,
+                      cursor: 'pointer', borderRadius: 6, transition: 'background 0.15s',
                     }}
                       onClick={() => openDetail(lead)}
-                      onMouseEnter={e => e.currentTarget.style.borderColor = stage.color + '80'}
-                      onMouseLeave={e => e.currentTarget.style.borderColor = T.border}>
+                      onMouseEnter={e => e.currentTarget.style.background = T.hover || (T.isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)')}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                       <div style={{ fontSize: 13, fontWeight: 500, color: T.t1, marginBottom: 4 }}>{lead.parent_name}</div>
                       <div style={{ fontSize: 11, color: T.t3, marginBottom: 8 }}>{lead.student_name}</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -247,7 +247,7 @@ function LeadsView({ onNavigate }) {
                     </div>
                   ))}
                   {cols.length === 0 && (
-                    <div style={{ padding: '20px 14px', border: `1px dashed ${T.border}`, borderRadius: 9, textAlign: 'center', fontSize: 12, color: T.t4 }}>Empty</div>
+                    <div style={{ padding: '16px 0', textAlign: 'center', fontSize: 12, color: T.t4 }}>Empty</div>
                   )}
                 </div>
               </div>

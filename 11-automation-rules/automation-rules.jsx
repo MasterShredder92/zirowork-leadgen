@@ -19,20 +19,24 @@ function AutomationRulesView({ onNavigate }) {
   }
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Automation Rules</div>
-          <div style={{ fontSize: 13, color: T.t3 }}>What should AI say, do, pause, or escalate?</div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Automation Rules</h1>
+          <div style={{ fontSize: 12, color: T.t3 }}>What should AI say, do, pause, or escalate?</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {L.Plus && <L.Plus size={14} />} Add Rule
+        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          {L.Plus && <L.Plus size={14} strokeWidth={1.75} />} Add Rule
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {/* Scrollable content — flat rows, hairline separated */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
         {rules.map(rule => (
-          <div key={rule.id} style={{ padding: '14px 18px', background: T.cardBg || 'var(--surface)', border: `1px solid ${T.border}`, borderRadius: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div key={rule.id} style={{ padding: '14px 8px', margin: '0 -8px', borderBottom: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', gap: 16, borderRadius: 6, transition: 'background 0.15s' }}
+            onMouseEnter={e => e.currentTarget.style.background = T.hover}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: modeColor(rule.mode) + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: modeColor(rule.mode) }} />
             </div>

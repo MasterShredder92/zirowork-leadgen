@@ -87,34 +87,35 @@ function EscalationsView({ onNavigate }) {
   };
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px' }}>
-      <div style={{ marginBottom: 24 }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
-          <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px' }}>Escalations</div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: 0 }}>Escalations</h1>
           {escalations.length > 0 && (
             <span style={{ fontSize: 12, fontWeight: 700, color: '#EF4444', background: '#EF444418', padding: '3px 10px', borderRadius: 20 }}>
               {escalations.length} open
             </span>
           )}
         </div>
-        <div style={{ fontSize: 13, color: T.t3 }}>What should not be handled by automation?</div>
+        <div style={{ fontSize: 12, color: T.t3 }}>What should not be handled by automation?</div>
       </div>
 
-      {/* Doctrine callout */}
-      <div style={{ padding: '12px 16px', background: '#F59E0B0D', border: '1px solid #F59E0B30', borderRadius: 8, marginBottom: 24, fontSize: 12, color: T.t2, lineHeight: 1.5 }}>
-        <strong style={{ color: '#F59E0B' }}>Escalation rule:</strong> AI handles new enrollment conversations only. Enrolled students, billing, refunds, angry parents, and cancellations are forwarded to the studio — not handled by ZiroWork.
-      </div>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
+        {/* Doctrine callout — flat, left rule only */}
+        <div style={{ paddingLeft: 12, borderLeft: '2px solid #F59E0B', marginBottom: 24, fontSize: 12, color: T.t2, lineHeight: 1.5 }}>
+          <strong style={{ color: '#F59E0B' }}>Escalation rule:</strong> AI handles new enrollment conversations only. Enrolled students, billing, refunds, angry parents, and cancellations are forwarded to the studio — not handled by ZiroWork.
+        </div>
 
-      {escalations.length === 0 ? (
-        <div style={{ padding: '40px 0', textAlign: 'center', color: T.t4, fontSize: 13 }}>No open escalations.</div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {escalations.map(esc => (
-            <div key={esc.id} style={{
-              padding: '16px 20px', background: T.cardBg || 'var(--surface)',
-              border: '1px solid #EF444440', borderLeft: '3px solid #EF4444',
-              borderRadius: 9,
-            }}>
+        {escalations.length === 0 ? (
+          <div style={{ padding: '40px 0', textAlign: 'center', color: T.t4, fontSize: 13 }}>No open escalations.</div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {escalations.map(esc => (
+              <div key={esc.id} style={{
+                padding: '16px 0 16px 14px', borderLeft: '3px solid #EF4444',
+                borderBottom: `1px solid ${T.border}`,
+              }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
@@ -184,9 +185,10 @@ function EscalationsView({ onNavigate }) {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

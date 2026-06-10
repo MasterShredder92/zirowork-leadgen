@@ -323,7 +323,7 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
           <button onClick={() => setUserMenuOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: 9, width: '100%', padding: '6px 8px', borderRadius: 7, border: 'none', background: userMenuOpen ? T.hover : 'transparent', color: T.t1, cursor: 'pointer', textAlign: 'left', fontFamily: "'Plus Jakarta Sans', sans-serif", transition: 'background 0.1s' }}
             onMouseEnter={e => { if (!userMenuOpen) e.currentTarget.style.background = T.hover; }}
             onMouseLeave={e => { if (!userMenuOpen) e.currentTarget.style.background = 'transparent'; }}>
-            <div style={{ width: 26, height: 26, borderRadius: '50%', flexShrink: 0, background: T.isDark ? 'rgba(255,255,255,0.12)' : '#1C1C1A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#FAFAF8', fontWeight: 600 }}>
+            <div style={{ width: 26, height: 26, borderRadius: '50%', flexShrink: 0, background: T.isDark ? 'rgba(255,255,255,0.12)' : '#1C1C1A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#F7F2E8', fontWeight: 600 }}>
               {userInitials}
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>

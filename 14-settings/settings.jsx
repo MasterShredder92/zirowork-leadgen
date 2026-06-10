@@ -6,21 +6,19 @@ function SettingsView({ onNavigate }) {
 
   const Section = ({ title, children }) => (
     <div style={{ marginBottom: 32 }}>
-      <div style={{ fontSize: 11, fontWeight: 600, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>{title}</div>
-      <div style={{ background: T.cardBg || 'var(--surface)', border: `1px solid ${T.border}`, borderRadius: 10, overflow: 'hidden' }}>
-        {children}
-      </div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 2 }}>{title}</div>
+      {children}
     </div>
   );
 
   const Row = ({ label, value, action, last }) => (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: last ? 'none' : `1px solid ${T.border}` }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', borderBottom: last ? 'none' : `1px solid ${T.border}` }}>
       <div>
         <div style={{ fontSize: 13, fontWeight: 500, color: T.t1 }}>{label}</div>
         {value && <div style={{ fontSize: 12, color: T.t4, marginTop: 2 }}>{value}</div>}
       </div>
       {action && (
-        <button style={{ padding: '5px 12px', border: `1px solid ${T.border}`, borderRadius: 6, background: 'none', fontSize: 12, color: T.t3, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <button style={{ padding: '5px 12px', border: `1px solid ${T.border}`, borderRadius: 7, background: 'transparent', fontSize: 12, color: T.t2, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {action}
         </button>
       )}
@@ -28,20 +26,23 @@ function SettingsView({ onNavigate }) {
   );
 
   return (
-    <div style={{ height: '100%', overflowY: 'auto', padding: '32px 40px', maxWidth: 640 }}>
-      <div style={{ marginBottom: 32 }}>
-        <div style={{ fontSize: 22, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', marginBottom: 4 }}>Settings</div>
-        <div style={{ fontSize: 13, color: T.t3 }}>Operator account and system configuration</div>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
+      {/* Header */}
+      <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Settings</h1>
+        <div style={{ fontSize: 12, color: T.t3 }}>Operator account and system configuration</div>
       </div>
+
+      {/* Scrollable content */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
+      <div style={{ maxWidth: 640 }}>
 
       <Section title="Operator Account">
         <Row label="Operator name" value={operator.name || 'ZiroWork'} action="Edit" />
         <Row label="Operator user" value={user.full_name || 'Zach Adkins'} />
         <Row label="Email" value={user.email || 'slavior1992@gmail.com'} action="Edit" />
-        <Row label="Role" last action={null}
-          value={null}
-        />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px 14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0' }}>
+          <div style={{ fontSize: 13, fontWeight: 500, color: T.t1 }}>Role</div>
           <span style={{ fontSize: 11, fontWeight: 600, color: T.accent, background: T.accent + '18', padding: '3px 10px', borderRadius: 20 }}>Operator</span>
         </div>
       </Section>
@@ -62,6 +63,9 @@ function SettingsView({ onNavigate }) {
         <Row label="Backend" value="DEV — local seed data (no backend wired)" />
         <Row label="Version" value="ZiroWork Operator CRM — Phase 1" last />
       </Section>
+
+      </div>
+      </div>
     </div>
   );
 }

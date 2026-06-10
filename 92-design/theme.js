@@ -10,16 +10,16 @@
   const dark = {
     isDark: true,
     // Backgrounds — neutral cool grays
-    bg: '#17161B', sidebarBg: '#0F0E13', cardBg: '#21202A', surface: '#21202A',
-    elevatedBg: '#2A2935', inputBg: 'rgba(255,255,255,0.05)',
-    headerBg: '#1C1B20',
+    bg: '#162833', sidebarBg: '#0F1E27', cardBg: '#233D4C', surface: '#233D4C',
+    elevatedBg: '#2B4859', inputBg: 'rgba(255,255,255,0.05)',
+    headerBg: '#1B3340',
     // Text
     t1: '#F5F4F1', t2: '#B0ADA9', t3: '#7A7773', t4: '#565350', t5: '#383532',
     // Borders
     border: 'rgba(255,255,255,0.08)', borderMed: 'rgba(255,255,255,0.12)',
     hover: 'rgba(255,255,255,0.05)', active: 'rgba(255,255,255,0.08)',
     activeB: 'rgba(255,255,255,0.06)',
-    accent: '#E04D27',
+    accent: '#FD802E',
     // Status badges
     paidBg: 'rgba(16,185,129,0.15)', paidText: '#34D399', paidDot: '#10B981',
     overdueBg: 'rgba(239,68,68,0.15)', overdueText: '#F87171', overdueDot: '#EF4444',
@@ -37,18 +37,18 @@
       {bg:'rgba(146,64,14,0.3)',fg:'#FDE68A'},{bg:'rgba(20,83,45,0.3)',fg:'#86EFAC'},
     ],
     // Calendar
-    calBg: '#1C1B20', calHeaderBg: '#21202A',
+    calBg: '#1B3340', calHeaderBg: '#233D4C',
     calBorder: 'rgba(255,255,255,0.06)', calHalf: 'rgba(255,255,255,0.025)',
-    calToday: '#21202A',
+    calToday: '#233D4C',
     // Lifecycle canvas
-    lcDotBg: '#17161B', lcDotBorder: 'rgba(255,255,255,0.15)',
+    lcDotBg: '#162833', lcDotBorder: 'rgba(255,255,255,0.15)',
     lcDotFill: 'rgba(255,255,255,0.18)', lcLine: 'rgba(255,255,255,0.08)',
     lcAnim: 'rgba(255,255,255,0.15)', lcGrid: 'rgba(255,255,255,0.06)',
-    lcTriggerBorder: 'rgba(255,255,255,0.14)', lcCardBg: '#21202A',
+    lcTriggerBorder: 'rgba(255,255,255,0.14)', lcCardBg: '#233D4C',
     lcCardBorder: 'rgba(255,255,255,0.08)', lcAddBg: 'rgba(255,255,255,0.04)',
     lcAddBorder: 'rgba(255,255,255,0.12)',
     // Drawer / modal
-    drawerBg: '#1C1B20',
+    drawerBg: '#1B3340',
     drawerShadow: '-1px 0 0 rgba(255,255,255,0.06), -20px 0 60px rgba(0,0,0,0.6)',
     scrim: 'rgba(0,0,0,0.45)',
     sysMsg: 'rgba(255,255,255,0.05)',
@@ -58,13 +58,13 @@
 
   const light = {
     isDark: false,
-    bg: '#FAFAF8', sidebarBg: '#F2F1EE', cardBg: '#FFFFFF', surface: '#FFFFFF',
-    elevatedBg: '#F4F3F0', inputBg: '#FAFAF8',
-    headerBg: '#F2F1EE',
+    bg: '#F7F2E8', sidebarBg: '#E8DCC8', cardBg: '#FFFFFF', surface: '#FFFFFF',
+    elevatedBg: '#EFE6D6', inputBg: '#F7F2E8',
+    headerBg: '#E8DCC8',
     // Text — significantly darkened for WCAG AA compliance on #FAFAF8
     // t2: 7.9:1 · t3: 4.8:1 · t4: 3.2:1 · t5: 2.0:1
-    t1: '#1C1C1A', t2: '#4A4A48', t3: '#717170', t4: '#8C8C8A', t5: '#A8A7A4',
-    accent: '#C84520',
+    t1: '#162833', t2: '#3D4F58', t3: '#6B7880', t4: '#8C9298', t5: '#A8AAA4',
+    accent: '#D9641C',
     border: 'rgba(0,0,0,0.07)', borderMed: 'rgba(0,0,0,0.11)',
     hover: 'rgba(0,0,0,0.04)', active: 'rgba(0,0,0,0.07)',
     activeB: 'rgba(0,0,0,0.05)',
@@ -84,8 +84,8 @@
     ],
     calBg: '#FFFFFF', calHeaderBg: '#FFFFFF',
     calBorder: 'rgba(0,0,0,0.07)', calHalf: 'rgba(0,0,0,0.04)',
-    calToday: '#FAFAF8',
-    lcDotBg: '#F4F3F0', lcDotBorder: 'rgba(0,0,0,0.15)',
+    calToday: '#F7F2E8',
+    lcDotBg: '#EFE6D6', lcDotBorder: 'rgba(0,0,0,0.15)',
     lcDotFill: '#D0CFCC', lcLine: 'rgba(0,0,0,0.08)',
     lcAnim: 'rgba(0,0,0,0.15)', lcGrid: 'rgba(0,0,0,0.11)',
     lcTriggerBorder: 'rgba(0,0,0,0.15)', lcCardBg: '#FFFFFF',

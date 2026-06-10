@@ -72,7 +72,7 @@ const TOKENS = {
       : { bg: '#FDCCCB', text: '#7F1D1D' },
 
     // Accent / brand
-    accent: (isDark) => isDark ? '#E04D27' : '#C84520',
+    accent: (isDark) => isDark ? '#FD802E' : '#D9641C',
 
     // Hover / active states
     hover: (isDark) => isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
