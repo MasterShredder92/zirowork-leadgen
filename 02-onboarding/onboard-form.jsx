@@ -83,6 +83,9 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
       if (data.tagline    && !form.tagline)    updates.tagline    = data.tagline;
       if (data.about      && !form.about)      updates.about      = data.about;
       if (data.testimonials?.length && !form.testimonial) updates.testimonial = data.testimonials[0];
+      if (data.testimonials?.length && !(form.testimonials || []).some(t => t && t.trim())) {
+        updates.testimonials = [0, 1, 2].map(i => data.testimonials[i] || '');
+      }
 
       if (data.programs?.length && form.instruments.length === 0) {
         const ALIASES = { voice: ['vocals', 'singing', 'vocal'], bass: ['bass guitar'] };
