@@ -20,7 +20,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
 
   // Live landing-page templates only — expand as more instrument pages ship (see TEMPL in handleSubmit)
   const INSTRUMENTS = ['Piano', 'Guitar', 'Voice', 'Drums'];
-  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   // Teachers + Schedule deliberately NOT collected at onboarding (low friction) —
   // they'll come from Settings later (CSV upload / calendar + CRM integrations).
@@ -416,59 +415,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         </label>
       )}
       {photoError && <div style={{ fontSize: 11, color: '#EF4444', marginTop: 4 }}>{photoError}</div>}
-    </div>
-  );
-
-  const setTeacher = (i, k, v) => setForm(f => ({ ...f, teachers: f.teachers.map((t, idx) => idx === i ? { ...t, [k]: v } : t) }));
-
-  const S4 = () => (
-    <div>
-      {form.teachers.map((t, i) => (
-        <div key={i} style={{ padding: '12px 14px', background: 'var(--bg)', border: `1px solid ${T.border}`, borderRadius: 8, marginBottom: 10 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontSize: 12, fontWeight: 600, color: T.t2 }}>Teacher {i + 1}</span>
-            {i > 0 && <button onClick={() => setForm(f => ({ ...f, teachers: f.teachers.filter((_, idx) => idx !== i) }))} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.t4, fontSize: 12 }}>Remove</button>}
-          </div>
-          <input style={{ ...inp, marginBottom: 8 }} value={t.name} onChange={e => setTeacher(i, 'name', e.target.value)} placeholder="Teacher name" />
-          <textarea style={{ ...inp, resize: 'vertical', minHeight: 56 }} value={t.bio} onChange={e => setTeacher(i, 'bio', e.target.value)} placeholder="Short bio for the landing page..." />
-        </div>
-      ))}
-      <button onClick={() => setForm(f => ({ ...f, teachers: [...f.teachers, { name: '', bio: '' }] }))} style={{ width: '100%', padding: '8px', border: `1px dashed ${T.border}`, borderRadius: 7, background: 'none', cursor: 'pointer', fontSize: 12, color: T.t3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-        + Add Another Teacher
-      </button>
-    </div>
-  );
-
-  const setSlot = (i, k, v) => setForm(f => ({ ...f, slots: f.slots.map((s, idx) => idx === i ? { ...s, [k]: v } : s) }));
-
-  const S5 = () => (
-    <div>
-      <div style={{ fontSize: 12, color: T.t3, marginBottom: 14, lineHeight: 1.5 }}>Protected slots are windows ZiroWork can book new students into. Add what you know now — you can confirm the rest later.</div>
-      {form.slots.length === 0 && (
-        <div style={{ padding: '24px', border: `1px dashed ${T.border}`, borderRadius: 8, textAlign: 'center', fontSize: 12, color: T.t4, marginBottom: 12 }}>No slots yet — skip and add after your profile is created.</div>
-      )}
-      {form.slots.map((s, i) => (
-        <div key={i} style={{ padding: '12px 14px', background: 'var(--bg)', border: `1px solid ${T.border}`, borderRadius: 8, marginBottom: 10 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontSize: 12, fontWeight: 600, color: T.t2 }}>Slot {i + 1}</span>
-            <button onClick={() => setForm(f => ({ ...f, slots: f.slots.filter((_, idx) => idx !== i) }))} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.t4, fontSize: 12 }}>Remove</button>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 8 }}>
-            <select value={s.day} onChange={e => setSlot(i, 'day', e.target.value)} style={inp}>
-              {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
-            </select>
-            <input style={inp} value={s.start} onChange={e => setSlot(i, 'start', e.target.value)} placeholder="9:00 AM" />
-            <input style={inp} value={s.end} onChange={e => setSlot(i, 'end', e.target.value)} placeholder="5:00 PM" />
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-            <input style={inp} value={s.max} onChange={e => setSlot(i, 'max', e.target.value)} placeholder="Max students/week" />
-            <input style={inp} value={s.teacher} onChange={e => setSlot(i, 'teacher', e.target.value)} placeholder="Teacher name" />
-          </div>
-        </div>
-      ))}
-      <button onClick={() => setForm(f => ({ ...f, slots: [...f.slots, { day: 'Monday', start: '', end: '', max: '', teacher: '' }] }))} style={{ width: '100%', padding: '8px', border: `1px dashed ${T.border}`, borderRadius: 7, background: 'none', cursor: 'pointer', fontSize: 12, color: T.t3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-        + Add Slot
-      </button>
     </div>
   );
 
