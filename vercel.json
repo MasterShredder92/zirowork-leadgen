@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/schools/:path*", "destination": "/schools/index.html" },
+    { "source": "/dashboard", "destination": "/dashboard/index.html" },
+    { "source": "/dashboard/:path*", "destination": "/dashboard/index.html" }
+  ]
+}
