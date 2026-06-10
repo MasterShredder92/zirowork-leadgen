@@ -324,6 +324,8 @@ Deno.serve(async (req) => {
     // a location page's identity fields must come from that page; root pages may also use the About page
     groundIdentityFields(extracted, isLocationPage ? mainPage.text : mainPage.text + '\n' + aboutPage.text);
 
+    extracted.logo_url = logoUrl || null;
+
     return new Response(JSON.stringify(extracted), { status: 200, headers: CORS });
   } catch (err) {
     return new Response(JSON.stringify({ error: String(err) }), { status: 500, headers: CORS });

@@ -78,7 +78,7 @@ function buildSchool(client, config, page, slug) {
     email: client.email || '',
     about: config.about || '',
     tagline: config.tagline || client.tagline || '',
-    accent: config.accent_color || '#E04D27',
+    accent: config.primary_color || config.accent_color || '#E04D27',
     testimonials: config.testimonials || (client.testimonial ? [client.testimonial] : []),
     photos: config.photos || [],
     offer: client.offer || 'First lesson free',

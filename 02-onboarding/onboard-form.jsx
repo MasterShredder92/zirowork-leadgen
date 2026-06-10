@@ -78,6 +78,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
       if ((loc.email || data.email) && !form.email) updates.email = loc.email || data.email;
       if ((loc.address || data.address) && !form.address) updates.address = loc.address || data.address;
       if ((loc.hours || data.hours) && !form.hours) updates.hours = loc.hours || data.hours;
+      if (data.logo_url   && !form.logo_url)   updates.logo_url   = data.logo_url;
       if (data.tagline    && !form.tagline)    updates.tagline    = data.tagline;
       if (data.about      && !form.about)      updates.about      = data.about;
       if (data.testimonials?.length && !form.testimonial) updates.testimonial = data.testimonials[0];
@@ -302,6 +303,23 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   const S3 = () => (
     <div>
       <div style={{ marginBottom: 14 }}>{fLabel('Logo URL')}<input style={inp} value={form.logo_url} onChange={e => set('logo_url', e.target.value)} placeholder="https://... (or add later)" /></div>
+      <div style={{ marginBottom: 14 }}>
+        {fLabel('Brand Colors')}
+        <div style={{ display: 'flex', gap: 18, alignItems: 'center', marginTop: 2 }}>
+          {[['primary_color', 'Primary'], ['accent_color', 'Accent']].map(([k, label]) => (
+            <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input
+                type="color"
+                value={scrapedMeta[k] || '#cccccc'}
+                onChange={e => setScrapedMeta(m => ({ ...m, [k]: e.target.value }))}
+                style={{ width: 30, height: 30, padding: 0, border: `1px solid ${T.border}`, borderRadius: 6, background: 'none', cursor: 'pointer' }}
+              />
+              <span style={{ fontSize: 11, color: T.t3 }}>{label}{scrapedMeta[k] ? ' · ' + scrapedMeta[k] : ''}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>Detected from your website — click a swatch to correct. The primary color styles your landing pages.</div>
+      </div>
       <div style={{ marginBottom: 14 }}>{fLabel('Studio Tagline')}<input style={inp} value={form.tagline} onChange={e => set('tagline', e.target.value)} placeholder="Building confidence through music since 2010" /></div>
       <div style={{ marginBottom: 14 }}>
         {fLabel('Primary Offer / Pitch')}
