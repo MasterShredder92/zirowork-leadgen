@@ -20,15 +20,13 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   // Live landing-page templates only — expand as more instrument pages ship (see TEMPL in handleSubmit)
   const INSTRUMENTS = ['Piano', 'Guitar', 'Voice', 'Drums'];
 
-  // Teachers + Schedule deliberately NOT collected at onboarding (low friction) —
-  // they'll come from Settings later (CSV upload / calendar + CRM integrations).
+  // Teachers, Schedule, AI Behavior, Tracking Pixels, and Twilio deliberately NOT collected
+  // at onboarding (low friction) — they live in Settings / operator tooling after signup.
   const STEPS = [
     { n: 1, label: 'Studio Info',     required: true  },
     { n: 2, label: 'Programs',        required: true  },
     { n: 3, label: 'Brand Assets',    required: false },
-    { n: 4, label: 'Tracking Pixels', required: false },
-    { n: 5, label: 'Twilio',          required: false },
-    { n: 6, label: 'Review & Launch', required: false },
+    { n: 4, label: 'Review & Launch', required: false },
   ];
 
   const [step, setStep] = useState(1);
@@ -416,33 +414,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     </div>
   );
 
-  const S7 = () => (
-    <div>
-      <div style={{ fontSize: 12, color: T.t3, marginBottom: 16, lineHeight: 1.6 }}>Optional — add these after your pages are live. Find them in your ad platform dashboards.</div>
-      <div style={{ marginBottom: 14 }}>
-        {fLabel('Facebook Pixel ID')}
-        <input style={inp} value={form.fb_pixel_id} onChange={e => set('fb_pixel_id', e.target.value)} placeholder="e.g. 1234567890" />
-        <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>Facebook Ads Manager → Events Manager → your pixel → Settings</div>
-      </div>
-      <div style={{ marginBottom: 14 }}>
-        {fLabel('Google Tag Manager ID')}
-        <input style={inp} value={form.gtm_id} onChange={e => set('gtm_id', e.target.value)} placeholder="e.g. GTM-XXXXXX" />
-        <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>tagmanager.google.com → your container → Container ID (top right)</div>
-      </div>
-    </div>
-  );
-
-  const S8 = () => (
-    <div>
-      <div style={{ fontSize: 12, color: T.t3, marginBottom: 16, lineHeight: 1.6 }}>The Twilio phone number ZiroWork will use to text leads for this school.</div>
-      <div style={{ marginBottom: 14 }}>
-        {fLabel('Twilio Phone Number')}
-        <input style={inp} value={form.twilio_phone_number} onChange={e => set('twilio_phone_number', e.target.value)} placeholder="+14025819366" />
-        <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>Twilio Console → Phone Numbers → Active Numbers → copy the E.164 number</div>
-      </div>
-    </div>
-  );
-
   const S9 = () => (
     <div>
       {blockers.length > 0 && (
@@ -473,7 +444,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     </div>
   );
 
-  const STEP_CONTENT = [S1, S2, S3, S7, S8, S9];
+  const STEP_CONTENT = [S1, S2, S3, S9];
   const currentStep = STEPS[step - 1];
   const StepComponent = STEP_CONTENT[step - 1];
 
