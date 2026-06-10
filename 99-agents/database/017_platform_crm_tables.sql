@@ -26,7 +26,7 @@
 --   bookings
 --   enrollments
 --   campaigns
---   pages
+--   client_pages
 --   automation_rules
 --   assets
 --   integrations
@@ -267,33 +267,35 @@ end $$;
 
 
 -- ─────────────────────────────────────────────────────────────
--- pages — CRM landing page records (one row per live/draft page)
+-- client_pages — landing pages ZiroWork builds per school + instrument
+-- Canonical landing-page table. Written by onboarding (onboard-form.jsx),
+-- read by the operator Pages view (use-pages.js) and the public student
+-- landing pages (schools/app.jsx). One row per school slug + instrument.
+-- (Replaces the old `pages` table — dropped in 021_drop_orphan_pages.sql.)
 -- ─────────────────────────────────────────────────────────────
 
-create table if not exists public.pages (
+create table if not exists public.client_pages (
   id          uuid primary key default gen_random_uuid(),
   client_id   uuid references public.clients (id) on delete cascade,
-  client_name text,
-  campaign_id uuid references public.campaigns (id) on delete set null,
-  title       text not null,
+  school_name text,
+  instrument  text,                                        -- 'piano' | 'guitar' | 'vocals' | 'drums'
   slug        text,
-  status      text not null default 'draft',               -- 'live' | 'draft' | 'archived'
-  url         text,
-  leads       integer not null default 0,
-  created_at  timestamptz not null default now()
+  status      text not null default 'live',                -- 'live' | 'draft' | 'archived'
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
 );
 
-create index if not exists idx_pages_client_id on public.pages (client_id);
-create index if not exists idx_pages_status    on public.pages (status);
+create index if not exists idx_client_pages_client_id on public.client_pages (client_id);
+create index if not exists idx_client_pages_slug      on public.client_pages (slug);
 
-alter table public.pages enable row level security;
+alter table public.client_pages enable row level security;
 
 do $$ begin
   if not exists (
     select 1 from pg_policies
-    where tablename = 'pages' and policyname = 'service_role_pages'
+    where tablename = 'client_pages' and policyname = 'service_role_client_pages'
   ) then
-    create policy "service_role_pages" on public.pages using (true) with check (true);
+    create policy "service_role_client_pages" on public.client_pages using (true) with check (true);
   end if;
 end $$;
 
@@ -429,7 +431,7 @@ end $$;
 --   conversations     — SMS/email thread per lead
 --   bookings          — trial/enrollment slots
 --   enrollments       — final outcome records
---   pages             — landing page records
+--   client_pages      — landing page records (per school + instrument)
 --   automation_rules  — trigger/action rules per client
 --   assets            — brand assets per client
 --   integrations      — external service connections per client
