@@ -274,15 +274,22 @@ end $$;
 -- (Replaces the old `pages` table — dropped in 021_drop_orphan_pages.sql.)
 -- ─────────────────────────────────────────────────────────────
 
+-- Column set mirrors the live table exactly (pulled from information_schema
+-- 2026-06-09) so a fresh rebuild matches production.
 create table if not exists public.client_pages (
-  id          uuid primary key default gen_random_uuid(),
-  client_id   uuid references public.clients (id) on delete cascade,
-  school_name text,
-  instrument  text,                                        -- 'piano' | 'guitar' | 'vocals' | 'drums'
-  slug        text,
-  status      text not null default 'live',                -- 'live' | 'draft' | 'archived'
-  created_at  timestamptz not null default now(),
-  updated_at  timestamptz not null default now()
+  id             uuid primary key default gen_random_uuid(),
+  client_id      uuid not null references public.clients (id) on delete cascade,
+  instrument     text not null,                            -- 'piano' | 'guitar' | 'vocals' | 'drums'
+  slug           text not null,
+  is_active      boolean not null default true,
+  hero_photo_url text,
+  teacher_index  integer not null default 0,
+  custom_headline text,
+  custom_offer   text,
+  status         text default 'live',                      -- 'live' | 'draft' | 'archived'
+  school_name    text,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now()
 );
 
 create index if not exists idx_client_pages_client_id on public.client_pages (client_id);
