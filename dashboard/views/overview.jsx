@@ -65,26 +65,24 @@ window.PortalOverview = function PortalOverview({ tenantId }) {
   }
 
   const s = {
-    page: { padding: '32px 36px', overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
+    page: { overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
+    band: {
+      padding: '20px 24px', borderBottom: '1px solid var(--border)',
+    },
+    content: { padding: '20px 24px' },
     heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
-    sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 28 },
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 28 },
-    card: {
-      background: 'var(--surface)', border: '1px solid var(--border)',
-      borderRadius: 10, padding: '20px 22px',
+    sub: { fontSize: 13, color: 'var(--t3)' },
+    grid: {
+      display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+      borderBottom: '1px solid var(--border)', paddingBottom: 24, marginBottom: 24,
     },
-    label: { fontSize: 11, fontWeight: 600, color: 'var(--t3)', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 8 },
-    value: { fontSize: 28, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.5px' },
-    valueSmall: { fontSize: 20, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.3px' },
-    badge: {
-      display: 'inline-block', marginTop: 6,
-      fontSize: 11, fontWeight: 600, color: 'var(--accent)',
-      background: 'var(--accent-bg)', padding: '2px 8px', borderRadius: 20,
-    },
-    activityCard: {
-      background: 'var(--surface)', border: '1px solid var(--border)',
-      borderRadius: 10, padding: '18px 22px',
+    stat: { paddingRight: 24 },
+    label: { fontSize: 11, fontWeight: 700, color: 'var(--t3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 },
+    value: { fontSize: 28, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.5px', fontVariantNumeric: 'tabular-nums' },
+    meta: { fontSize: 12, color: 'var(--t3)', marginTop: 6 },
+    activityRow: {
       display: 'flex', alignItems: 'center', gap: 12,
+      paddingTop: 4,
     },
     dot: {
       width: 8, height: 8, borderRadius: '50%',

@@ -5,6 +5,23 @@ window.PortalPipeline = function PortalPipeline({ tenantId }) {
 
   React.useEffect(() => {
     async function load() {
+      // Design-preview path: render the funnel fully without a backend.
+      if (tenantId === 'preview') {
+        setEnrolled([
+          { student_name: 'Ava Bennett', parent_name: 'Marcus Bennett', program: 'Piano',  enrolled_at: '2026-06-07' },
+          { student_name: 'Leo Carter',  parent_name: null,             program: 'Guitar', enrolled_at: '2026-06-05' },
+          { student_name: 'Mia Flores',  parent_name: null,             program: 'Vocals', enrolled_at: '2026-06-03' },
+        ]);
+        setStages([
+          { key: 'new',      label: 'New Lead',     count: 12, desc: 'Contacted once, awaiting reply' },
+          { key: 'follow',   label: 'Following Up', count: 8,  desc: 'Multi-touch, no reply yet' },
+          { key: 'engaged',  label: 'Engaged',      count: 5,  desc: 'Responded to outreach' },
+          { key: 'enrolled', label: 'Enrolled',     count: 3,  desc: 'Handed off to you' },
+        ]);
+        setLoading(false);
+        return;
+      }
+
       // Messages drive the early-funnel counts; enrollments drive the handoff.
       const [{ data: msgs }, { data: enr }] = await Promise.all([
         window.sb.from('ziro_message_log')
