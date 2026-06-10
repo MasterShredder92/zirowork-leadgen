@@ -4,6 +4,20 @@ window.PortalOverview = function PortalOverview({ tenantId }) {
 
   React.useEffect(() => {
     async function load() {
+      if (tenantId === 'preview') {
+        setMetrics({
+          totalLeads: 47,
+          contacted: 47,
+          replied: 19,
+          replyRate: 40,
+          messagesSent: 213,
+          last30Days: 31,
+          lastActivity: '2h ago',
+        });
+        setLoading(false);
+        return;
+      }
+
       const { data: msgs } = await window.sb
         .from('ziro_message_log')
         .select('direction, recipient_phone, sent_at, status')
