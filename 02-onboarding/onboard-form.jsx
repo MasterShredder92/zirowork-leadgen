@@ -22,16 +22,16 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   const INSTRUMENTS = ['Piano', 'Guitar', 'Voice', 'Drums'];
   const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
+  // Teachers + Schedule deliberately NOT collected at onboarding (low friction) —
+  // they'll come from Settings later (CSV upload / calendar + CRM integrations).
   const STEPS = [
     { n: 1, label: 'Studio Info',     required: true  },
     { n: 2, label: 'Programs',        required: true  },
     { n: 3, label: 'Brand Assets',    required: false },
-    { n: 4, label: 'Teachers',        required: false },
-    { n: 5, label: 'Schedule',        required: false },
-    { n: 6, label: 'AI Behavior',     required: false },
-    { n: 7, label: 'Tracking Pixels', required: false },
-    { n: 8, label: 'Twilio',          required: false },
-    { n: 9, label: 'Review & Launch', required: false },
+    { n: 4, label: 'AI Behavior',     required: false },
+    { n: 5, label: 'Tracking Pixels', required: false },
+    { n: 6, label: 'Twilio',          required: false },
+    { n: 7, label: 'Review & Launch', required: false },
   ];
 
   const [step, setStep] = useState(1);
@@ -101,11 +101,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         }
       }
 
-      if (data.teachers?.length) {
-        const mapped = data.teachers.map(t => ({ name: t.name || '', bio: t.bio || '' })).filter(t => t.name);
-        if (mapped.length) updates.teachers = mapped;
-      }
-
       if (data.google_photos?.length && (form.photos || []).length === 0) updates.photos = data.google_photos.slice(0, 4);
 
       setForm(f => ({ ...f, ...updates }));
@@ -124,9 +119,8 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         scraped_at:       new Date().toISOString(),
       });
 
-      const filled = Object.keys(updates).filter(k => !['program_prices','instruments','teachers'].includes(k)).length
-        + (updates.instruments?.length ? 1 : 0)
-        + (updates.teachers?.length ? 1 : 0);
+      const filled = Object.keys(updates).filter(k => !['program_prices','instruments'].includes(k)).length
+        + (updates.instruments?.length ? 1 : 0);
       if (filled > 0) { setScrapeReady(true); setScrapeMsg(''); }
       else setScrapeMsg('Scraped — no new fields found');
       setScraping(false);
@@ -170,8 +164,6 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     { label: 'Studio',   value: form.studio_name ? `${form.studio_name} · ${form.city}, ${form.state}` : null },
     { label: 'Programs', value: form.instruments.length ? form.instruments.join(', ') : null },
     { label: 'Brand',    value: form.tagline || (form.logo_url ? 'Logo URL added' : null) },
-    { label: 'Teachers', value: form.teachers.filter(t => t.name).length ? form.teachers.filter(t => t.name).map(t => t.name).join(', ') : null },
-    { label: 'Slots',    value: form.slots.length ? `${form.slots.length} slot${form.slots.length > 1 ? 's' : ''} defined` : null },
   ];
 
   const inp = {
@@ -557,7 +549,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     </div>
   );
 
-  const STEP_CONTENT = [S1, S2, S3, S4, S5, S6, S7, S8, S9];
+  const STEP_CONTENT = [S1, S2, S3, S6, S7, S8, S9];
   const currentStep = STEPS[step - 1];
   const StepComponent = STEP_CONTENT[step - 1];
 
@@ -732,7 +724,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
               {standalone ? 'Get your school set up with ZiroWork' : 'New Client Onboarding'}
             </div>
             <div style={{ fontSize: 12, color: T.t3, marginTop: 2 }}>
-              Step {step} of 9 · {currentStep.label}
+              Step {step} of {STEPS.length} · {currentStep.label}
               {!currentStep.required && <span style={{ color: T.t4, marginLeft: 4 }}>(optional)</span>}
             </div>
           </div>
@@ -757,7 +749,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           style={{ padding: '8px 18px', background: 'transparent', color: T.t3, border: `1px solid ${T.border}`, borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", visibility: step === 1 && standalone ? 'hidden' : 'visible' }}>
           {step === 1 ? 'Cancel' : '← Back'}
         </button>
-        {step < 9 ? (
+        {step < STEPS.length ? (
           <button
             onClick={() => setStep(s => s + 1)}
             style={{ padding: '8px 20px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
