@@ -29,7 +29,7 @@
 **Phase 2 — IN PROGRESS**
 - Agent backend (`99-agents/`): DEPLOYED. All 9 edge functions live and reachable (complete-onboarding, scrape-school, on-new-lead, process-pending, on-reply, send-followup, enrollment-handoff, monthly-report, intake-form). SQL migrations run (old codenames replaced with ziro_* naming).
 - Studio Map: researched (vis-network via CDN). Not yet built.
-- Agent tables LIVE in Supabase (agent_tenants, ziro_events, ziro_message_log, ziro_messaging_escalations, ziro_messaging_knowledge_base, pending_leads, and the rest). 3 pg_cron jobs scheduled and active (process-pending every 5 min, send-followup hourly, monthly-report 1st of month 6am).
+- Agent tables LIVE in Supabase (agent_tenants, ziro_events, ziro_message_log, ziro_messaging_escalations, pending_leads, and the rest; 6 orphan tables dropped 2026-06-10 by migration 023). 3 pg_cron jobs scheduled and active (process-pending every 5 min, send-followup hourly, monthly-report 1st of month 6am).
 
 ---
 

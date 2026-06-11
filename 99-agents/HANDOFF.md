@@ -28,13 +28,9 @@ Group B requires Zach to provide credentials — prompt him for the 4 values lis
 | `ziro_events` | Audit log for every agent run |
 | `ziro_message_log` | Every SMS/email attempt with status |
 | `ziro_messaging_escalations` | Conversations flagged for human takeover |
-| `ziro_messaging_knowledge_base` | 12 response frameworks + guardrails |
-| `anchor_job_locks` | Distributed lock — prevents double-firing |
-| `system_health` | Component health tracking |
-| `ziro_client_context_cache` | Student tone/personality context per tenant |
-| `ziro_retention_risk_log` | Churn risk staging with cooldown gate |
-| `privacy_violation_log` | Teacher privacy violation audit trail |
 | `pending_leads` | Off-hours lead queue (9 AM gate) |
+
+> DROPPED 2026-06-10 (migration 023): `ziro_messaging_knowledge_base`, `system_health`, `anchor_job_locks`, `ziro_client_context_cache`, `ziro_retention_risk_log`, `privacy_violation_log` — no longer live.
 
 ### CRM Tables (ALL LIVE in txpgyuetfsrzfxxopwzf — separate from agent tables)
 

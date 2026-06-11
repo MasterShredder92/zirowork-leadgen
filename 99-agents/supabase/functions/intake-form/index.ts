@@ -1,5 +1,4 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { buildPrivacyHtml, buildTermsHtml } from './legal.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -68,7 +67,7 @@ function buildHtml(client: {
     ? `<blockquote class="testimonial">${escHtml(client.testimonial)}</blockquote>`
     : '';
 
-  const smsConsent = `Consent is not a condition of purchase. <a href="/functions/v1/intake-form/terms" target="_blank" style="color:#6366F1">Terms</a> &amp; <a href="/functions/v1/intake-form/privacy" target="_blank" style="color:#6366F1">Privacy Policy</a>`;
+  const smsConsent = `Consent is not a condition of purchase. <a href="https://app.zirowork.com/terms" target="_blank" style="color:#6366F1">Terms</a> &amp; <a href="https://app.zirowork.com/privacy" target="_blank" style="color:#6366F1">Privacy Policy</a>`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -274,7 +273,7 @@ ${gtmBody}
       </div>
       <div class="checkbox-row" style="align-items:flex-start;margin-top:4px">
         <input type="checkbox" id="sms_consent" name="sms_consent" style="margin-top:2px">
-        <label for="sms_consent" style="font-size:0.8rem;color:#444;line-height:1.5">I agree to receive automated text messages from <strong>${escHtml(client.name)}</strong> about my lesson inquiry. Up to 8 messages per inquiry. Msg &amp; data rates may apply. Reply HELP for help or STOP to cancel anytime. <a href="/functions/v1/intake-form/terms" target="_blank" style="color:#6366F1">Terms</a> | <a href="/functions/v1/intake-form/privacy" target="_blank" style="color:#6366F1">Privacy Policy</a></label>
+        <label for="sms_consent" style="font-size:0.8rem;color:#444;line-height:1.5">I consent to receive text messages from ZiroWork on behalf of <strong>${escHtml(client.name)}</strong> about my lesson inquiry, including follow-ups and booking reminders, at the number provided. Message frequency varies. Msg &amp; data rates may apply. Reply HELP for help or STOP to cancel. <a href="https://app.zirowork.com/privacy" target="_blank" style="color:#6366F1">Privacy Policy</a> | <a href="https://app.zirowork.com/terms" target="_blank" style="color:#6366F1">Terms</a></label>
       </div>
 
       <!-- Hidden UTM fields -->
@@ -284,7 +283,6 @@ ${gtmBody}
       <input type="hidden" id="utm_content" name="utm_content">
       <input type="hidden" id="utm_term" name="utm_term">
 
-      <div id="consent-error" style="display:none;color:#DC2626;font-size:0.8rem;margin-bottom:4px">Please check the box above to continue.</div>
       <button type="submit" id="submit-btn">Get Started</button>
     </form>
 
@@ -304,11 +302,6 @@ ${gtmBody}
     // Submit handler
     document.getElementById('lead-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      if (!document.getElementById('sms_consent').checked) {
-        document.getElementById('consent-error').style.display = 'block';
-        return;
-      }
-      document.getElementById('consent-error').style.display = 'none';
       var btn = document.getElementById('submit-btn');
       btn.disabled = true;
       btn.textContent = 'Sending...';
@@ -324,8 +317,8 @@ ${gtmBody}
           student_age: parseInt(fd.get('student_age')) || null,
           military: fd.get('military') === 'on',
           how_did_you_hear: fd.get('how_did_you_hear') || null,
-          sms_consent: true,
-          sms_consent_at: new Date().toISOString(),
+          sms_consent: fd.get('sms_consent') === 'on',
+          sms_consent_at: fd.get('sms_consent') === 'on' ? new Date().toISOString() : null,
           utm: {
             utm_source: fd.get('utm_source') || null,
             utm_campaign: fd.get('utm_campaign') || null,
@@ -385,12 +378,12 @@ Deno.serve(async (req) => {
     slug = secondToLast;
   }
 
-  // Legal pages — serve before studio lookup
+  // Legal pages — single canonical source lives at app.zirowork.com (legal/*.html)
   if (slug === 'privacy') {
-    return new Response(buildPrivacyHtml(), { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+    return Response.redirect('https://app.zirowork.com/privacy', 302);
   }
   if (slug === 'terms') {
-    return new Response(buildTermsHtml(), { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+    return Response.redirect('https://app.zirowork.com/terms', 302);
   }
 
   // Guard: slug must exist and not just be the function name

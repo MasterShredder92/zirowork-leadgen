@@ -1,7 +1,10 @@
 {
+  "redirects": [
+    { "source": "/", "has": [{ "type": "host", "value": "zirowork.com" }], "destination": "/home", "permanent": false },
+    { "source": "/", "has": [{ "type": "host", "value": "www.zirowork.com" }], "destination": "/home", "permanent": false }
+  ],
   "rewrites": [
-    { "source": "/", "has": [{ "type": "host", "value": "zirowork.com" }], "destination": "/www/index.html" },
-    { "source": "/", "has": [{ "type": "host", "value": "www.zirowork.com" }], "destination": "/www/index.html" },
+    { "source": "/home", "destination": "/www/index.html" },
     { "source": "/privacy", "destination": "/legal/privacy-policy.html" },
     { "source": "/privacy-policy", "destination": "/legal/privacy-policy.html" },
     { "source": "/terms", "destination": "/legal/terms.html" },

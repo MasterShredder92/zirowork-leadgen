@@ -48,31 +48,18 @@ export async function scoreAndSend(lead: LeadRecord, tenantId: string): Promise<
   const phone = getPhone(lead);
   if (!phone) throw new Error('Lead has no phone number');
 
-  // TCPA/A2P gate: never text a lead without recorded SMS consent
-  if (lead.sms_consent !== true) {
-    await db.from('ziro_message_log').insert({
-      tenant_id: tenantId,
-      from_agent: 'ZIRO_MESSAGING',
-      channel: 'sms',
-      direction: 'outbound',
-      recipient_phone: phone,
-      recipient_name: getFirstName(lead),
-      message_body: '[not sent — lead has no recorded SMS consent]',
-      status: 'skipped_no_consent',
-      sent_at: new Date().toISOString(),
-      sms_enabled: SMS_ENABLED,
-      requires_approval: false,
-    });
-    return;
-  }
+  // TCPA/A2P: consent gates the TEXT, never the lead's existence — every lead
+  // is still scored and synced to the operator CRM below.
+  const consented = lead.sms_consent === true;
 
-  // Score lead via ZIRO_LEADS
+  // Score lead via ZIRO_LEADS (consent fields stripped — constants add no signal)
+  const { sms_consent: _sc, sms_consent_at: _sca, ...leadForPrompt } = lead;
   const leadsUserMsg = [
     `Tenant: ${cfg.location_name}`,
     `Director: ${cfg.director_name}, ${cfg.director_title}`,
     '',
     'Lead data:',
-    JSON.stringify(lead, null, 2),
+    JSON.stringify(leadForPrompt, null, 2),
   ].join('\n');
 
   const scoringRaw = await callClaude(LEADS_SYSTEM_PROMPT, leadsUserMsg);
@@ -85,55 +72,77 @@ export async function scoreAndSend(lead: LeadRecord, tenantId: string): Promise<
     throw new Error(`ZIRO_LEADS response not parseable: ${scoringRaw}`);
   }
 
-  // Polish message via ZIRO_MESSAGING
-  const finalMsg = await callClaude(MESSAGING_SYSTEM_PROMPT, scoring.message_draft);
+  // Sync lead into platform CRM so operators can see it in the Leads page — ALWAYS,
+  // and BEFORE the send so a Twilio failure can never lose the lead.
+  // The webhook record may already BE a platform leads row (DB-webhook wiring), or a
+  // retry may re-deliver: update the existing row's scoring instead of duplicating.
+  const { data: existing } = await db
+    .from('leads')
+    .select('id')
+    .eq('client_id', tenantId)
+    .eq('phone', phone)
+    .limit(1);
 
-  if (finalMsg.trim() === 'ESCALATE') {
-    await db.from('ziro_messaging_escalations').insert({
-      tenant_id: tenantId,
-      contact_phone: phone,
-      contact_name: getFirstName(lead),
-      trigger_reason: 'unresolved_variable_in_draft',
-      original_message: scoring.message_draft,
-      ziro_response: finalMsg,
-    });
-    return;
+  if (existing?.length) {
+    await db.from('leads').update({
+      notes: [scoring.why, scoring.hook].filter(Boolean).join(' | '),
+      priority: scoring.priority,
+    }).eq('id', existing[0].id);
+  } else {
+    await db.from('leads').insert({
+      client_id: tenantId,
+      student_name: [getFirstName(lead), lead.last_name].filter(Boolean).join(' '),
+      parent_name: (lead.parent_name as string) ?? null,
+      program: (lead.instrument as string) ?? 'Unknown',
+      stage: 'new',
+      source: 'webhook',
+      phone: phone,
+      email: (lead.email as string) ?? null,
+      notes: [scoring.why, scoring.hook].filter(Boolean).join(' | '),
+      priority: scoring.priority,
+      sms_consent: consented,
+      sms_consent_at: (lead.sms_consent_at as string) ?? null,
+      utm: (lead.utm as object) ?? null,
+      page_url: (lead.page_url as string) ?? null,
+      created_at: new Date().toISOString(),
+    }); // non-fatal — errors returned in {error} field
   }
 
-  // Send SMS
-  await sendSMS(phone, finalMsg);
+  // Polish + send only with recorded consent
+  let smsSent = false;
+  let finalMsg = '';
+  if (consented) {
+    finalMsg = await callClaude(MESSAGING_SYSTEM_PROMPT, scoring.message_draft);
+    if (finalMsg.trim() === 'ESCALATE') {
+      await db.from('ziro_messaging_escalations').insert({
+        tenant_id: tenantId,
+        contact_phone: phone,
+        contact_name: getFirstName(lead),
+        trigger_reason: 'unresolved_variable_in_draft',
+        original_message: scoring.message_draft,
+        ziro_response: finalMsg,
+      });
+    } else {
+      await sendSMS(phone, finalMsg);
+      smsSent = true;
+    }
+  }
 
-  // Sync lead into platform CRM so operators can see it in the Leads page
-  await db.from('leads').insert({
-    client_id: tenantId,
-    student_name: [getFirstName(lead), lead.last_name].filter(Boolean).join(' '),
-    parent_name: (lead.parent_name as string) ?? null,
-    program: (lead.instrument as string) ?? 'Unknown',
-    stage: 'new',
-    source: 'webhook',
-    phone: phone,
-    email: (lead.email as string) ?? null,
-    notes: [scoring.why, scoring.hook].filter(Boolean).join(' | '),
-    priority: scoring.priority,
-    sms_consent: lead.sms_consent === true,
-    sms_consent_at: (lead.sms_consent_at as string) ?? null,
-    utm: (lead.utm as object) ?? null,
-    page_url: (lead.page_url as string) ?? null,
-    created_at: new Date().toISOString(),
-  }); // non-fatal — errors returned in {error} field, SMS already sent
-
-  // Log to ziro_message_log
-  await db.from('ziro_message_log').insert({
-    tenant_id: tenantId,
-    from_agent: 'ZIRO_MESSAGING',
-    channel: 'sms',
-    direction: 'outbound',
-    recipient_phone: phone,
-    recipient_name: getFirstName(lead),
-    message_body: finalMsg,
-    status: 'sent',
-    sent_at: new Date().toISOString(),
-    sms_enabled: SMS_ENABLED,
-    requires_approval: false,
-  });
+  // Log to ziro_message_log only when a real SMS went out — consumers
+  // (conversations, reporting, Claude history) treat outbound rows as sent.
+  if (smsSent) {
+    await db.from('ziro_message_log').insert({
+      tenant_id: tenantId,
+      from_agent: 'ZIRO_MESSAGING',
+      channel: 'sms',
+      direction: 'outbound',
+      recipient_phone: phone,
+      recipient_name: getFirstName(lead),
+      message_body: finalMsg,
+      status: 'sent',
+      sent_at: new Date().toISOString(),
+      sms_enabled: SMS_ENABLED,
+      requires_approval: false,
+    });
+  }
 }

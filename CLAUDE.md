@@ -96,8 +96,8 @@ zirowork-leadgen/
 ├── dashboard/              — client portal           → /dashboard
 ├── onboard.html            — public self-serve onboarding, served at /onboarding (renders 02-onboarding OnboardForm)
 ├── onboarding/             — scaffold (future onboarding section — empty)
-├── www/                    — ZiroWork brand/business page (A2P compliance: identity + SMS program disclosure); zirowork.com root serves it via vercel.json host rewrite once the domain is attached
-├── legal/                  — static legal pages (SMS-compliant) → /privacy, /privacy-policy, /terms, /terms-of-service — keep in sync with schools/*.html copies + intake-form legal.ts
+├── www/                    — ZiroWork brand/business page (A2P compliance: identity + SMS program disclosure); served at /home; zirowork.com root redirects there via vercel.json host redirect once the domain is attached
+├── legal/                  — static legal pages (SMS-compliant) → /privacy, /privacy-policy, /terms, /terms-of-service. THE ONLY SOURCE — intake-form's legal routes redirect here; the old schools/ copies are deleted
 │
 │  BACKEND & DOCS — not served to the browser
 ├── 99-agents/              — Python / Supabase edge-function backend
@@ -122,8 +122,8 @@ zirowork-leadgen/
 | `90-shell/Router.jsx renderMain()` | Duplicate route cases silently overwrite each other |
 | `93-hooks/use-local-data.js` | `window.SEED_DATA` — all page views read from here |
 | `vercel.json` (root) | Wrong/removed rewrite 404s `/schools`, `/dashboard`, or the `/privacy`+`/terms` URLs registered with Twilio (A2P rejection risk) |
-| `legal/*.html` ↔ `schools/*.html` ↔ `intake-form/legal.ts` | THREE copies of privacy/terms must stay consistent — conflicting policies are a Twilio rejection cause |
-| `schools/pages/signup.jsx` SMS consent checkbox | Never remove or pre-check it; `leads.sms_consent` gates ALL outbound SMS (TCPA) |
+| `legal/*.html` | THE single source of privacy/terms (all other surfaces link or redirect here) — its URLs are registered with Twilio; breaking them = A2P rejection |
+| `schools/pages/signup.jsx` SMS consent checkbox | Never remove or pre-check it. Consent gates the TEXT, never the lead: scoreAndSend + send-followup send only when `sms_consent=true`; on-reply honors stored `opted_out` + STOP/START/HELP keywords. Leads ALWAYS sync to the CRM regardless of consent |
 | `onboard.html` ↔ `02-onboarding/onboard-form.jsx` | Form shared by CRM onboarding view AND public onboard.html — edits hit both |
 | `schools/index.html`, `dashboard/index.html` | Script `src`s are absolute (`/schools/…`, `/dashboard/…`) — keep the prefix or assets 404 |
 

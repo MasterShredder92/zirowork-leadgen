@@ -1,4 +1,19 @@
 -- =============================================================
+-- ⚠️  WARNING — DROPPED TABLES (read before running this file)
+-- Migration 023 (023_drop_orphan_tables.sql) was APPLIED LIVE on
+-- 2026-06-10 and dropped these 6 tables from the platform DB:
+--   ziro_messaging_knowledge_base
+--   system_health
+--   anchor_job_locks
+--   ziro_client_context_cache
+--   ziro_retention_risk_log
+--   privacy_violation_log
+-- This file still contains their CREATE statements (kept as a
+-- historical combined artifact). Bootstrapping a DB from this file
+-- will RESURRECT those 6 tables unless you run 023 afterward.
+-- =============================================================
+
+-- =============================================================
 -- ZIROWORK PLATFORM DB — COMBINED MIGRATIONS
 -- Run this entire file once in the Supabase SQL editor:
 -- Dashboard → SQL Editor → New query → paste → Run

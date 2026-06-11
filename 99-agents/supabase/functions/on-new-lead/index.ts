@@ -53,15 +53,6 @@ Deno.serve(async (req) => {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  // Tenant ID is the last path segment: /functions/v1/on-new-lead/{tenantId}
-  const url = new URL(req.url);
-  const segments = url.pathname.split('/').filter(Boolean);
-  const tenantId = segments[segments.length - 1];
-
-  if (!tenantId || tenantId === 'on-new-lead') {
-    return new Response('Missing tenant_id in URL path', { status: 400 });
-  }
-
   let payload: WebhookPayload;
   try {
     payload = await req.json();
@@ -74,6 +65,27 @@ Deno.serve(async (req) => {
   }
 
   const lead = payload.record;
+
+  // Rows scoreAndSend itself syncs into `leads` carry source='webhook' —
+  // ignore them or the leads-table DB webhook would loop.
+  if (lead.source === 'webhook') {
+    return new Response('CRM sync row — ignored', { status: 200 });
+  }
+
+  // Tenant ID: explicit URL path segment (/on-new-lead/{tenantId}) wins;
+  // otherwise derived from the record's client_id (leads-table DB webhook —
+  // one static webhook serves every tenant).
+  const url = new URL(req.url);
+  const segments = url.pathname.split('/').filter(Boolean);
+  const pathTenant = segments[segments.length - 1];
+  const tenantId = (pathTenant && pathTenant !== 'on-new-lead')
+    ? pathTenant
+    : String(lead.client_id ?? '');
+
+  if (!tenantId) {
+    return new Response('Missing tenant_id (URL path or record.client_id)', { status: 400 });
+  }
+
   const db = createClient(PLATFORM_URL, PLATFORM_SERVICE_KEY);
 
   if (isInWindow()) {

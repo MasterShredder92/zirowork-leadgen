@@ -103,7 +103,7 @@ COLD / PAST STUDENT
 
 ---
 
-## Framework IDs (for ziro_messaging_knowledge_base lookup)
+## Framework IDs (for ziro_messaging_knowledge_base lookup) [table dropped 2026-06-10 — see migration 023; this DB lookup no longer exists]
 
 ```
 lead_opener
