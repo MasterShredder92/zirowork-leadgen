@@ -102,7 +102,7 @@ Write a brief, natural follow-up SMS. Match Andrea's voice. No more than 2 sente
 
       processed++;
     } catch (err) {
-      console.error(`Failed lead ${lead.id}:`, err);
+      console.error(`Failed lead ${lead.id}:`, err); // log only — nosemgrep: javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
       failed++;
     }
   }

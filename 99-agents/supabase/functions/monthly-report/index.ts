@@ -90,7 +90,7 @@ Deno.serve(async (req) => {
 
       processed++;
     } catch (err) {
-      console.error(`monthly-report: tenant ${tenant.tenant_id} failed:`, err);
+      console.error(`monthly-report: tenant ${tenant.tenant_id} failed:`, err); // log only — nosemgrep: javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
       failed++;
     }
   }
