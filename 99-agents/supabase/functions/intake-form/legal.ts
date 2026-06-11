@@ -38,10 +38,11 @@ export function buildPrivacyHtml(): string {
     <p>We collect the information you provide on the inquiry form: name, phone number, email (optional), instrument interest, student age, and how you heard about us.</p>
 
     <h2>How We Use Your Information</h2>
-    <p>We use your information to send SMS messages about your lesson inquiry, schedule follow-ups, and connect you with the music school. We do not sell or share your mobile phone number with third parties for marketing purposes.</p>
+    <p>We use your information to send SMS messages about your lesson inquiry, schedule follow-ups, and connect you with the music school. We do not sell, rent, or share your personal information with third parties except as necessary to deliver SMS messages through our SMS provider.</p>
+    <p>No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. Information sharing to subcontractors in support services, such as customer service, is permitted. All other use case categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.</p>
 
     <h2>SMS Messaging</h2>
-    <p>By opting in, you may receive up to 8 automated text messages per inquiry. Message and data rates may apply. Reply <strong>STOP</strong> at any time to unsubscribe. Reply <strong>HELP</strong> for assistance.</p>
+    <p>By opting in, you may receive up to 8 automated text messages per inquiry. Message frequency varies. Message and data rates may apply. Reply <strong>STOP</strong> at any time to unsubscribe. Reply <strong>HELP</strong> for assistance.</p>
 
     <h2>Data Retention</h2>
     <p>Your contact information is retained for up to 12 months after your inquiry or until you opt out, whichever comes first.</p>
@@ -93,13 +94,13 @@ export function buildTermsHtml(): string {
     <p>By checking the consent box on the inquiry form, you agree to receive automated text messages from the music school you contacted. Consent is not required to purchase lessons or any other service.</p>
 
     <h2>Message Frequency</h2>
-    <p>Up to 8 messages per inquiry. Message and data rates may apply.</p>
+    <p>Message frequency varies. Up to 8 messages per inquiry. Message and data rates may apply.</p>
 
     <h2>Opt-Out</h2>
-    <p>Reply <strong>STOP</strong> to any message to unsubscribe immediately. Reply <strong>HELP</strong> for support contact information.</p>
+    <p>Reply <strong>STOP</strong> to any message to unsubscribe immediately. After you send the SMS message "STOP" to us, we will send you one final SMS message to confirm that you have been unsubscribed; you will receive no further messages. Reply <strong>HELP</strong> for support contact information. If you are experiencing issues with the messaging program you can reply with the keyword HELP for more assistance.</p>
 
     <h2>No Warranties</h2>
-    <p>Services are provided as-is. ZiroWork is not responsible for carrier delays or message delivery failures.</p>
+    <p>Services are provided as-is. ZiroWork is not responsible for carrier delays or message delivery failures. Carriers are not liable for delayed or undelivered messages.</p>
 
     <h2>Contact</h2>
     <p>Questions? Email <a href="mailto:support@zirowork.com">support@zirowork.com</a></p>

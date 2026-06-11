@@ -48,6 +48,24 @@ export async function scoreAndSend(lead: LeadRecord, tenantId: string): Promise<
   const phone = getPhone(lead);
   if (!phone) throw new Error('Lead has no phone number');
 
+  // TCPA/A2P gate: never text a lead without recorded SMS consent
+  if (lead.sms_consent !== true) {
+    await db.from('ziro_message_log').insert({
+      tenant_id: tenantId,
+      from_agent: 'ZIRO_MESSAGING',
+      channel: 'sms',
+      direction: 'outbound',
+      recipient_phone: phone,
+      recipient_name: getFirstName(lead),
+      message_body: '[not sent — lead has no recorded SMS consent]',
+      status: 'skipped_no_consent',
+      sent_at: new Date().toISOString(),
+      sms_enabled: SMS_ENABLED,
+      requires_approval: false,
+    });
+    return;
+  }
+
   // Score lead via ZIRO_LEADS
   const leadsUserMsg = [
     `Tenant: ${cfg.location_name}`,
@@ -97,6 +115,8 @@ export async function scoreAndSend(lead: LeadRecord, tenantId: string): Promise<
     email: (lead.email as string) ?? null,
     notes: [scoring.why, scoring.hook].filter(Boolean).join(' | '),
     priority: scoring.priority,
+    sms_consent: lead.sms_consent === true,
+    sms_consent_at: (lead.sms_consent_at as string) ?? null,
     utm: (lead.utm as object) ?? null,
     page_url: (lead.page_url as string) ?? null,
     created_at: new Date().toISOString(),

@@ -21,6 +21,7 @@ function SignupPage({ school, slug, instrument }) {
   const [selectedDays, setSelectedDays] = useState([]);
   const [hasInstrument, setHasInstrument] = useState('');
   const [contact, setContact] = useState({ parentFirstName: '', parentLastName: '', email: '', phone: '', isMilitary: false });
+  const [smsConsent, setSmsConsent] = useState(false);
   const [additionalStudents, setAdditionalStudents] = useState([]);
   const [addingStudent, setAddingStudent] = useState(false);
   const [newStudent, setNewStudent] = useState({ firstName: '', lastName: '', instruments: [], bio: '', goals: '' });
@@ -76,6 +77,8 @@ function SignupPage({ school, slug, instrument }) {
         age: student.age ? parseInt(student.age) : null,
         page_url: window.location.href,
         stage: 'new',
+        sms_consent: smsConsent,
+        sms_consent_at: smsConsent ? new Date().toISOString() : null,
         utm: {
           enrollment_type: selectedPath,
           gift_recipient: giftRecipient || null,
@@ -630,6 +633,21 @@ function SignupPage({ school, slug, instrument }) {
             onChange={e => setContact(c => ({ ...c, phone: e.target.value }))}
             placeholder="(555) 000-0000"
           />
+        </div>
+        <div style={{ width: '100%', display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 16 }}>
+          <input
+            type="checkbox"
+            id="sms-consent"
+            checked={smsConsent}
+            onChange={e => setSmsConsent(e.target.checked)}
+            style={{ marginTop: 2, accentColor: accent, flexShrink: 0, cursor: 'pointer' }}
+          />
+          <label htmlFor="sms-consent" style={{ fontSize: 12, color: '#888', lineHeight: 1.5, cursor: 'pointer' }}>
+            I consent to receive text messages from ZiroWork on behalf of {school.name} about my lesson inquiry, including follow-ups and booking reminders, at the number provided. Message frequency varies. Msg & data rates may apply. Reply HELP for help or STOP to cancel.{' '}
+            <a href="/privacy" target="_blank" style={{ color: accent, textDecoration: 'underline' }}>Privacy Policy</a>
+            {' | '}
+            <a href="/terms" target="_blank" style={{ color: accent, textDecoration: 'underline' }}>Terms</a>
+          </label>
         </div>
         <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#f8f8f6', borderRadius: 10, marginBottom: 16, cursor: 'pointer' }}
           onClick={() => setContact(c => ({ ...c, isMilitary: !c.isMilitary }))}>

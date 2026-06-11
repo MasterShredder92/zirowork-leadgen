@@ -20,6 +20,7 @@ Deno.serve(async (req) => {
     .eq('stage', 'new')
     .eq('followup_paused', false)
     .eq('opted_out', false)
+    .eq('sms_consent', true)
     .lt('followup_count', 3)
     .or(
       'last_contact_at.is.null,last_contact_at.lt.' +

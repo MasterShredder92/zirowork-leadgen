@@ -19,6 +19,8 @@ export interface LeadRecord {
   num_students?: number;
   goals?: string;
   personality?: string;
+  sms_consent?: boolean;
+  sms_consent_at?: string;
   created_at?: string;
   [key: string]: unknown;
 }

@@ -46,6 +46,11 @@ function LandingLayout({ school, intakeUrl, instrument, children }) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
             <div style={{ fontSize: 11, color: '#444' }}>© 2025 {school.name}</div>
+            <div style={{ fontSize: 11, color: '#444' }}>
+              <a href="/privacy" target="_blank" style={{ color: '#666', textDecoration: 'none' }}>Privacy Policy</a>
+              {' · '}
+              <a href="/terms" target="_blank" style={{ color: '#666', textDecoration: 'none' }}>Terms</a>
+            </div>
             <div style={{ fontSize: 11, color: '#333' }}>Powered by <span style={{ color: '#555', fontWeight: 600 }}>ZiroWork</span></div>
             <a href={intakeUrl} style={{ padding: '8px 18px', background: accent, color: '#fff', borderRadius: 6, fontSize: 12, fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap' }}>
               Get Started →

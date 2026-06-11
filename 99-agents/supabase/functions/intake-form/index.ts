@@ -324,6 +324,8 @@ ${gtmBody}
           student_age: parseInt(fd.get('student_age')) || null,
           military: fd.get('military') === 'on',
           how_did_you_hear: fd.get('how_did_you_hear') || null,
+          sms_consent: true,
+          sms_consent_at: new Date().toISOString(),
           utm: {
             utm_source: fd.get('utm_source') || null,
             utm_campaign: fd.get('utm_campaign') || null,
