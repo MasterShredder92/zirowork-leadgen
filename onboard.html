@@ -16,16 +16,16 @@
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.1/dist/umd/supabase.min.js" integrity="sha384-UQ9Ztz63gzT2JZCuDRkNXV8RP/gXxdPUuM9LKlz2BzqGx9xFYNAK8yAEgbfZHs7P" crossorigin="anonymous"></script>
 <script>
   window.sb = supabase.createClient(
     'https://txpgyuetfsrzfxxopwzf.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cGd5dWV0ZnNyemZ4eG9wd3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDk5MzQsImV4cCI6MjA5NDc4NTkzNH0.LaSe5Gfho9WIqKQOyBECKHx4CbtIO95RexqoAQMkIvQ'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cGd5dWV0ZnNyemZ4eG9wd3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDk5MzQsImV4cCI6MjA5NDc4NTkzNH0.LaSe5Gfho9WIqKQOyBECKHx4CbtIO95RexqoAQMkIvQ' // public anon key — nosemgrep: generic.secrets.security.detected-jwt-token.detected-jwt-token
   );
 </script>
 
-<!-- LucideReact for icons -->
-<script src="https://unpkg.com/lucide-react@latest/dist/umd/lucide-react.min.js"></script>
+<!-- Icons — local set, provides window.LucideReact (lucide-react no longer ships a UMD build) -->
+<script type="text/babel" src="92-design/icons.jsx"></script>
 
 <!-- Theme tokens (window.T) -->
 <script src="92-design/theme.js"></script>

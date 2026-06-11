@@ -413,7 +413,7 @@ CLI is already linked. Should take ~30 seconds each.
 | Platform URL | https://txpgyuetfsrzfxxopwzf.supabase.co |
 | Project ref | txpgyuetfsrzfxxopwzf |
 | Service role key | [REDACTED_SERVICE_ROLE_KEY] |
-| Anon key | eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cGd5dWV0ZnNyemZ4eG9wd3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDk5MzQsImV4cCI6MjA5NDc4NTkzNH0.LaSe5Gfho9WIqKQOyBECKHx4CbtIO95RexqoAQMkIvQ |
+| Anon key | eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cGd5dWV0ZnNyemZ4eG9wd3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDk5MzQsImV4cCI6MjA5NDc4NTkzNH0.LaSe5Gfho9WIqKQOyBECKHx4CbtIO95RexqoAQMkIvQ | <!-- public anon key — nosemgrep: generic.secrets.security.detected-jwt-token.detected-jwt-token -->
 | PAT | [REDACTED_PAT] |
 | CLI | v2.101.0, already linked to txpgyuetfsrzfxxopwzf |
 | SQL editor | https://supabase.com/dashboard/project/txpgyuetfsrzfxxopwzf/sql/new |
