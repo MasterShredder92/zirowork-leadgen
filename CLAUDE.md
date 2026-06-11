@@ -96,8 +96,8 @@ zirowork-leadgen/
 ├── dashboard/              — client portal           → /dashboard
 ├── onboard.html            — public self-serve onboarding, served at /onboarding (renders 02-onboarding OnboardForm)
 ├── onboarding/             — scaffold (future onboarding section — empty)
-├── www/                    — scaffold (future marketing site — empty)
-├── legal/                  — static legal pages
+├── www/                    — ZiroWork brand/business page (A2P compliance: identity + SMS program disclosure); zirowork.com root serves it via vercel.json host rewrite once the domain is attached
+├── legal/                  — static legal pages (SMS-compliant) → /privacy, /privacy-policy, /terms, /terms-of-service — keep in sync with schools/*.html copies + intake-form legal.ts
 │
 │  BACKEND & DOCS — not served to the browser
 ├── 99-agents/              — Python / Supabase edge-function backend
@@ -106,7 +106,7 @@ zirowork-leadgen/
 ├── MASTER_PLAN.md          — launch execution plan
 ├── .brain/                 — session memory + logs
 │
-├── vercel.json             — rewrites /schools + /dashboard; operator served at /
+├── vercel.json             — rewrites /schools + /dashboard + /privacy(-policy) + /terms(-of-service) + zirowork.com host→www/; operator served at /
 ├── CLAUDE.md               — this file (Layer 0 router)
 └── CONTEXT.md              — task router (Layer 1)
 ```
@@ -121,7 +121,9 @@ zirowork-leadgen/
 | `index.html` script load order | New pages must load **before** `90-shell/Router.jsx` |
 | `90-shell/Router.jsx renderMain()` | Duplicate route cases silently overwrite each other |
 | `93-hooks/use-local-data.js` | `window.SEED_DATA` — all page views read from here |
-| `vercel.json` (root) | Wrong/removed rewrite 404s `/schools` or `/dashboard` |
+| `vercel.json` (root) | Wrong/removed rewrite 404s `/schools`, `/dashboard`, or the `/privacy`+`/terms` URLs registered with Twilio (A2P rejection risk) |
+| `legal/*.html` ↔ `schools/*.html` ↔ `intake-form/legal.ts` | THREE copies of privacy/terms must stay consistent — conflicting policies are a Twilio rejection cause |
+| `schools/pages/signup.jsx` SMS consent checkbox | Never remove or pre-check it; `leads.sms_consent` gates ALL outbound SMS (TCPA) |
 | `onboard.html` ↔ `02-onboarding/onboard-form.jsx` | Form shared by CRM onboarding view AND public onboard.html — edits hit both |
 | `schools/index.html`, `dashboard/index.html` | Script `src`s are absolute (`/schools/…`, `/dashboard/…`) — keep the prefix or assets 404 |
 
