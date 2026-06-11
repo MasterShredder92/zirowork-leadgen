@@ -7,17 +7,17 @@
 -- =============================================================
 --
 -- ┌───────────────────────────────────────────────────────────┐
--- │  ⚠  DO NOT RUN — PENDING A PRODUCT DECISION               │
+-- │  ✅ APPLIED 2026-06-10 — decision: DROP (features abandoned)│
 -- │                                                           │
--- │  These 6 tables back features that were SCAFFOLDED BUT    │
--- │  NEVER BUILT. They are referenced by no code today, but   │
--- │  the features they were named for are still on the table. │
+-- │  These 6 tables backed features that were SCAFFOLDED BUT  │
+-- │  NEVER BUILT. They were referenced by no code and held    │
+-- │  0 rows, so the drop lost no data.                        │
 -- │                                                           │
--- │  Run this migration ONLY once those features are          │
--- │  confirmed ABANDONED.                                     │
+-- │  Re-runnable safely (drop ... if exists). To restore any  │
+-- │  table, re-run its original migration (cited per line).   │
 -- │                                                           │
--- │  Data loss: NONE. Every table is empty (0 rows verified), │
--- │  so the drop loses no data.                               │
+-- │  Data loss: NONE. Every table was empty (0 rows verified).│
+-- │                                                           │
 -- │                                                           │
 -- │  Reversible: YES. To restore any table, re-run the        │
 -- │  original migration that created it (cited per-line       │

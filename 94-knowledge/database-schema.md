@@ -86,17 +86,6 @@ Used by the `99-agents/` edge functions and the client portal. Created by the `9
 
 ---
 
-## Tables that exist but no code currently uses (orphan schema)
+_The 6 orphan tables that backed unbuilt features (ziro_messaging_knowledge_base, system_health, anchor_job_locks, ziro_client_context_cache, ziro_retention_risk_log, privacy_violation_log) were **dropped 2026-06-10** via migration `023`._
 
-Present live, but no edge function or frontend reads/writes them. Either build the feature or drop them.
-
-- **`ziro_messaging_knowledge_base`** — response frameworks (prompts are hardcoded instead).
-- **`system_health`** — component health tracking (never written).
-- **`anchor_job_locks`** — distributed job locks (never used; single-instance).
-- **`ziro_client_context_cache`** — student context cache for an unbuilt agent.
-- **`ziro_retention_risk_log`** — churn-risk staging for an unbuilt agent.
-- **`privacy_violation_log`** — teacher-privacy audit for an unbuilt agent.
-
----
-
-_26 tables total. If you add/alter a table, update this file in the same change — a stale schema doc is a defect._
+_If you add/alter/drop a table, update this file in the same change — a stale schema doc is a defect._
