@@ -12,8 +12,10 @@ function getPlatformClient() {
 }
 
 function getFirstName(lead: LeadRecord): string {
-  if (lead.first_name) return lead.first_name;
+  if (lead.first_name) return String(lead.first_name).split(' ')[0];
   if (lead.name) return String(lead.name).split(' ')[0];
+  if (lead.parent_name) return String(lead.parent_name).split(' ')[0];
+  if (lead.student_name) return String(lead.student_name).split(' ')[0];
   return 'there';
 }
 
@@ -77,31 +79,32 @@ export async function scoreAndSend(lead: LeadRecord, tenantId: string): Promise<
     throw new Error(`ZIRO_LEADS response not parseable: ${scoringRaw}`);
   }
 
-  // Sync lead into platform CRM so operators can see it in the Leads page — ALWAYS,
-  // and BEFORE the send so a Twilio failure can never lose the lead.
-  // The webhook record may already BE a platform leads row (DB-webhook wiring), or a
-  // retry may re-deliver: update the existing row's scoring instead of duplicating.
+  // Sync lead into platform CRM — always, before the send.
+  // Match on either the normalized phone OR raw digits so a lead stored
+  // before normalization is found and updated rather than duplicated.
+  const phoneDigits = phone.replace(/\D/g, '');
   const { data: existing } = await db
     .from('leads')
     .select('id')
     .eq('client_id', tenantId)
-    .eq('phone', phone)
+    .or(`phone.eq.${phone},phone.eq.${phoneDigits}`)
     .limit(1);
 
   if (existing?.length) {
     await db.from('leads').update({
+      phone,  // normalize to E.164 if stored without country code
       notes: [scoring.why, scoring.hook].filter(Boolean).join(' | '),
       priority: scoring.priority,
     }).eq('id', existing[0].id);
   } else {
     await db.from('leads').insert({
       client_id: tenantId,
-      student_name: [getFirstName(lead), lead.last_name].filter(Boolean).join(' '),
+      student_name: (lead.student_name as string) ?? [getFirstName(lead), lead.last_name].filter(Boolean).join(' '),
       parent_name: (lead.parent_name as string) ?? null,
-      program: (lead.instrument as string) ?? 'Unknown',
+      program: (lead.program as string) ?? (lead.instrument as string) ?? 'Unknown',
       stage: 'new',
       source: 'webhook',
-      phone: phone,
+      phone,
       email: (lead.email as string) ?? null,
       notes: [scoring.why, scoring.hook].filter(Boolean).join(' | '),
       priority: scoring.priority,
@@ -110,7 +113,7 @@ export async function scoreAndSend(lead: LeadRecord, tenantId: string): Promise<
       utm: (lead.utm as object) ?? null,
       page_url: (lead.page_url as string) ?? null,
       created_at: new Date().toISOString(),
-    }); // non-fatal — errors returned in {error} field
+    });
   }
 
   // Polish + send only with recorded consent
