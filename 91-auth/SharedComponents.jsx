@@ -17,7 +17,7 @@ function AuthWrap({ children }) {
       <div style={{ width: '100%', maxWidth: 360, padding: '0 24px' }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <img src="bolt-white.png" alt="ZiroWork" style={{ height: 30, marginBottom: 10 }} />
-          <div style={{ fontSize: 12, color: 'var(--text-4)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600 }}>Music Academy OS</div>
+          <div style={{ fontSize: 12, color: 'var(--text-4)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600 }}>Enrollment OS</div>
         </div>
         {children}
       </div>

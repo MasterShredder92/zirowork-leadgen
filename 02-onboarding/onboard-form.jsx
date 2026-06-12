@@ -224,7 +224,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         </div>
       )}
 
-      <div style={{ marginBottom: 14 }}>{fLabel('Studio Name', true)}<input style={inp} value={form.studio_name} onChange={e => set('studio_name', e.target.value)} placeholder="Adkins Music Lessons" /></div>
+      <div style={{ marginBottom: 14 }}>{fLabel('Studio Name', true)}<input style={inp} value={form.studio_name} onChange={e => set('studio_name', e.target.value)} placeholder="Your Studio Name" /></div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px', gap: 10, marginBottom: 14 }}>
         <div>{fLabel('City', true)}<input style={inp} value={form.city} onChange={e => set('city', e.target.value)} placeholder="Austin" /></div>
         <div>{fLabel('State', true)}<input style={inp} value={form.state} onChange={e => set('state', e.target.value)} placeholder="TX" maxLength={2} /></div>
