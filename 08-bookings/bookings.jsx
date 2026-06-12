@@ -2,8 +2,9 @@
 function BookingsView({ onNavigate }) {
   const T = window.T || {};
   const { useState } = React;
-  const [clientId, setClientId] = useState(null);
-  const { data: rawData } = useBookings(clientId ? { client_id: clientId } : undefined);
+  // bookings has NO client_id column — never filter it by client_id (see 94-knowledge/data-ssot.md).
+  // To scope by client, attribute through lead_id → leads.client_id.
+  const { data: rawData } = useBookings();
   const [bookings, setBookings] = useState([]);
   React.useEffect(() => { if (rawData) setBookings(rawData); }, [rawData]);
 

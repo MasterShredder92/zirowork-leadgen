@@ -6,9 +6,12 @@ function ClientOnboardingView({ onNavigate }) {
   const { data: clientsData, refetch: refetchClients } = useClients();
   const clients = clientsData || [];
 
+  // `derived` items map to TEXT columns holding a real value (the SMS number, the webhook URL).
+  // They are read-only here: checked = a value exists. Toggling them would clobber the real value
+  // with a boolean — see 94-knowledge/data-ssot.md. The rest are boolean onboarding flags.
   const CHECKLIST = [
-    { key: 'sms_number',        label: 'SMS number assigned' },
-    { key: 'lead_form_webhook', label: 'Lead form webhook configured' },
+    { key: 'sms_number',        label: 'SMS number assigned',          derived: true },
+    { key: 'lead_form_webhook', label: 'Lead form webhook configured', derived: true },
     { key: 'protected_slots',   label: 'Protected slots confirmed' },
     { key: 'brand_assets',      label: 'Brand assets uploaded' },
     { key: 'automation_rules',  label: 'Automation rules configured' },
@@ -60,9 +63,9 @@ function ClientOnboardingView({ onNavigate }) {
                       const checked = !!client[item.key];
                       return (
                         <div key={item.key}
-                          style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: checked ? T.t2 : T.t4, cursor: 'pointer' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: checked ? T.t2 : T.t4, cursor: item.derived ? 'default' : 'pointer' }}
                           onClick={async () => {
-                            if (!window.sb) return;
+                            if (item.derived || !window.sb) return;
                             await window.sb.from('clients').update({ [item.key]: !client[item.key] }).eq('id', client.id);
                             refetchClients();
                           }}>
