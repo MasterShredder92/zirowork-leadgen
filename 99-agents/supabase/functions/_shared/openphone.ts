@@ -9,7 +9,7 @@ export async function sendSMS(to: string, body: string): Promise<void> {
   const res = await fetch('https://api.openphone.com/v1/messages', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${OPENPHONE_API_KEY}`,
+      Authorization: OPENPHONE_API_KEY,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
