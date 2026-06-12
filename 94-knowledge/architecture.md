@@ -104,7 +104,6 @@ The operator app is organized as numbered folders in CRM nav order — **one fol
 09-enrollments/      window.EnrollmentsView        route: enrollments
 10-reporting/        window.ReportingView          route: reporting
 11-automation-rules/ window.AutomationRulesView    route: automation-rules
-12-assets/           window.AssetsView             route: assets
 13-integrations/     window.IntegrationsView       route: integrations
 14-settings/         window.SettingsView           route: settings
 15-insights/         window.InsightsView           route: insights
@@ -169,7 +168,6 @@ Adding a route = load the view file before `Router.jsx`, add a `case` in `render
 | `enrollments` | `window.EnrollmentsView` | `09-enrollments/enrollments.jsx` |
 | `reporting` | `window.ReportingView` | `10-reporting/reporting.jsx` |
 | `automation-rules` | `window.AutomationRulesView` | `11-automation-rules/automation-rules.jsx` |
-| `assets` | `window.AssetsView` | `12-assets/assets.jsx` |
 | `integrations` | `window.IntegrationsView` | `13-integrations/integrations.jsx` |
 | `settings` | `window.SettingsView` | `14-settings/settings.jsx` |
 | `insights` | `window.InsightsView` | `15-insights/insights.jsx` |
@@ -179,7 +177,7 @@ Adding a route = load the view file before `Router.jsx`, add a `case` in `render
 
 ## Data Layer
 
-Defined in `93-hooks/use-local-data.js`. Each table has a hook (`useClients`, `useCampaigns`, `useLeads`, `useConversations`, `useEscalations`, `useBookings`, `useEnrollments`, `useOperatorTasks`, `useClientReports`, `useAutomationRules`, `useAssets`, `useIntegrations`), all exposed on `window`.
+Defined in `93-hooks/use-local-data.js`. Each table has a hook (`useClients`, `useCampaigns`, `useLeads`, `useConversations`, `useEscalations`, `useBookings`, `useEnrollments`, `useOperatorTasks`, `useClientReports`, `useAutomationRules`, `useIntegrations`), all exposed on `window`.
 
 Every hook is built on `_useTable(table, seedKey, filters)`, which:
 - If `window.sb` is **absent** (dev, no credentials) → returns filtered rows from `window.SEED_DATA[seedKey]`.

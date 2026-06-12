@@ -59,7 +59,6 @@ function App() {
     'enrollments':      'Enrollments',
     'reporting':        'Reporting',
     'automation-rules': 'Automation Rules',
-    'assets':           'Assets',
     'integrations':     'Integrations',
     'settings':         'Settings',
     'insights':         'Insights',
@@ -80,7 +79,6 @@ function App() {
       case 'enrollments':      return window.EnrollmentsView      ? React.createElement(window.EnrollmentsView,      { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Enrollments' });
       case 'reporting':        return window.ReportingView        ? React.createElement(window.ReportingView,        { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Reporting' });
       case 'automation-rules': return window.AutomationRulesView  ? React.createElement(window.AutomationRulesView,  { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Automation Rules' });
-      case 'assets':           return window.AssetsView           ? React.createElement(window.AssetsView,           { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Assets' });
       case 'integrations':     return window.IntegrationsView     ? React.createElement(window.IntegrationsView,     { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Integrations' });
       case 'settings':         return window.SettingsView         ? React.createElement(window.SettingsView,         { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Settings' });
       case 'insights':         return window.InsightsView         ? React.createElement(window.InsightsView,         { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Insights' });

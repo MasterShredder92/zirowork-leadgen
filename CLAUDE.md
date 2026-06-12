@@ -96,7 +96,6 @@ zirowork-leadgen/
 ├── 09-enrollments/         window.EnrollmentsView     | route: enrollments
 ├── 10-reporting/           window.ReportingView       | route: reporting
 ├── 11-automation-rules/    window.AutomationRulesView | route: automation-rules
-├── 12-assets/              window.AssetsView          | route: assets
 ├── 13-integrations/        window.IntegrationsView    | route: integrations
 ├── 14-settings/            window.SettingsView        | route: settings
 ├── 15-insights/            window.InsightsView        | route: insights

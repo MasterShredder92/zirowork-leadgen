@@ -12,7 +12,6 @@ const NAV = [
   { section: 'FUNNELS', items: [
     { id: 'campaigns', label: 'Campaigns', icon: 'Megaphone' },
     { id: 'pages',     label: 'Pages',     icon: 'Globe' },
-    { id: 'assets',    label: 'Assets',    icon: 'Folder' },
   ]},
   { section: 'PIPELINE', items: [
     { id: 'leads',         label: 'Leads',         icon: 'Inbox' },

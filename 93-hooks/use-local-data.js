@@ -9,7 +9,6 @@ window.SEED_DATA = {
   operator_tasks: [],
   client_reports: [],
   automation_rules: [],
-  assets: [],
   integrations: [],
 };
 
@@ -69,7 +68,6 @@ function useEnrollments(f)   { return _useTable('enrollments',    'enrollments',
 function useOperatorTasks(f)   { return _useTable('operator_tasks',   'operator_tasks',   f); }
 function useClientReports(f)   { return _useTable('client_reports',   'client_reports',   f); }
 function useAutomationRules(f) { return _useTable('automation_rules', 'automation_rules', f); }
-function useAssets(f)          { return _useTable('assets',           'assets',           f); }
 function useIntegrations(f)    { return _useTable('integrations',     'integrations',     f); }
 
 // ─── SINGLE SOURCE OF TRUTH: derived rollups ────────────────────────────────
@@ -151,6 +149,6 @@ Object.assign(window, {
   useClients, useCampaigns, useLeads,
   useConversations, useEscalations, useBookings, useEnrollments,
   useOperatorTasks, useClientReports,
-  useAutomationRules, useAssets, useIntegrations,
+  useAutomationRules, useIntegrations,
   useRollups, deriveRollups, EMPTY_CLIENT_ROLLUP, EMPTY_CAMPAIGN_ROLLUP,
 });
