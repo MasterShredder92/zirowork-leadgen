@@ -27,6 +27,8 @@ function _useTable(table, seedKey, filters) {
   const [error, setError] = React.useState(null);
   const [tick, setTick] = React.useState(0);
   const filterKey = filters ? JSON.stringify(filters) : '';
+
+  // Fetch effect — runs on mount and whenever tick increments (realtime or manual refetch)
   React.useEffect(() => {
     if (!window.sb) {
       setData(applyFilters(window.SEED_DATA[seedKey] || [], filters));
@@ -41,6 +43,19 @@ function _useTable(table, seedKey, filters) {
       setLoading(false);
     });
   }, [filterKey, tick]);
+
+  // Realtime subscription — any INSERT/UPDATE/DELETE on this table triggers a refetch
+  React.useEffect(() => {
+    if (!window.sb) return;
+    const channel = window.sb
+      .channel('rt-' + table + (filterKey ? '-' + filterKey : ''))
+      .on('postgres_changes', { event: '*', schema: 'public', table }, () => {
+        setTick(t => t + 1);
+      })
+      .subscribe();
+    return () => { window.sb.removeChannel(channel); };
+  }, [filterKey]);
+
   return { data, loading, error, refetch: () => setTick(t => t + 1) };
 }
 
