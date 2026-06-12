@@ -21,7 +21,7 @@ function applyFilters(data, filters) {
   return data.filter(row => Object.entries(filters).every(([k, v]) => row[k] === v));
 }
 
-function _useTable(table, seedKey, filters) {
+function _useTable(table, seedKey, filters, chanKey) {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
@@ -48,7 +48,7 @@ function _useTable(table, seedKey, filters) {
   React.useEffect(() => {
     if (!window.sb) return;
     const channel = window.sb
-      .channel('rt-' + table + (filterKey ? '-' + filterKey : ''))
+      .channel('rt-' + table + (chanKey ? '-' + chanKey : '') + (filterKey ? '-' + filterKey : ''))
       .on('postgres_changes', { event: '*', schema: 'public', table }, () => {
         setTick(t => t + 1);
       })
@@ -72,9 +72,85 @@ function useAutomationRules(f) { return _useTable('automation_rules', 'automatio
 function useAssets(f)          { return _useTable('assets',           'assets',           f); }
 function useIntegrations(f)    { return _useTable('integrations',     'integrations',     f); }
 
+// ─── SINGLE SOURCE OF TRUTH: derived rollups ────────────────────────────────
+// The `clients` and `campaigns` tables carry stored count columns (leads_30d,
+// trials_30d, enrollments_30d, active_campaigns, open_escalations / leads,
+// trials, enrolled) that NOTHING keeps in sync — they drift the moment a lead,
+// booking, enrollment, campaign, or escalation changes. NEVER read those stored
+// columns for display. Instead every page derives these counts here, from the
+// live source tables, so all surfaces always agree. See 94-knowledge/data-ssot.md.
+// NOTE: clients.mrr_cents is NOT here — it is the client's contract fee to
+// ZiroWork (a primary billing value), not a count derived from source rows.
+
+const ROLLUP_WINDOW_MS = 30 * 24 * 60 * 60 * 1000; // "_30d" columns = trailing 30 days
+
+function deriveRollups({ leads, bookings, enrollments, campaigns, escalations }, nowMs) {
+  const since = new Date(nowMs - ROLLUP_WINDOW_MS).toISOString();
+  const leadById = {};
+  leads.forEach(l => { leadById[l.id] = l; });
+
+  const byClient = {};
+  const ensureClient = id => (byClient[id] = byClient[id] ||
+    { leads_30d: 0, trials_30d: 0, enrollments_30d: 0, active_campaigns: 0, open_escalations: 0 });
+
+  const byCampaign = {};
+  const ensureCampaign = id => (byCampaign[id] = byCampaign[id] || { leads: 0, trials: 0, enrolled: 0 });
+
+  leads.forEach(l => {
+    if (l.campaign_id) ensureCampaign(l.campaign_id).leads += 1;
+    if (l.client_id && l.created_at >= since) ensureClient(l.client_id).leads_30d += 1;
+  });
+
+  // bookings have NO client_id — attribute through the lead (lead_id → lead.client_id/campaign_id)
+  bookings.forEach(b => {
+    const lead = b.lead_id ? leadById[b.lead_id] : null;
+    if (!lead) return;
+    if (lead.campaign_id) ensureCampaign(lead.campaign_id).trials += 1;
+    if (lead.client_id && b.created_at >= since) ensureClient(lead.client_id).trials_30d += 1;
+  });
+
+  enrollments.forEach(e => {
+    if (e.outcome !== 'enrolled') return;
+    const lead = e.lead_id ? leadById[e.lead_id] : null;
+    if (lead && lead.campaign_id) ensureCampaign(lead.campaign_id).enrolled += 1;
+    if (e.client_id && e.created_at >= since) ensureClient(e.client_id).enrollments_30d += 1;
+  });
+
+  campaigns.forEach(c => {
+    if (c.client_id && c.status === 'active') ensureClient(c.client_id).active_campaigns += 1;
+  });
+
+  // open escalations: ziro_messaging_escalations (the table the Escalations page treats
+  // as truth) with no resolved_at, keyed by tenant_id (=== clients.id).
+  escalations.forEach(e => {
+    if (e.tenant_id && !e.resolved_at) ensureClient(e.tenant_id).open_escalations += 1;
+  });
+
+  return { byClient, byCampaign };
+}
+
+// One hook, called by every page that shows client/campaign counts. Composes the
+// realtime source hooks with a distinct channel key so it never collides with a
+// page's own subscriptions. Returns { byClient: {clientId: {...}}, byCampaign: {...} }.
+const EMPTY_CLIENT_ROLLUP   = { leads_30d: 0, trials_30d: 0, enrollments_30d: 0, active_campaigns: 0, open_escalations: 0 };
+const EMPTY_CAMPAIGN_ROLLUP = { leads: 0, trials: 0, enrolled: 0 };
+
+function useRollups() {
+  const leads       = _useTable('leads',                       'leads',       undefined, 'roll').data;
+  const bookings    = _useTable('bookings',                    'bookings',    undefined, 'roll').data;
+  const enrollments = _useTable('enrollments',                 'enrollments', undefined, 'roll').data;
+  const campaigns   = _useTable('campaigns',                   'campaigns',   undefined, 'roll').data;
+  const escalations = _useTable('ziro_messaging_escalations',  '__msgEsc',    undefined, 'roll').data;
+  return React.useMemo(
+    () => deriveRollups({ leads, bookings, enrollments, campaigns, escalations }, Date.now()),
+    [leads, bookings, enrollments, campaigns, escalations]
+  );
+}
+
 Object.assign(window, {
   useClients, useCampaigns, useLeads,
   useConversations, useEscalations, useBookings, useEnrollments,
   useOperatorTasks, useClientReports,
   useAutomationRules, useAssets, useIntegrations,
+  useRollups, deriveRollups, EMPTY_CLIENT_ROLLUP, EMPTY_CAMPAIGN_ROLLUP,
 });

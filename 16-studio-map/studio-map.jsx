@@ -100,12 +100,13 @@ function buildJourneyData(leads) {
   return { nodes, edges };
 }
 
-function buildBlockerData(clients, escalations) {
+function buildBlockerData(clients, escalations, byClient) {
   const nodes = [], edges = [];
 
   clients.forEach((c, i) => {
     const hc = HEALTH_COLORS[c.health] || HEALTH_COLORS[c.status] || '#888';
-    nodes.push(smNode(c.id, c.name, hc, 20 + (c.open_escalations || 0) * 4, 'client', c));
+    const openEsc = (byClient[c.id] || {}).open_escalations || 0;
+    nodes.push(smNode(c.id, c.name, hc, 20 + openEsc * 4, 'client', c));
   });
 
   escalations.forEach(e => {
@@ -140,10 +141,10 @@ function smEdge(from, to, color, opacity = 0.3, dashes = false) {
 }
 
 function smGetViewData(view, data) {
-  const { clients = [], campaigns = [], leads = [], enrollments = [], escalations = [] } = data || {};
+  const { clients = [], campaigns = [], leads = [], enrollments = [], escalations = [], byClient = {} } = data || {};
   if (view === 'funnel')   return buildFunnelData(clients, campaigns, leads, enrollments);
   if (view === 'journey')  return buildJourneyData(leads);
-  if (view === 'blockers') return buildBlockerData(clients, escalations);
+  if (view === 'blockers') return buildBlockerData(clients, escalations, byClient);
   return { nodes: [], edges: [] };
 }
 
@@ -207,6 +208,7 @@ window.StudioMapView = function StudioMapView() {
   const { data: leads = [] }       = window.useLeads       ? window.useLeads()       : { data: [] };
   const { data: enrollments = [] } = window.useEnrollments ? window.useEnrollments() : { data: [] };
   const { data: escalations = [] } = window.useEscalations ? window.useEscalations() : { data: [] };
+  const rollups = window.useRollups ? window.useRollups() : { byClient: {}, byCampaign: {} };
 
   const [activeView,    setActiveView]    = useState('funnel');
   const [nodeInfo,      setNodeInfo]      = useState(null);
@@ -222,7 +224,7 @@ window.StudioMapView = function StudioMapView() {
   useEffect(() => {
     if (!graphRef.current || !window.vis) return;
 
-    const { nodes, edges } = smGetViewData(activeView, { clients, campaigns, leads, enrollments, escalations });
+    const { nodes, edges } = smGetViewData(activeView, { clients, campaigns, leads, enrollments, escalations, byClient: rollups.byClient });
     const nDS = new vis.DataSet(nodes);
     const eDS = new vis.DataSet(edges);
     nodesDSRef.current = nDS;
@@ -294,17 +296,17 @@ window.StudioMapView = function StudioMapView() {
     const d = nodeInfo._raw || {};
     let rows = [];
 
-    if (t === 'client') rows = [
+    if (t === 'client') { const cr = rollups.byClient[d.id] || window.EMPTY_CLIENT_ROLLUP || {}; rows = [
       ['Name', d.name], ['Location', `${d.city || ''}${d.state ? ', ' + d.state : ''}`],
       ['Status', d.status], ['Health', d.health || '—'],
-      ['Leads 30d', d.leads_30d], ['Enrolled 30d', d.enrollments_30d],
+      ['Leads 30d', cr.leads_30d], ['Enrolled 30d', cr.enrollments_30d],
       ['MRR', d.mrr_cents ? '$' + (d.mrr_cents / 100).toLocaleString() : '—'],
-    ];
-    else if (t === 'campaign') rows = [
+    ]; }
+    else if (t === 'campaign') { const cr = rollups.byCampaign[d.id] || window.EMPTY_CAMPAIGN_ROLLUP || {}; rows = [
       ['Program', d.program], ['Client', d.client_name],
-      ['Status', d.status], ['Leads', d.leads],
-      ['Enrolled', d.enrolled],
-    ];
+      ['Status', d.status], ['Leads', cr.leads],
+      ['Enrolled', cr.enrolled],
+    ]; }
     else if (t === 'lead') rows = [
       ['Student', d.student_name], ['Parent', d.parent_name],
       ['Program', d.program], ['Stage', (d.stage || '').replace('_', ' ')],

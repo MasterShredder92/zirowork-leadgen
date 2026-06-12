@@ -7,6 +7,7 @@ function CommandCenterView({ onNavigate }) {
   const bookings     = useBookings().data     || [];
   const leads        = useLeads().data        || [];
   const enrollments  = useEnrollments().data  || [];
+  const rollups      = window.useRollups ? window.useRollups().byClient : {};
 
   const totalLeads       = leads.length;
   const totalTrials      = bookings.filter(b => b.status === 'completed' || b.status === 'scheduled').length;
@@ -150,7 +151,9 @@ function CommandCenterView({ onNavigate }) {
               </tr>
             </thead>
             <tbody>
-              {clients.map(c => (
+              {clients.map(c => {
+                const r = rollups[c.id] || window.EMPTY_CLIENT_ROLLUP || {};
+                return (
                 <tr key={c.id} onClick={() => onNavigate && onNavigate('clients')}
                   style={{ cursor: 'pointer' }}
                   onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
@@ -170,16 +173,17 @@ function CommandCenterView({ onNavigate }) {
                       </span>
                     )}
                   </td>
-                  <td style={numCell}>{c.leads_30d ?? leads.filter(l => l.client_id === c.id).length}</td>
-                  <td style={numCell}>{c.trials_30d ?? bookings.filter(b => b.client_id === c.id).length}</td>
-                  <td style={numCell}>{c.enrollments_30d ?? enrollments.filter(e => e.client_id === c.id && e.outcome === 'enrolled').length}</td>
+                  <td style={numCell}>{r.leads_30d}</td>
+                  <td style={numCell}>{r.trials_30d}</td>
+                  <td style={numCell}>{r.enrollments_30d}</td>
                   <td style={lastCell}>
-                    {c.open_escalations > 0
-                      ? <span style={{ color: '#EF4444', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{c.open_escalations}</span>
+                    {r.open_escalations > 0
+                      ? <span style={{ color: '#EF4444', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{r.open_escalations}</span>
                       : <span style={{ color: T.t4 }}>—</span>}
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>

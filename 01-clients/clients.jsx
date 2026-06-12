@@ -458,6 +458,7 @@ function ClientsView({ onNavigate }) {
   const L = window.LucideReact || {};
   const { useState } = React;
   const clients = useClients().data || [];
+  const rollups = window.useRollups ? window.useRollups().byClient : {};
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState(null);
 
@@ -530,7 +531,9 @@ function ClientsView({ onNavigate }) {
             </tr>
           </thead>
           <tbody>
-            {visible.map(c => (
+            {visible.map(c => {
+              const r = rollups[c.id] || window.EMPTY_CLIENT_ROLLUP || {};
+              return (
               <tr key={c.id}
                 style={{ cursor: 'pointer' }}
                 onClick={() => setSelected(c)}
@@ -546,13 +549,14 @@ function ClientsView({ onNavigate }) {
                 <td style={cell}>
                   {c.health ? pill(healthColor(c.health), healthLabel(c.health)) : <span style={{ color: T.t4 }}>—</span>}
                 </td>
-                <td style={numCell}>{c.leads_30d != null ? c.leads_30d : <span style={{ color: T.t4 }}>—</span>}</td>
-                <td style={numCell}>{c.trials_30d != null ? c.trials_30d : <span style={{ color: T.t4 }}>—</span>}</td>
-                <td style={numCell}>{c.enrollments_30d != null ? c.enrollments_30d : <span style={{ color: T.t4 }}>—</span>}</td>
+                <td style={numCell}>{r.leads_30d}</td>
+                <td style={numCell}>{r.trials_30d}</td>
+                <td style={numCell}>{r.enrollments_30d}</td>
                 <td style={numCell}>{c.mrr_cents > 0 ? '$' + (c.mrr_cents / 100).toLocaleString() : <span style={{ color: T.t4 }}>—</span>}</td>
-                <td style={lastCell}>{c.active_campaigns != null ? <span style={{ fontVariantNumeric: 'tabular-nums' }}>{c.active_campaigns}</span> : <span style={{ color: T.t4 }}>—</span>}</td>
+                <td style={lastCell}><span style={{ fontVariantNumeric: 'tabular-nums' }}>{r.active_campaigns}</span></td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

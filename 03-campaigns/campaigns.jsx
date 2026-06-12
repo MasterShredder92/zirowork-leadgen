@@ -5,6 +5,7 @@ function CampaignsView({ onNavigate }) {
   const { useState } = React;
   const [clientId, setClientId] = useState(null);
   const campaigns = useCampaigns(clientId ? { client_id: clientId } : undefined).data || [];
+  const rollups = window.useRollups ? window.useRollups().byCampaign : {};
 
   const programColor = p => ({ Piano: '#818CF8', Guitar: '#F59E0B', Voice: '#EC4899', Drums: '#F97316' }[p] || '#6B7280');
   const pageColor    = s => ({ live: '#22C55E', draft: '#F59E0B', broken: '#EF4444' }[s] || '#6B7280');
@@ -48,7 +49,8 @@ function CampaignsView({ onNavigate }) {
           </thead>
           <tbody>
             {campaigns.map(c => {
-              const conv = c.leads > 0 ? ((c.enrolled / c.leads) * 100).toFixed(0) + '%' : '—';
+              const r = rollups[c.id] || window.EMPTY_CAMPAIGN_ROLLUP || {};
+              const conv = r.leads > 0 ? ((r.enrolled / r.leads) * 100).toFixed(0) + '%' : '—';
               return (
                 <tr key={c.id}
                   onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
@@ -66,9 +68,9 @@ function CampaignsView({ onNavigate }) {
                       {pageLabel(c.landing_page)}
                     </span>
                   </td>
-                  <td style={numCell}>{c.leads}</td>
-                  <td style={numCell}>{c.trials}</td>
-                  <td style={numCell}>{c.enrolled}</td>
+                  <td style={numCell}>{r.leads}</td>
+                  <td style={numCell}>{r.trials}</td>
+                  <td style={numCell}>{r.enrolled}</td>
                   <td style={lastCell}>{conv}</td>
                 </tr>
               );

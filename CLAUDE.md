@@ -40,6 +40,7 @@ These docs describe the repo and MUST be updated in the **same change** that mak
 | `schools/` · `dashboard/` · `onboard.html` · `vercel.json` routing | this `CLAUDE.md` + `README.md` |
 | edge functions / backend layout in `99-agents/` | `99-agents/CONTEXT.md` (never alter agent names, voice, or brand speak) |
 | a folder's files or load list | that folder's `CONTEXT.md` |
+| how any page reads counts, derives a shared fact, or writes a table/column | `94-knowledge/data-ssot.md` (the SSOT contract) |
 
 Each of these docs carries a `> Keep this in sync:` header. **A stale doc is a defect.**
 
@@ -56,6 +57,21 @@ Every HTML entry point — operator, `schools`, `dashboard`, `onboard.html`, and
 ```
 
 Brand assets live in `96-public/`. (Operator `index.html` is served at `/` so it uses relative `96-public/...`; every other surface uses absolute `/96-public/...`.)
+
+---
+
+## Single-Source-of-Truth Gate (one dashboard, not ten sections)
+
+Every page reads the same fact the same way and writes to the same place. No page computes a count its own way; no page reads a stale stored copy. **Full doctrine + the pre-ship checklist: [`94-knowledge/data-ssot.md`](94-knowledge/data-ssot.md). Read it before adding or editing any page that shows counts or edits client data.**
+
+Non-negotiable:
+- **Counts are derived, never read from a stored column.** Leads/trials/enrollments/active-campaigns/open-escalations/conversion all come from `window.useRollups()` — NEVER from `clients.leads_30d`, `campaigns.leads`, `open_escalations`, etc. Those denormalized columns drift and are banned for display.
+- **Exception:** `clients.mrr_cents` is the client's contract fee (a billing value), not a count — read it directly.
+- **Same fact → same read path.** If two pages show the same number, they call the same hook.
+- **Writes hit the source table only**, with columns that exist in the schema.
+- **Shared edit surfaces** (operator side panel ↔ client portal) write the same `clients` + `agent_tenants.config` rows.
+
+A page that reads a stored count column, or computes a shared number its own way, is **NOT done.**
 
 ---
 
@@ -135,6 +151,7 @@ zirowork-leadgen/
 |---|---|---|
 | `window.T` | `92-design/theme.js` | Theme tokens — used by every view |
 | `window.SEED_DATA` | `93-hooks/use-local-data.js` | Dev seed data fallback |
+| `window.useRollups` | `93-hooks/use-local-data.js` | **SSOT for counts** — derives per-client/per-campaign leads/trials/enrollments/etc. from source tables. Use instead of stored `*_30d` columns. See `94-knowledge/data-ssot.md` |
 | `window.currentUser` | `91-auth/Session.jsx` | `{ full_name, role, email }` |
 | `window.currentOperator` | `91-auth/Session.jsx` | `{ name, label }` |
 | `window.useOperatorContext` | `93-hooks/use-studio-context.js` | Operator identity hook |
@@ -155,6 +172,7 @@ zirowork-leadgen/
 | Design system | `94-knowledge/design-system.md` |
 | Architecture | `94-knowledge/architecture.md` |
 | Data model | `94-knowledge/data-model.md` |
+| Source-of-truth contract (counts, reads, writes) | `94-knowledge/data-ssot.md` |
 | Seed data | `93-hooks/use-local-data.js` |
 | Auth bypass | `91-auth/Session.jsx` |
 | SPA routing (operator) | `90-shell/Router.jsx` |
