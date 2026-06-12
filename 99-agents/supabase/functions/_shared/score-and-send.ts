@@ -152,5 +152,14 @@ export async function scoreAndSend(lead: LeadRecord, tenantId: string): Promise<
       sms_enabled: SMS_ENABLED,
       requires_approval: false,
     });
+
+    // Stamp last_contact_at so the follow-up drip is anchored to the ACTUAL
+    // first outreach. Without this, last_contact_at stays null after the
+    // initial send and send-followup fires a follow-up before/right after it.
+    await db
+      .from('leads')
+      .update({ last_contact_at: new Date().toISOString() })
+      .eq('client_id', tenantId)
+      .eq('phone', phone);
   }
 }

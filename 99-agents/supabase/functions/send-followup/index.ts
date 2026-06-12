@@ -7,9 +7,30 @@ import { loadHistory } from '../_shared/conversation.ts';
 const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
 const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
+// Mirror on-new-lead's gate: only contact leads 9 AM–10 PM Eastern.
+function isInWindow(): boolean {
+  const hour = parseInt(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      hour: 'numeric',
+      hour12: false,
+    }).format(new Date()),
+    10
+  );
+  return hour >= 9 && hour < 22;
+}
+
 Deno.serve(async (req) => {
   if (req.headers.get('authorization') !== `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`) {
     return new Response('Unauthorized', { status: 401 });
+  }
+
+  // Business-hours gate — never drip-text leads overnight (the cron runs hourly).
+  if (!isInWindow()) {
+    return new Response(JSON.stringify({ processed: 0, failed: 0, skipped: 'off-hours' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   const db = createClient(PLATFORM_URL, PLATFORM_SERVICE_KEY);
@@ -22,10 +43,11 @@ Deno.serve(async (req) => {
     .eq('opted_out', false)
     .eq('sms_consent', true)
     .lt('followup_count', 3)
-    .or(
-      'last_contact_at.is.null,last_contact_at.lt.' +
-        new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-    )
+    // Only follow up leads we have ACTUALLY contacted. A null last_contact_at
+    // means the initial outreach hasn't gone out yet (e.g. queued overnight in
+    // pending_leads) — following up then would land before the first message.
+    .not('last_contact_at', 'is', null)
+    .lt('last_contact_at', new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString())
     .limit(50);
 
   if (error) {
