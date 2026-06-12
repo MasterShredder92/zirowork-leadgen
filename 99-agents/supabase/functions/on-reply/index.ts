@@ -6,7 +6,6 @@ import { loadHistory } from '../_shared/conversation.ts';
 
 const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
 const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const WEBHOOK_SECRET = Deno.env.get('WEBHOOK_SECRET');
 
 // deno-lint-ignore no-explicit-any
 async function logOutbound(db: any, tenantId: string, phone: string, body: string): Promise<void> {
@@ -23,11 +22,6 @@ async function logOutbound(db: any, tenantId: string, phone: string, body: strin
 }
 
 Deno.serve(async (req) => {
-  const url = new URL(req.url);
-  if (WEBHOOK_SECRET && url.searchParams.get('secret') !== WEBHOOK_SECRET) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
   try {
     const payload = await req.json();
 
