@@ -18,7 +18,12 @@ function getFirstName(lead: LeadRecord): string {
 }
 
 function getPhone(lead: LeadRecord): string | null {
-  return (lead.phone ?? lead.recipient_phone ?? null) as string | null;
+  const raw = (lead.phone ?? lead.recipient_phone ?? null) as string | null;
+  if (!raw) return null;
+  const digits = raw.replace(/\D/g, '');
+  if (digits.length === 10) return '+1' + digits;
+  if (digits.length === 11 && digits.startsWith('1')) return '+' + digits;
+  return '+' + digits;
 }
 
 export async function scoreAndSend(lead: LeadRecord, tenantId: string): Promise<void> {
