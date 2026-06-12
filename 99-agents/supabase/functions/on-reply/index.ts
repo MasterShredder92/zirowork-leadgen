@@ -1,40 +1,12 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { crypto } from 'https://deno.land/std@0.177.0/crypto/mod.ts';
-import { sendSMS } from '../_shared/twilio.ts';
+import { sendSMS } from '../_shared/openphone.ts';
 import { callClaude } from '../_shared/claude.ts';
 import { MESSAGING_SYSTEM_PROMPT } from '../_shared/prompts.ts';
 import { loadHistory } from '../_shared/conversation.ts';
 
 const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
 const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-
-async function validateTwilioSignature(req: Request, authToken: string): Promise<boolean> {
-  const signature = req.headers.get('x-twilio-signature');
-  if (!signature) return false;
-
-  const url = req.url;
-  const form = await req.clone().formData();
-
-  // Sort params alphabetically and concatenate to URL
-  const params = [...form.entries()].sort(([a], [b]) => a.localeCompare(b));
-  let str = url;
-  for (const [k, v] of params) str += k + v;
-
-  // HMAC-SHA1
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(authToken),
-    { name: 'HMAC', hash: 'SHA-1' },
-    false,
-    ['sign']
-  );
-  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(str));
-  const expected = btoa(String.fromCharCode(...new Uint8Array(sig)));
-
-  return expected === signature;
-}
-
-const TWIML_OK = '<?xml version="1.0" encoding="UTF-8"?><Response></Response>';
+const WEBHOOK_SECRET = Deno.env.get('WEBHOOK_SECRET');
 
 // deno-lint-ignore no-explicit-any
 async function logOutbound(db: any, tenantId: string, phone: string, body: string): Promise<void> {
@@ -51,32 +23,37 @@ async function logOutbound(db: any, tenantId: string, phone: string, body: strin
 }
 
 Deno.serve(async (req) => {
-  if (!await validateTwilioSignature(req, Deno.env.get('TWILIO_AUTH_TOKEN')!)) {
+  const url = new URL(req.url);
+  if (WEBHOOK_SECRET && url.searchParams.get('secret') !== WEBHOOK_SECRET) {
     return new Response('Unauthorized', { status: 401 });
   }
 
   try {
-    const form = await req.formData();
-    const fromPhone = form.get('From') as string;
-    const toPhone = form.get('To') as string;
-    const body = form.get('Body') as string;
+    const payload = await req.json();
+
+    if (payload.type !== 'message.received') {
+      return new Response('OK', { status: 200 });
+    }
+
+    const msg = payload.data.object;
+    const fromPhone: string = msg.from;
+    const phoneNumberId: string = msg.phoneNumberId;
+    const body: string = msg.body;
 
     const db = createClient(PLATFORM_URL, PLATFORM_SERVICE_KEY);
 
-    // Tenant lookup by twilio_phone_number in config
     const { data: tenant } = await db
       .from('agent_tenants')
       .select('tenant_id, name, config')
-      .filter("config->>'twilio_phone_number'", 'eq', toPhone)
+      .filter("config->>'openphone_number_id'", 'eq', phoneNumberId)
       .maybeSingle();
 
     if (!tenant) {
-      return new Response(TWIML_OK, { status: 200, headers: { 'Content-Type': 'text/xml' } });
+      return new Response('OK', { status: 200 });
     }
 
     const tenantId: string = tenant.tenant_id;
 
-    // Log inbound message
     await db.from('ziro_message_log').insert({
       tenant_id: tenantId,
       from_agent: 'HUMAN',
@@ -88,8 +65,6 @@ Deno.serve(async (req) => {
       sent_at: new Date().toISOString(),
     });
 
-    // A2P-registered keywords — exact match on the trimmed message, plus
-    // whole-word stop/unsubscribe inside longer sentences ("please stop texting me").
     const norm = body.trim().toLowerCase().replace(/[.!?]+$/, '');
     const OPT_OUT_WORDS = ['stop', 'stopall', 'stop all', 'unsubscribe', 'cancel', 'end', 'quit'];
     const OPT_IN_WORDS = ['start', 'unstop'];
@@ -101,11 +76,10 @@ Deno.serve(async (req) => {
         .update({ opted_out: true, followup_paused: true })
         .eq('phone', fromPhone)
         .eq('client_id', tenantId);
-      // One final confirmation — promised in our terms; permitted post-revocation
       const confirmMsg = 'You have successfully been unsubscribed. You will not receive any more messages from this number. Reply START to resubscribe.';
       await sendSMS(fromPhone, confirmMsg);
       await logOutbound(db, tenantId, fromPhone, confirmMsg);
-      return new Response(TWIML_OK, { status: 200, headers: { 'Content-Type': 'text/xml' } });
+      return new Response('OK', { status: 200 });
     }
 
     if (OPT_IN_WORDS.includes(norm)) {
@@ -117,17 +91,16 @@ Deno.serve(async (req) => {
       const optInMsg = `${tenant.name}: You're now opted in to receive automated messages about your lesson inquiry. Msg frequency varies, up to 8 msgs per inquiry. Msg & data rates may apply. Reply HELP for help or STOP to cancel anytime.`;
       await sendSMS(fromPhone, optInMsg);
       await logOutbound(db, tenantId, fromPhone, optInMsg);
-      return new Response(TWIML_OK, { status: 200, headers: { 'Content-Type': 'text/xml' } });
+      return new Response('OK', { status: 200 });
     }
 
     if (HELP_WORDS.includes(norm)) {
       const helpMsg = `ZiroWork on behalf of ${tenant.name}: You're receiving messages about your lesson inquiry. For help, email hello@zirowork.com. Msg frequency varies. Msg & data rates may apply. Reply STOP to cancel.`;
       await sendSMS(fromPhone, helpMsg);
       await logOutbound(db, tenantId, fromPhone, helpMsg);
-      return new Response(TWIML_OK, { status: 200, headers: { 'Content-Type': 'text/xml' } });
+      return new Response('OK', { status: 200 });
     }
 
-    // Never AI-reply to a number that previously opted out
     const { data: optedOut } = await db
       .from('leads')
       .select('id')
@@ -136,10 +109,9 @@ Deno.serve(async (req) => {
       .eq('opted_out', true)
       .limit(1);
     if (optedOut?.length) {
-      return new Response(TWIML_OK, { status: 200, headers: { 'Content-Type': 'text/xml' } });
+      return new Response('OK', { status: 200 });
     }
 
-    // Pause follow-up sequences
     try {
       await db
         .from('leads')
@@ -150,17 +122,12 @@ Deno.serve(async (req) => {
       // non-fatal
     }
 
-    // Load conversation history
     const history = await loadHistory(db, tenantId, fromPhone);
-
-    // Build user message for Claude
     const userMessage = `Conversation history:\n${history}\n\nNew reply from lead: ${body}\n\nRespond to this reply in Andrea's voice. Reply with only ESCALATE (nothing else) if: the lead asks about pricing/payment/contracts, asks to speak to a human, or you are unsure how to respond.`;
 
-    // Call Claude
     const response = await callClaude(MESSAGING_SYSTEM_PROMPT, userMessage);
     const responseText = response.trim();
 
-    // Escalate if needed
     if (responseText === 'ESCALATE') {
       await db.from('ziro_messaging_escalations').insert({
         tenant_id: tenantId,
@@ -170,13 +137,11 @@ Deno.serve(async (req) => {
         original_message: body,
         ziro_response: responseText,
       });
-      return new Response(TWIML_OK, { status: 200, headers: { 'Content-Type': 'text/xml' } });
+      return new Response('OK', { status: 200 });
     }
 
-    // Send SMS reply
     await sendSMS(fromPhone, responseText);
 
-    // Log outbound message
     await db.from('ziro_message_log').insert({
       tenant_id: tenantId,
       from_agent: 'ZIRO_MESSAGING',
@@ -188,7 +153,7 @@ Deno.serve(async (req) => {
       sent_at: new Date().toISOString(),
     });
 
-    return new Response(TWIML_OK, { status: 200, headers: { 'Content-Type': 'text/xml' } });
+    return new Response('OK', { status: 200 });
   } catch (err) {
     return new Response(`Error: ${String(err)}`, { status: 500 });
   }

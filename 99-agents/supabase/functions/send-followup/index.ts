@@ -1,5 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { sendSMS, SMS_ENABLED } from '../_shared/twilio.ts';
+import { sendSMS, SMS_ENABLED } from '../_shared/openphone.ts';
 import { callClaude } from '../_shared/claude.ts';
 import { MESSAGING_SYSTEM_PROMPT } from '../_shared/prompts.ts';
 import { loadHistory } from '../_shared/conversation.ts';

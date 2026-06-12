@@ -1,6 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { callClaude } from './claude.ts';
-import { sendSMS, SMS_ENABLED } from './twilio.ts';
+import { sendSMS, SMS_ENABLED } from './openphone.ts';
 import { LEADS_SYSTEM_PROMPT, MESSAGING_SYSTEM_PROMPT } from './prompts.ts';
 import type { LeadRecord, ScoringResult, TenantConfig } from './types.ts';
 
