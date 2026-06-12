@@ -1,4 +1,4 @@
-// 05-leads — Who is in the pipeline and what is the next move?
+﻿// 05-leads — Who is in the pipeline and what is the next move?
 function LeadsView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -83,13 +83,13 @@ function LeadsView({ onNavigate }) {
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Leads</h1>
-            <div style={{ fontSize: 12, color: T.t3 }}>Who is in the pipeline and what is the next move?</div>
+            <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Leads</h1>
+            <div style={{ fontSize: 13, color: T.t3 }}>Who is in the pipeline and what is the next move?</div>
           </div>
           <select
             value={clientId || ''}
             onChange={e => setClientId(e.target.value || null)}
-            style={{ fontSize: 13, color: T.t2, background: T.cardBg || 'var(--surface)', border: `1px solid ${T.border}`, borderRadius: 7, padding: '6px 10px', cursor: 'pointer' }}>
+            style={{ fontSize: 14, color: T.t2, background: T.cardBg || 'var(--surface)', border: `1px solid ${T.border}`, borderRadius: 7, padding: '6px 10px', cursor: 'pointer' }}>
             <option value=''>All Clients</option>
             {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
@@ -105,8 +105,8 @@ function LeadsView({ onNavigate }) {
         }}>
           {/* Panel header */}
           <div style={{ padding: '20px 24px 16px', borderBottom: `1px solid ${T.border}`, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: T.t1 }}>{selectedLead.student_name || selectedLead.parent_name}</div>
-            <button onClick={() => setSelectedLead(null)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: T.t3, fontSize: 18, lineHeight: 1, padding: 4 }}>✕</button>
+            <div style={{ fontSize: 16, fontWeight: 700, color: T.t1 }}>{selectedLead.student_name || selectedLead.parent_name}</div>
+            <button onClick={() => setSelectedLead(null)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: T.t3, fontSize: 19, lineHeight: 1, padding: 4 }}>✕</button>
           </div>
 
           {/* Fields */}
@@ -126,23 +126,23 @@ function LeadsView({ onNavigate }) {
               ['Score', selectedLead.score],
             ].filter(([, v]) => v != null && v !== '').map(([label, value]) => (
               <div key={label} style={{ display: 'flex', gap: 8 }}>
-                <span style={{ fontSize: 11, color: T.t4, width: 90, flexShrink: 0, paddingTop: 2 }}>{label}</span>
-                <span style={{ fontSize: 12, color: T.t1 }}>{String(value)}</span>
+                <span style={{ fontSize: 12, color: T.t4, width: 90, flexShrink: 0, paddingTop: 2 }}>{label}</span>
+                <span style={{ fontSize: 13, color: T.t1 }}>{String(value)}</span>
               </div>
             ))}
             {/* Stage badge */}
             <div style={{ display: 'flex', gap: 8 }}>
-              <span style={{ fontSize: 11, color: T.t4, width: 90, flexShrink: 0, paddingTop: 2 }}>Stage</span>
+              <span style={{ fontSize: 12, color: T.t4, width: 90, flexShrink: 0, paddingTop: 2 }}>Stage</span>
               {(() => {
                 const s = STAGES.find(x => x.id === selectedLead.stage);
-                return <span style={{ fontSize: 11, fontWeight: 600, color: s ? s.color : T.t2, background: s ? s.color + '1A' : 'transparent', padding: '2px 8px', borderRadius: 20 }}>{s ? s.label : selectedLead.stage}</span>;
+                return <span style={{ fontSize: 12, fontWeight: 600, color: s ? s.color : T.t2, background: s ? s.color + '1A' : 'transparent', padding: '2px 8px', borderRadius: 20 }}>{s ? s.label : selectedLead.stage}</span>;
               })()}
             </div>
             {/* Notes */}
             {selectedLead.notes && (
               <div style={{ display: 'flex', gap: 8 }}>
-                <span style={{ fontSize: 11, color: T.t4, width: 90, flexShrink: 0, paddingTop: 2 }}>Notes</span>
-                <span style={{ fontSize: 12, color: T.t2, fontStyle: 'italic' }}>{selectedLead.notes}</span>
+                <span style={{ fontSize: 12, color: T.t4, width: 90, flexShrink: 0, paddingTop: 2 }}>Notes</span>
+                <span style={{ fontSize: 13, color: T.t2, fontStyle: 'italic' }}>{selectedLead.notes}</span>
               </div>
             )}
           </div>
@@ -153,11 +153,11 @@ function LeadsView({ onNavigate }) {
 
             {/* Move stage */}
             <div>
-              <div style={{ fontSize: 11, color: T.t4, marginBottom: 6 }}>Move Stage</div>
+              <div style={{ fontSize: 12, color: T.t4, marginBottom: 6 }}>Move Stage</div>
               <select
                 value={selectedLead.stage}
                 onChange={e => handleMoveStage(e.target.value)}
-                style={{ width: '100%', fontSize: 12, color: T.t2, background: T.bg || 'var(--bg)', border: `1px solid ${T.border}`, borderRadius: 6, padding: '6px 8px', cursor: 'pointer' }}>
+                style={{ width: '100%', fontSize: 13, color: T.t2, background: T.bg || 'var(--bg)', border: `1px solid ${T.border}`, borderRadius: 6, padding: '6px 8px', cursor: 'pointer' }}>
                 {STAGES.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
               </select>
             </div>
@@ -166,24 +166,24 @@ function LeadsView({ onNavigate }) {
             {selectedLead.stage !== 'enrolled' && (
               <button
                 onClick={handleMarkEnrolled}
-                style={{ width: '100%', fontSize: 12, fontWeight: 600, color: '#fff', background: '#22C55E', border: 'none', borderRadius: 7, padding: '8px 0', cursor: 'pointer' }}>
+                style={{ width: '100%', fontSize: 13, fontWeight: 600, color: '#fff', background: '#22C55E', border: 'none', borderRadius: 7, padding: '8px 0', cursor: 'pointer' }}>
                 Mark Enrolled
               </button>
             )}
 
             {/* Add note */}
             <div>
-              <div style={{ fontSize: 11, color: T.t4, marginBottom: 6 }}>Add Note</div>
+              <div style={{ fontSize: 12, color: T.t4, marginBottom: 6 }}>Add Note</div>
               <textarea
                 value={noteText}
                 onChange={e => setNoteText(e.target.value)}
                 rows={3}
                 placeholder='Type a note…'
-                style={{ width: '100%', fontSize: 12, color: T.t1, background: T.bg || 'var(--bg)', border: `1px solid ${T.border}`, borderRadius: 6, padding: '6px 8px', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }} />
+                style={{ width: '100%', fontSize: 13, color: T.t1, background: T.bg || 'var(--bg)', border: `1px solid ${T.border}`, borderRadius: 6, padding: '6px 8px', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }} />
               <button
                 onClick={handleSaveNote}
                 disabled={noteSaving || !noteText.trim()}
-                style={{ marginTop: 6, width: '100%', fontSize: 12, fontWeight: 600, color: T.t1, background: 'transparent', border: `1px solid ${T.border}`, borderRadius: 7, padding: '6px 0', cursor: noteText.trim() ? 'pointer' : 'default', opacity: noteText.trim() ? 1 : 0.4 }}>
+                style={{ marginTop: 6, width: '100%', fontSize: 13, fontWeight: 600, color: T.t1, background: 'transparent', border: `1px solid ${T.border}`, borderRadius: 7, padding: '6px 0', cursor: noteText.trim() ? 'pointer' : 'default', opacity: noteText.trim() ? 1 : 0.4 }}>
                 {noteSaving ? 'Saving…' : 'Save Note'}
               </button>
             </div>
@@ -191,7 +191,7 @@ function LeadsView({ onNavigate }) {
             {/* View conversation */}
             <button
               onClick={() => { setSelectedLead(null); onNavigate && onNavigate('conversations'); }}
-              style={{ width: '100%', fontSize: 12, fontWeight: 600, color: '#818CF8', background: 'transparent', border: `1px solid #818CF8`, borderRadius: 7, padding: '8px 0', cursor: 'pointer' }}>
+              style={{ width: '100%', fontSize: 13, fontWeight: 600, color: '#818CF8', background: 'transparent', border: `1px solid #818CF8`, borderRadius: 7, padding: '8px 0', cursor: 'pointer' }}>
               View Conversation →
             </button>
           </div>
@@ -207,8 +207,8 @@ function LeadsView({ onNavigate }) {
               <div key={stage.id} style={{ width: 240, flexShrink: 0, display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingBottom: 8, marginBottom: 4, borderBottom: `1px solid ${T.border}` }}>
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: stage.color, flexShrink: 0 }} />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{stage.label}</span>
-                  <span style={{ marginLeft: 'auto', fontSize: 11, color: T.t4, fontVariantNumeric: 'tabular-nums' }}>{cols.length}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{stage.label}</span>
+                  <span style={{ marginLeft: 'auto', fontSize: 12, color: T.t4, fontVariantNumeric: 'tabular-nums' }}>{cols.length}</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
                   {cols.map(lead => (
@@ -219,17 +219,17 @@ function LeadsView({ onNavigate }) {
                       onClick={() => openDetail(lead)}
                       onMouseEnter={e => e.currentTarget.style.background = T.hover || (T.isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)')}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                      <div style={{ fontSize: 13, fontWeight: 500, color: T.t1, marginBottom: 4 }}>{lead.parent_name}</div>
-                      <div style={{ fontSize: 11, color: T.t3, marginBottom: 8 }}>{lead.student_name}</div>
+                      <div style={{ fontSize: 14, fontWeight: 500, color: T.t1, marginBottom: 4 }}>{lead.parent_name}</div>
+                      <div style={{ fontSize: 12, color: T.t3, marginBottom: 8 }}>{lead.student_name}</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ fontSize: 10, fontWeight: 600, color: programColor(lead.program), background: programColor(lead.program) + '1A', padding: '2px 7px', borderRadius: 20 }}>
+                        <span style={{ fontSize: 11, fontWeight: 600, color: programColor(lead.program), background: programColor(lead.program) + '1A', padding: '2px 7px', borderRadius: 20 }}>
                           {lead.program}
                         </span>
-                        <span style={{ fontSize: 10, color: T.t4, marginLeft: 'auto' }}>{lead.client_name}</span>
+                        <span style={{ fontSize: 11, color: T.t4, marginLeft: 'auto' }}>{lead.client_name}</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
                         {stale(lead.days_in_stage) && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: '#F59E0B' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#F59E0B' }}>
                             <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#F59E0B' }} />
                             {lead.days_in_stage}d in stage
                           </div>
@@ -237,7 +237,7 @@ function LeadsView({ onNavigate }) {
                         {STAGE_IDS.indexOf(lead.stage) !== -1 && STAGE_IDS.indexOf(lead.stage) < STAGE_IDS.length - 1 && (
                           <button
                             onClick={e => handleAdvance(lead, e)}
-                            style={{ marginLeft: 'auto', fontSize: 10, color: T.t3, background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 4px', borderRadius: 4, lineHeight: 1 }}
+                            style={{ marginLeft: 'auto', fontSize: 11, color: T.t3, background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 4px', borderRadius: 4, lineHeight: 1 }}
                             onMouseEnter={e => e.currentTarget.style.color = stage.color}
                             onMouseLeave={e => e.currentTarget.style.color = T.t3}>
                             → Next
@@ -247,7 +247,7 @@ function LeadsView({ onNavigate }) {
                     </div>
                   ))}
                   {cols.length === 0 && (
-                    <div style={{ padding: '16px 0', textAlign: 'center', fontSize: 12, color: T.t4 }}>Empty</div>
+                    <div style={{ padding: '16px 0', textAlign: 'center', fontSize: 13, color: T.t4 }}>Empty</div>
                   )}
                 </div>
               </div>

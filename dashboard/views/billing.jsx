@@ -1,4 +1,4 @@
-window.PortalBilling = function PortalBilling({ tenantId }) {
+﻿window.PortalBilling = function PortalBilling({ tenantId }) {
   const FN_URL = 'https://txpgyuetfsrzfxxopwzf.supabase.co/functions/v1/billing';
 
   const [status, setStatus] = React.useState(null);
@@ -131,27 +131,27 @@ window.PortalBilling = function PortalBilling({ tenantId }) {
 
   const s = {
     page: { padding: '32px 36px', overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
-    heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
-    sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 28 },
+    heading: { fontSize: 23, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
+    sub: { fontSize: 14, color: 'var(--t3)', marginBottom: 28 },
     section: { marginBottom: 32 },
     sectionHead: {
       paddingBottom: 10, marginBottom: 18, borderBottom: '1px solid var(--border)',
-      fontSize: 11, fontWeight: 700, color: 'var(--t3)',
+      fontSize: 12, fontWeight: 700, color: 'var(--t3)',
       letterSpacing: '0.08em', textTransform: 'uppercase',
     },
-    emptyText: { fontSize: 13, color: 'var(--t3)' },
+    emptyText: { fontSize: 14, color: 'var(--t3)' },
     cardRow: { display: 'flex', alignItems: 'center', gap: 12 },
-    cardBrand: { fontSize: 13, fontWeight: 600, color: 'var(--t1)' },
-    cardExp: { fontSize: 12, color: 'var(--t4)' },
+    cardBrand: { fontSize: 14, fontWeight: 600, color: 'var(--t1)' },
+    cardExp: { fontSize: 13, color: 'var(--t4)' },
     btn: (disabled) => ({
       padding: '9px 20px', background: 'var(--accent)', color: '#fff',
-      border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600,
+      border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600,
       cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.6 : 1,
       fontFamily: 'inherit',
     }),
     ghostBtn: {
       padding: '9px 20px', background: 'transparent', color: 'var(--t2)',
-      border: '1px solid var(--bmed)', borderRadius: 7, fontSize: 13, fontWeight: 600,
+      border: '1px solid var(--bmed)', borderRadius: 7, fontSize: 14, fontWeight: 600,
       cursor: 'pointer', fontFamily: 'inherit',
     },
     cardElWrap: {
@@ -159,18 +159,18 @@ window.PortalBilling = function PortalBilling({ tenantId }) {
       border: '1px solid var(--bmed)', borderRadius: 7, marginBottom: 14,
       maxWidth: 480,
     },
-    errorText: { fontSize: 12, color: '#B42318', fontWeight: 600, marginTop: 10 },
-    feeLine: { fontSize: 13, color: 'var(--t2)', marginTop: 14 },
+    errorText: { fontSize: 13, color: '#B42318', fontWeight: 600, marginTop: 10 },
+    feeLine: { fontSize: 14, color: 'var(--t2)', marginTop: 14 },
     feeStrong: { fontWeight: 700, color: 'var(--t1)' },
     histItem: {
       display: 'flex', alignItems: 'center', gap: 12,
       padding: '12px 0', borderBottom: '1px solid var(--border)',
     },
-    histDesc: { fontSize: 13, fontWeight: 600, color: 'var(--t1)' },
-    histDate: { fontSize: 11, color: 'var(--t4)', marginTop: 1 },
-    histAmount: { fontSize: 13, fontWeight: 600, color: 'var(--t1)', marginLeft: 'auto', flexShrink: 0 },
+    histDesc: { fontSize: 14, fontWeight: 600, color: 'var(--t1)' },
+    histDate: { fontSize: 12, color: 'var(--t4)', marginTop: 1 },
+    histAmount: { fontSize: 14, fontWeight: 600, color: 'var(--t1)', marginLeft: 'auto', flexShrink: 0 },
     chip: (st) => ({
-      fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20, flexShrink: 0,
+      fontSize: 12, fontWeight: 600, padding: '3px 10px', borderRadius: 20, flexShrink: 0,
       background: (chipColors[st] || {}).bg || 'var(--hover)',
       color: (chipColors[st] || {}).fg || 'var(--t3)',
     }),
@@ -178,7 +178,7 @@ window.PortalBilling = function PortalBilling({ tenantId }) {
 
   if (loading) return (
     <div style={{ ...s.page, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ color: 'var(--t3)', fontSize: 13 }}>Loading…</div>
+      <div style={{ color: 'var(--t3)', fontSize: 14 }}>Loading…</div>
     </div>
   );
 

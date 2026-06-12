@@ -1,4 +1,4 @@
-window.PortalPipeline = function PortalPipeline({ tenantId }) {
+﻿window.PortalPipeline = function PortalPipeline({ tenantId }) {
   const [stages, setStages] = React.useState(null);
   const [enrolled, setEnrolled] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -70,8 +70,8 @@ window.PortalPipeline = function PortalPipeline({ tenantId }) {
 
   const s = {
     page: { padding: '24px 28px', overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
-    heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
-    sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 32 },
+    heading: { fontSize: 23, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
+    sub: { fontSize: 14, color: 'var(--t3)', marginBottom: 32 },
     flow: { display: 'flex', alignItems: 'flex-start', gap: 0 },
     stageWrap: { display: 'flex', alignItems: 'flex-start' },
     stageCol: { width: 160, padding: '0 4px' },
@@ -81,35 +81,35 @@ window.PortalPipeline = function PortalPipeline({ tenantId }) {
       background: COLORS[key].dot, flexShrink: 0,
     }),
     stageLabel: {
-      fontSize: 11, fontWeight: 700, color: 'var(--t3)',
+      fontSize: 12, fontWeight: 700, color: 'var(--t3)',
       letterSpacing: '0.06em', textTransform: 'uppercase',
     },
     count: (key) => ({
-      fontSize: 30, fontWeight: 700, color: 'var(--t1)',
+      fontSize: 31, fontWeight: 700, color: 'var(--t1)',
       letterSpacing: '-0.5px', lineHeight: 1, marginBottom: 8,
       fontVariantNumeric: 'tabular-nums',
     }),
-    desc: { fontSize: 11, color: 'var(--t3)', lineHeight: 1.4 },
+    desc: { fontSize: 12, color: 'var(--t3)', lineHeight: 1.4 },
     arrow: {
       width: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
       color: 'var(--t4)', flexShrink: 0, paddingTop: 24,
     },
     note: {
       marginTop: 28, paddingTop: 18, borderTop: '1px solid var(--border)',
-      fontSize: 12, color: 'var(--t3)', lineHeight: 1.6,
+      fontSize: 13, color: 'var(--t3)', lineHeight: 1.6,
     },
   };
 
   if (loading) return (
     <div style={{ ...s.page, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ color: 'var(--t3)', fontSize: 13 }}>Loading pipeline…</div>
+      <div style={{ color: 'var(--t3)', fontSize: 14 }}>Loading pipeline…</div>
     </div>
   );
 
   if (!stages) return (
     <div style={s.page}>
       <div style={s.heading}>Pipeline</div>
-      <div style={{ color: 'var(--t3)', fontSize: 13, marginTop: 8 }}>No leads yet.</div>
+      <div style={{ color: 'var(--t3)', fontSize: 14, marginTop: 8 }}>No leads yet.</div>
     </div>
   );
 
@@ -142,18 +142,18 @@ window.PortalPipeline = function PortalPipeline({ tenantId }) {
 
       {enrolled.length > 0 && (
         <div style={{ marginTop: 28 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--t1)', marginBottom: 4 }}>Enrolled — ready for you</div>
-          <div style={{ fontSize: 12, color: 'var(--t3)', marginBottom: 14 }}>These students confirmed their spot. They're yours now.</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--t1)', marginBottom: 4 }}>Enrolled — ready for you</div>
+          <div style={{ fontSize: 13, color: 'var(--t3)', marginBottom: 14 }}>These students confirmed their spot. They're yours now.</div>
           <div>
             {enrolled.map((e, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '14px 0', borderBottom: '1px solid var(--border)' }}>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)' }}>{e.student_name || 'Student'}</div>
-                  {e.parent_name && <div style={{ fontSize: 12, color: 'var(--t3)' }}>Parent: {e.parent_name}</div>}
+                  <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--accent)' }}>{e.student_name || 'Student'}</div>
+                  {e.parent_name && <div style={{ fontSize: 13, color: 'var(--t3)' }}>Parent: {e.parent_name}</div>}
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--t2)' }}>{e.program || '—'}</div>
-                  {e.enrolled_at && <div style={{ fontSize: 11, color: 'var(--t4)' }}>Enrolled {new Date(e.enrolled_at + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>}
+                  <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--t2)' }}>{e.program || '—'}</div>
+                  {e.enrolled_at && <div style={{ fontSize: 12, color: 'var(--t4)' }}>Enrolled {new Date(e.enrolled_at + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>}
                 </div>
               </div>
             ))}

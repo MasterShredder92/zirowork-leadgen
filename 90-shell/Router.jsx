@@ -1,4 +1,4 @@
-// Router.jsx — ZiroWork Operator CRM
+﻿// Router.jsx — ZiroWork Operator CRM
 // Routes remapped to operator pages. Old school-CRM routes removed.
 const TWEAK_DEFAULTS = { accent: '#FD802E', density: 'comfortable' };
 
@@ -99,7 +99,7 @@ function App() {
 
         {!isMobile && (
           <div style={{ background: 'var(--sidebar-bg)', borderBottom: '1px solid var(--border)', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>
               {(window.currentOperator && window.currentOperator.name) || 'ZiroWork'}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>

@@ -1,4 +1,4 @@
-// 07-escalations — What should not be handled by automation?
+﻿// 07-escalations — What should not be handled by automation?
 function EscalationsView({ onNavigate }) {
   const T = window.T || {};
   const { useState, useEffect } = React;
@@ -91,24 +91,24 @@ function EscalationsView({ onNavigate }) {
       {/* Header */}
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: 0 }}>Escalations</h1>
+          <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: 0 }}>Escalations</h1>
           {escalations.length > 0 && (
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#EF4444', background: '#EF444418', padding: '3px 10px', borderRadius: 20 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#EF4444', background: '#EF444418', padding: '3px 10px', borderRadius: 20 }}>
               {escalations.length} open
             </span>
           )}
         </div>
-        <div style={{ fontSize: 12, color: T.t3 }}>What should not be handled by automation?</div>
+        <div style={{ fontSize: 13, color: T.t3 }}>What should not be handled by automation?</div>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
         {/* Doctrine callout — flat, left rule only */}
-        <div style={{ paddingLeft: 12, borderLeft: '2px solid #F59E0B', marginBottom: 24, fontSize: 12, color: T.t2, lineHeight: 1.5 }}>
+        <div style={{ paddingLeft: 12, borderLeft: '2px solid #F59E0B', marginBottom: 24, fontSize: 13, color: T.t2, lineHeight: 1.5 }}>
           <strong style={{ color: '#F59E0B' }}>Escalation rule:</strong> AI handles new enrollment conversations only. Enrolled students, billing, refunds, angry parents, and cancellations are forwarded to the studio — not handled by ZiroWork.
         </div>
 
         {escalations.length === 0 ? (
-          <div style={{ padding: '40px 0', textAlign: 'center', color: T.t4, fontSize: 13 }}>No open escalations.</div>
+          <div style={{ padding: '40px 0', textAlign: 'center', color: T.t4, fontSize: 14 }}>No open escalations.</div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {escalations.map(esc => (
@@ -119,28 +119,28 @@ function EscalationsView({ onNavigate }) {
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: T.t1 }}>{esc.contact_name}</span>
-                    <span style={{ fontSize: 11, color: T.t4 }}>{esc.contact_phone}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: T.t1 }}>{esc.contact_name}</span>
+                    <span style={{ fontSize: 12, color: T.t4 }}>{esc.contact_phone}</span>
                   </div>
-                  <div style={{ fontSize: 13, color: T.t2, marginBottom: 4 }}>
+                  <div style={{ fontSize: 14, color: T.t2, marginBottom: 4 }}>
                     <strong style={{ color: T.t1 }}>Reason:</strong> {esc.trigger_reason}
                   </div>
                   {esc.original_message && (
-                    <div style={{ fontSize: 12, color: T.t3, marginBottom: 4 }}>
+                    <div style={{ fontSize: 13, color: T.t3, marginBottom: 4 }}>
                       <strong>Original:</strong> {esc.original_message}
                     </div>
                   )}
                   {esc.ziro_response && (
-                    <div style={{ fontSize: 12, color: T.t3, marginBottom: 4 }}>
+                    <div style={{ fontSize: 13, color: T.t3, marginBottom: 4 }}>
                       <strong>Ziro replied:</strong> {esc.ziro_response}
                     </div>
                   )}
-                  <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>Opened {new Date(esc.created_at).toLocaleString()}</div>
+                  <div style={{ fontSize: 12, color: T.t4, marginTop: 4 }}>Opened {new Date(esc.created_at).toLocaleString()}</div>
 
                   {/* Thread toggle */}
                   <button
                     onClick={() => loadThread(esc)}
-                    style={{ marginTop: 10, fontSize: 11, color: T.accent, background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                    style={{ marginTop: 10, fontSize: 12, color: T.accent, background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                   >
                     {loadingThread[esc.id] ? 'Loading thread…' : expandedThread[esc.id] ? 'Hide conversation' : 'Show conversation'}
                   </button>
@@ -149,15 +149,15 @@ function EscalationsView({ onNavigate }) {
                   {expandedThread[esc.id] && threads[esc.id] && (
                     <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
                       {threads[esc.id].length === 0 ? (
-                        <div style={{ fontSize: 11, color: T.t4 }}>No messages found.</div>
+                        <div style={{ fontSize: 12, color: T.t4 }}>No messages found.</div>
                       ) : threads[esc.id].map(msg => (
                         <div key={msg.id} style={{
-                          fontSize: 12, color: T.t2, padding: '6px 10px',
+                          fontSize: 13, color: T.t2, padding: '6px 10px',
                           background: msg.direction === 'inbound' ? (T.bg || 'var(--bg)') : '#3B82F610',
                           borderRadius: 6, alignSelf: msg.direction === 'inbound' ? 'flex-start' : 'flex-end',
                           maxWidth: '85%',
                         }}>
-                          <div style={{ fontSize: 10, color: T.t4, marginBottom: 2 }}>
+                          <div style={{ fontSize: 11, color: T.t4, marginBottom: 2 }}>
                             {msg.direction === 'inbound' ? 'Lead' : (msg.from_agent || 'Ziro')} · {msg.sent_at ? new Date(msg.sent_at).toLocaleString() : ''}
                           </div>
                           {msg.message_body}
@@ -171,14 +171,14 @@ function EscalationsView({ onNavigate }) {
                   <button
                     onClick={() => forwardToStudio(esc)}
                     disabled={!!acting[esc.id]}
-                    style={{ padding: '6px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: acting[esc.id] ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', fontFamily: "'Plus Jakarta Sans', sans-serif", opacity: acting[esc.id] ? 0.6 : 1 }}
+                    style={{ padding: '6px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: acting[esc.id] ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', fontFamily: "'Plus Jakarta Sans', sans-serif", opacity: acting[esc.id] ? 0.6 : 1 }}
                   >
                     {acting[esc.id] === 'forward' ? 'Sending…' : 'Forward to Studio'}
                   </button>
                   <button
                     onClick={() => resolveEscalation(esc.id)}
                     disabled={!!acting[esc.id]}
-                    style={{ padding: '6px 14px', background: 'transparent', color: T.t3, border: `1px solid ${T.border}`, borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: acting[esc.id] ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', fontFamily: "'Plus Jakarta Sans', sans-serif", opacity: acting[esc.id] ? 0.6 : 1 }}
+                    style={{ padding: '6px 14px', background: 'transparent', color: T.t3, border: `1px solid ${T.border}`, borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: acting[esc.id] ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', fontFamily: "'Plus Jakarta Sans', sans-serif", opacity: acting[esc.id] ? 0.6 : 1 }}
                   >
                     {acting[esc.id] === 'resolve' ? 'Resolving…' : 'Resolve'}
                   </button>

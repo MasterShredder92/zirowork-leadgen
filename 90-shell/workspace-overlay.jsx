@@ -1,4 +1,4 @@
-// ── Workspace Overlay Surface ────────────────────────────────────────────────────────
+﻿// ── Workspace Overlay Surface ────────────────────────────────────────────────────────
 // Presentation shell that isolates a focused view workflow directly over the workspace layer.
 
 function WorkspaceOverlay({ T, title, subtitle, open, onClose, children, actions = [], onBackdropClick = null }) {
@@ -37,10 +37,10 @@ function WorkspaceOverlay({ T, title, subtitle, open, onClose, children, actions
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20, gap: 12 }}>
           <div>
-            <h2 style={{ fontSize: 15, fontWeight: 700, color: T.t1, margin: '0 0 4px 0' }}>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: T.t1, margin: '0 0 4px 0' }}>
               {title}
             </h2>
-            {subtitle && <p style={{ fontSize: 12, color: T.t3, margin: 0 }}>{subtitle}</p>}
+            {subtitle && <p style={{ fontSize: 13, color: T.t3, margin: 0 }}>{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
@@ -49,7 +49,7 @@ function WorkspaceOverlay({ T, title, subtitle, open, onClose, children, actions
               border: 'none',
               color: T.t3,
               cursor: 'pointer',
-              fontSize: 20,
+              fontSize: 21,
               lineHeight: 1,
               padding: '4px 8px',
               flexShrink: 0,
@@ -81,7 +81,7 @@ function WorkspaceOverlay({ T, title, subtitle, open, onClose, children, actions
                     : 'transparent',
                   color: action.variant === 'primary' ? '#fff' : T.t2,
                   cursor: action.disabled ? 'default' : 'pointer',
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: action.variant === 'primary' ? 600 : 500,
                   fontFamily: 'inherit',
                   opacity: action.disabled ? 0.7 : 1,

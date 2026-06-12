@@ -1,4 +1,4 @@
-function MusicEQIcon({ color }) {
+﻿function MusicEQIcon({ color }) {
   const c = color || '#8B8986';
   const bars = [
     { x:0,  h:10, anim:'eqB1 1.1s ease-in-out infinite' },
@@ -33,7 +33,7 @@ function MobileHeader({ onMenuOpen, onBack, canGoBack, pageTitle }) {
             </div>
         }
       </button>
-      <div style={{ fontSize:14, fontWeight:600, color:T.t1, flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', transition:'opacity 0.15s' }}>
+      <div style={{ fontSize: 15, fontWeight:600, color:T.t1, flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', transition:'opacity 0.15s' }}>
         {pageTitle}
       </div>
     </div>
@@ -45,8 +45,8 @@ function ComingSoon({ label }) {
   const T = window.T || {};
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: T.bg, gap: 10 }}>
-      <div style={{ fontSize: 13, fontWeight: 600, color: T.t1 }}>{label}</div>
-      <div style={{ fontSize: 12, color: T.t3 }}>Coming soon</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: T.t1 }}>{label}</div>
+      <div style={{ fontSize: 13, color: T.t3 }}>Coming soon</div>
     </div>
   );
 }

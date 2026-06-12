@@ -1,4 +1,4 @@
-function VocalsWidget({ accent }) {
+﻿function VocalsWidget({ accent }) {
   const { useState, useRef, useEffect } = React;
   const [state, setState] = useState('idle'); // idle | recording | recorded | playing
   const [seconds, setSeconds] = useState(0);
@@ -90,29 +90,29 @@ function VocalsWidget({ accent }) {
       {/* Controls */}
       <div style={{ display: 'flex', gap: 12, justifyContent: 'center', alignItems: 'center' }}>
         {state === 'idle' && (
-          <button onClick={start} style={{ padding: '12px 28px', background: accent, color: '#fff', border: 'none', borderRadius: 50, fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={start} style={{ padding: '12px 28px', background: accent, color: '#fff', border: 'none', borderRadius: 50, fontSize: 15, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#fff', display: 'inline-block' }} />
             Record your voice
           </button>
         )}
         {state === 'recording' && (
-          <button onClick={stop} style={{ padding: '12px 28px', background: '#EF4444', color: '#fff', border: 'none', borderRadius: 50, fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={stop} style={{ padding: '12px 28px', background: '#EF4444', color: '#fff', border: 'none', borderRadius: 50, fontSize: 15, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ width: 10, height: 10, borderRadius: 2, background: '#fff', display: 'inline-block' }} />
             Stop · {seconds}s
           </button>
         )}
         {(state === 'recorded' || state === 'playing') && (
           <>
-            <button onClick={play} disabled={state === 'playing'} style={{ padding: '12px 24px', background: '#22C55E', color: '#fff', border: 'none', borderRadius: 50, fontSize: 14, fontWeight: 700, cursor: state === 'playing' ? 'default' : 'pointer', opacity: state === 'playing' ? 0.7 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            <button onClick={play} disabled={state === 'playing'} style={{ padding: '12px 24px', background: '#22C55E', color: '#fff', border: 'none', borderRadius: 50, fontSize: 15, fontWeight: 700, cursor: state === 'playing' ? 'default' : 'pointer', opacity: state === 'playing' ? 0.7 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {state === 'playing' ? '▶ Playing...' : '▶ Play back'}
             </button>
-            <button onClick={reset} style={{ padding: '12px 24px', background: '#f7f7f5', color: '#555', border: '1px solid #e5e5e3', borderRadius: 50, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            <button onClick={reset} style={{ padding: '12px 24px', background: '#f7f7f5', color: '#555', border: '1px solid #e5e5e3', borderRadius: 50, fontSize: 15, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               Re-record
             </button>
           </>
         )}
       </div>
-      <div style={{ marginTop: 16, fontSize: 13, color: '#aaa' }}>
+      <div style={{ marginTop: 16, fontSize: 14, color: '#aaa' }}>
         {state === 'idle' && 'Hear how your voice sounds. No account needed.'}
         {state === 'recording' && 'Recording in progress — sing anything!'}
         {state === 'recorded' && 'Nice! Play it back to hear yourself.'}

@@ -1,4 +1,4 @@
-// 14-settings — ZiroWork operator settings
+﻿// 14-settings — ZiroWork operator settings
 function SettingsView({ onNavigate }) {
   const T = window.T || {};
   const operator = window.currentOperator || {};
@@ -6,7 +6,7 @@ function SettingsView({ onNavigate }) {
 
   const Section = ({ title, children }) => (
     <div style={{ marginBottom: 32 }}>
-      <div style={{ fontSize: 10, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 2 }}>{title}</div>
+      <div style={{ fontSize: 11, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 2 }}>{title}</div>
       {children}
     </div>
   );
@@ -14,11 +14,11 @@ function SettingsView({ onNavigate }) {
   const Row = ({ label, value, action, last }) => (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0', borderBottom: last ? 'none' : `1px solid ${T.border}` }}>
       <div>
-        <div style={{ fontSize: 13, fontWeight: 500, color: T.t1 }}>{label}</div>
-        {value && <div style={{ fontSize: 12, color: T.t4, marginTop: 2 }}>{value}</div>}
+        <div style={{ fontSize: 14, fontWeight: 500, color: T.t1 }}>{label}</div>
+        {value && <div style={{ fontSize: 13, color: T.t4, marginTop: 2 }}>{value}</div>}
       </div>
       {action && (
-        <button style={{ padding: '5px 12px', border: `1px solid ${T.border}`, borderRadius: 7, background: 'transparent', fontSize: 12, color: T.t2, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <button style={{ padding: '5px 12px', border: `1px solid ${T.border}`, borderRadius: 7, background: 'transparent', fontSize: 13, color: T.t2, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {action}
         </button>
       )}
@@ -29,8 +29,8 @@ function SettingsView({ onNavigate }) {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Header */}
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Settings</h1>
-        <div style={{ fontSize: 12, color: T.t3 }}>Operator account and system configuration</div>
+        <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Settings</h1>
+        <div style={{ fontSize: 13, color: T.t3 }}>Operator account and system configuration</div>
       </div>
 
       {/* Scrollable content */}
@@ -42,8 +42,8 @@ function SettingsView({ onNavigate }) {
         <Row label="Operator user" value={user.full_name || 'Zach Adkins'} />
         <Row label="Email" value={user.email || 'slavior1992@gmail.com'} action="Edit" />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0' }}>
-          <div style={{ fontSize: 13, fontWeight: 500, color: T.t1 }}>Role</div>
-          <span style={{ fontSize: 11, fontWeight: 600, color: T.accent, background: T.accent + '18', padding: '3px 10px', borderRadius: 20 }}>Operator</span>
+          <div style={{ fontSize: 14, fontWeight: 500, color: T.t1 }}>Role</div>
+          <span style={{ fontSize: 12, fontWeight: 600, color: T.accent, background: T.accent + '18', padding: '3px 10px', borderRadius: 20 }}>Operator</span>
         </div>
       </Section>
 

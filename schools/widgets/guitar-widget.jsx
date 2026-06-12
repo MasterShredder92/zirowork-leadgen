@@ -1,4 +1,4 @@
-function GuitarWidget({ accent }) {
+﻿function GuitarWidget({ accent }) {
   const { useState } = React;
   const [active, setActive] = useState(null);
   const AUDIO_BASE = null;
@@ -61,16 +61,16 @@ function GuitarWidget({ accent }) {
               fontFamily: "'Plus Jakarta Sans', sans-serif",
             }}
           >
-            <div style={{ fontSize: 28, fontWeight: 800, color: active === chord.name ? '#fff' : '#1a1a1a', marginBottom: 4 }}>
+            <div style={{ fontSize: 29, fontWeight: 800, color: active === chord.name ? '#fff' : '#1a1a1a', marginBottom: 4 }}>
               {chord.name}
             </div>
-            <div style={{ fontSize: 10, color: active === chord.name ? 'rgba(255,255,255,0.7)' : '#aaa', fontWeight: 500, letterSpacing: '0.05em' }}>
+            <div style={{ fontSize: 11, color: active === chord.name ? 'rgba(255,255,255,0.7)' : '#aaa', fontWeight: 500, letterSpacing: '0.05em' }}>
               CHORD
             </div>
           </button>
         ))}
       </div>
-      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: '#aaa' }}>
+      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: '#aaa' }}>
         Tap a chord to hear how it sounds
       </div>
     </div>

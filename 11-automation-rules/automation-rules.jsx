@@ -1,4 +1,4 @@
-// 11-automation-rules — What should AI say, do, pause, or escalate?
+﻿// 11-automation-rules — What should AI say, do, pause, or escalate?
 function AutomationRulesView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -23,10 +23,10 @@ function AutomationRulesView({ onNavigate }) {
       {/* Header */}
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Automation Rules</h1>
-          <div style={{ fontSize: 12, color: T.t3 }}>What should AI say, do, pause, or escalate?</div>
+          <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Automation Rules</h1>
+          <div style={{ fontSize: 13, color: T.t3 }}>What should AI say, do, pause, or escalate?</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {L.Plus && <L.Plus size={14} strokeWidth={1.75} />} Add Rule
         </button>
       </div>
@@ -41,19 +41,19 @@ function AutomationRulesView({ onNavigate }) {
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: modeColor(rule.mode) }} />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: T.t1, marginBottom: 2 }}>{rule.name}</div>
-              <div style={{ fontSize: 11, color: T.t4, display: 'flex', gap: 8 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: T.t1, marginBottom: 2 }}>{rule.name}</div>
+              <div style={{ fontSize: 12, color: T.t4, display: 'flex', gap: 8 }}>
                 <span>When: {rule.trigger}</span>
                 <span>·</span>
                 <span>Then: {rule.action}</span>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-              <span style={{ fontSize: 10, fontWeight: 700, color: modeColor(rule.mode), background: modeColor(rule.mode) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, color: modeColor(rule.mode), background: modeColor(rule.mode) + '1A', padding: '2px 8px', borderRadius: 20 }}>
                 {modeLabel(rule.mode)}
               </span>
               <button onClick={() => toggleRule(rule)}
-                style={{ fontSize: 10, fontWeight: 600, color: statColor(rule.status), background: statColor(rule.status) + '1A', padding: '2px 8px', borderRadius: 20, border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                style={{ fontSize: 11, fontWeight: 600, color: statColor(rule.status), background: statColor(rule.status) + '1A', padding: '2px 8px', borderRadius: 20, border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 {rule.status}
               </button>
             </div>

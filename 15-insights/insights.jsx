@@ -1,4 +1,4 @@
-// 15-insights — What patterns, playbooks, and benchmarks help ZiroWork operate better?
+﻿// 15-insights — What patterns, playbooks, and benchmarks help ZiroWork operate better?
 function InsightsView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -46,8 +46,8 @@ function InsightsView({ onNavigate }) {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Header */}
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Insights</h1>
-        <div style={{ fontSize: 12, color: T.t3 }}>What patterns, playbooks, and benchmarks help ZiroWork operate better?</div>
+        <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Insights</h1>
+        <div style={{ fontSize: 13, color: T.t3 }}>What patterns, playbooks, and benchmarks help ZiroWork operate better?</div>
       </div>
 
       {/* Scrollable content — flat rows, hairline separated, accent strip indicator */}
@@ -59,12 +59,12 @@ function InsightsView({ onNavigate }) {
             <div style={{ width: 3, alignSelf: 'stretch', background: p.accent, borderRadius: 2, flexShrink: 0 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                <span style={{ fontSize: 9, fontWeight: 700, color: p.accent, background: p.accent + '18', padding: '2px 7px', borderRadius: 20, letterSpacing: '0.06em' }}>{p.category}</span>
-                <span style={{ fontSize: 10, color: T.t4 }}>{p.tag}</span>
+                <span style={{ fontSize: 10, fontWeight: 700, color: p.accent, background: p.accent + '18', padding: '2px 7px', borderRadius: 20, letterSpacing: '0.06em' }}>{p.category}</span>
+                <span style={{ fontSize: 11, color: T.t4 }}>{p.tag}</span>
               </div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: T.t1, marginBottom: 8, lineHeight: 1.4 }}>{p.title}</div>
-              <div style={{ fontSize: 12, color: T.t3, lineHeight: 1.6, marginBottom: 12, maxWidth: 720 }}>{p.excerpt}</div>
-              <div style={{ fontSize: 11, color: T.t4, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: 15, fontWeight: 600, color: T.t1, marginBottom: 8, lineHeight: 1.4 }}>{p.title}</div>
+              <div style={{ fontSize: 13, color: T.t3, lineHeight: 1.6, marginBottom: 12, maxWidth: 720 }}>{p.excerpt}</div>
+              <div style={{ fontSize: 12, color: T.t4, display: 'flex', alignItems: 'center', gap: 4 }}>
                 {L.Clock && <L.Clock size={11} strokeWidth={1.75} />} {p.read} read
               </div>
             </div>

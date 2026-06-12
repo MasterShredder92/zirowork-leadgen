@@ -1,4 +1,4 @@
-// ─── Signup ──────────────────────────────────────────────────
+﻿// ─── Signup ──────────────────────────────────────────────────
 function SignupView({ onSwitchToLogin, onSignupComplete }) {
   const [name, setName]             = React.useState('');
   const [schoolName, setSchoolName] = React.useState('');
@@ -45,8 +45,8 @@ function SignupView({ onSwitchToLogin, onSignupComplete }) {
           <div style={{ display: 'inline-flex', padding: 16, borderRadius: 16, background: 'rgba(224,77,39,0.1)', marginBottom: 20 }}>
             {MailIcon && <MailIcon size={28} strokeWidth={1.5} color="var(--accent)" />}
           </div>
-          <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Check your email</div>
-          <div style={{ fontSize: 14, color: 'var(--text-3)', lineHeight: 1.7 }}>
+          <div style={{ fontSize: 19, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Check your email</div>
+          <div style={{ fontSize: 15, color: 'var(--text-3)', lineHeight: 1.7 }}>
             Confirmation sent to <span style={{ color: 'var(--text-2)', fontWeight: 600 }}>{email}</span>.<br />
             Click the link to finish setup.
           </div>
@@ -83,7 +83,7 @@ function SignupView({ onSwitchToLogin, onSignupComplete }) {
           {loading ? 'Setting up your studio…' : 'Create account'}
         </button>
       </form>
-      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: 'var(--text-4)' }}>
+      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: 'var(--text-4)' }}>
         Already have an account?{' '}
         <span onClick={onSwitchToLogin} style={{ color: 'var(--accent)', cursor: 'pointer', fontWeight: 600 }}>
           Sign in

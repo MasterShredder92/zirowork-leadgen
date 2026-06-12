@@ -1,4 +1,4 @@
-const _sb = supabase.createClient(
+﻿const _sb = supabase.createClient(
   'https://txpgyuetfsrzfxxopwzf.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cGd5dWV0ZnNyemZ4eG9wd3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDk5MzQsImV4cCI6MjA5NDc4NTkzNH0.LaSe5Gfho9WIqKQOyBECKHx4CbtIO95RexqoAQMkIvQ' // public anon key — nosemgrep: generic.secrets.security.detected-jwt-token.detected-jwt-token
 );
@@ -139,7 +139,7 @@ function SignupPage({ school, slug, instrument }) {
       color: accent,
       padding: '3px 12px',
       borderRadius: 20,
-      fontSize: 11,
+      fontSize: 12,
       fontWeight: 700,
       letterSpacing: '0.08em',
       textTransform: 'uppercase',
@@ -155,7 +155,7 @@ function SignupPage({ school, slug, instrument }) {
       lineHeight: 1.15,
     },
     sub: {
-      fontSize: 15,
+      fontSize: 16,
       color: '#888',
       marginBottom: 28,
       marginTop: 0,
@@ -173,13 +173,13 @@ function SignupPage({ school, slug, instrument }) {
       transition: 'all 0.15s',
     }),
     pathCardTitle: {
-      fontSize: 16,
+      fontSize: 17,
       fontWeight: 800,
       color: '#1a1a1a',
       marginBottom: 3,
     },
     pathCardSub: {
-      fontSize: 13,
+      fontSize: 14,
       color: '#888',
       margin: 0,
     },
@@ -187,7 +187,7 @@ function SignupPage({ school, slug, instrument }) {
       padding: '10px 20px',
       borderRadius: 24,
       border: '2px solid ' + (selected ? accent : '#f0f0ee'),
-      fontSize: 14,
+      fontSize: 15,
       fontWeight: 600,
       cursor: 'pointer',
       background: selected ? accent + '12' : '#fff',
@@ -213,7 +213,7 @@ function SignupPage({ school, slug, instrument }) {
       padding: '13px 16px',
       border: '2px solid #f0f0ee',
       borderRadius: 10,
-      fontSize: 15,
+      fontSize: 16,
       fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
       outline: 'none',
       color: '#1a1a1a',
@@ -221,7 +221,7 @@ function SignupPage({ school, slug, instrument }) {
       boxSizing: 'border-box',
     },
     label: {
-      fontSize: 13,
+      fontSize: 14,
       fontWeight: 700,
       color: '#555',
       marginBottom: 6,
@@ -242,7 +242,7 @@ function SignupPage({ school, slug, instrument }) {
     btn: (disabled) => ({
       padding: '15px 32px',
       borderRadius: 10,
-      fontSize: 15,
+      fontSize: 16,
       fontWeight: 700,
       border: 'none',
       cursor: disabled ? 'not-allowed' : 'pointer',
@@ -257,7 +257,7 @@ function SignupPage({ school, slug, instrument }) {
       background: 'none',
       border: 'none',
       cursor: 'pointer',
-      fontSize: 13,
+      fontSize: 14,
       fontWeight: 700,
       color: '#888',
       padding: '4px 0',
@@ -276,7 +276,7 @@ function SignupPage({ school, slug, instrument }) {
       padding: '13px 16px',
       border: '2px solid #f0f0ee',
       borderRadius: 10,
-      fontSize: 14,
+      fontSize: 15,
       fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
       outline: 'none',
       color: '#1a1a1a',
@@ -466,8 +466,8 @@ function SignupPage({ school, slug, instrument }) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, width: '100%', marginBottom: 8 }}>
           {INSTRUMENTS.map(inst => (
             <button key={inst} style={S.instCard(selectedInstruments.includes(inst))} onClick={() => toggleInst(inst)}>
-              <span style={{ fontSize: 28 }}>{INST_ICON[inst]}</span>
-              <span style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a' }}>{inst}</span>
+              <span style={{ fontSize: 29 }}>{INST_ICON[inst]}</span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a' }}>{inst}</span>
             </button>
           ))}
         </div>
@@ -545,7 +545,7 @@ function SignupPage({ school, slug, instrument }) {
           ))}
         </div>
         {hasInstrument === 'No' && (
-          <p style={{ fontSize: 13, color: '#888', marginTop: 16, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 14, color: '#888', marginTop: 16, lineHeight: 1.6 }}>
             No problem — we can help you find something.
           </p>
         )}
@@ -561,8 +561,8 @@ function SignupPage({ school, slug, instrument }) {
       <h1 style={S.headline}>Your location</h1>
       <p style={S.sub}>Based on the page you came from.</p>
       <div style={{ width: '100%', padding: '24px 28px', background: '#f8f8f6', borderRadius: 16, border: '1px solid #f0f0ee', marginBottom: 24 }}>
-        <div style={{ fontSize: 20, fontWeight: 800, color: '#1a1a1a', marginBottom: 6 }}>{school.name}</div>
-        <div style={{ fontSize: 15, color: '#666' }}>{school.city}{school.state ? ', ' + school.state : ''}</div>
+        <div style={{ fontSize: 21, fontWeight: 800, color: '#1a1a1a', marginBottom: 6 }}>{school.name}</div>
+        <div style={{ fontSize: 16, color: '#666' }}>{school.city}{school.state ? ', ' + school.state : ''}</div>
       </div>
       <div style={S.stickyBottom}>
         <button style={S.btn(false)} onClick={goNext}>
@@ -622,7 +622,7 @@ function SignupPage({ school, slug, instrument }) {
             onBlur={handleEmailBlur}
             placeholder="you@example.com"
           />
-          {emailError && <div style={{ fontSize: 12, color: '#e04d27', marginTop: 4 }}>{emailError}</div>}
+          {emailError && <div style={{ fontSize: 13, color: '#e04d27', marginTop: 4 }}>{emailError}</div>}
         </div>
         <div style={S.fieldGroup}>
           <label style={S.label}>Phone</label>
@@ -642,7 +642,7 @@ function SignupPage({ school, slug, instrument }) {
             onChange={e => setSmsConsent(e.target.checked)}
             style={{ marginTop: 2, accentColor: accent, flexShrink: 0, cursor: 'pointer' }}
           />
-          <label htmlFor="sms-consent" style={{ fontSize: 12, color: '#888', lineHeight: 1.5, cursor: 'pointer' }}>
+          <label htmlFor="sms-consent" style={{ fontSize: 13, color: '#888', lineHeight: 1.5, cursor: 'pointer' }}>
             I consent to receive text messages from ZiroWork on behalf of {school.name} about my lesson inquiry, including follow-ups and booking reminders, at the number provided. Message frequency varies. Msg & data rates may apply. Reply HELP for help or STOP to cancel.{' '}
             <a href="/privacy" target="_blank" style={{ color: accent, textDecoration: 'underline' }}>Privacy Policy</a>
             {' | '}
@@ -661,7 +661,7 @@ function SignupPage({ school, slug, instrument }) {
               transition: 'left 0.2s', boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
             }} />
           </div>
-          <span style={{ fontSize: 14, fontWeight: 600, color: '#1a1a1a' }}>Military family?</span>
+          <span style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a' }}>Military family?</span>
         </div>
         <div style={S.stickyBottom}>
           <button style={S.btn(!valid)} disabled={!valid} onClick={goNext}>
@@ -703,9 +703,9 @@ function SignupPage({ school, slug, instrument }) {
           <div style={{ width: '100%', marginBottom: 16 }}>
             {additionalStudents.map((s, i) => (
               <div key={i} style={{ padding: '14px 18px', background: '#f8f8f6', borderRadius: 12, marginBottom: 8, border: '1px solid #f0f0ee' }}>
-                <div style={{ fontWeight: 700, fontSize: 15, color: '#1a1a1a' }}>{s.firstName} {s.lastName}</div>
+                <div style={{ fontWeight: 700, fontSize: 16, color: '#1a1a1a' }}>{s.firstName} {s.lastName}</div>
                 {s.instruments.length > 0 && (
-                  <div style={{ fontSize: 13, color: '#888', marginTop: 2 }}>{s.instruments.join(', ')}</div>
+                  <div style={{ fontSize: 14, color: '#888', marginTop: 2 }}>{s.instruments.join(', ')}</div>
                 )}
               </div>
             ))}
@@ -757,8 +757,8 @@ function SignupPage({ school, slug, instrument }) {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 {INSTRUMENTS.map(inst => (
                   <button key={inst} style={S.instCard(newStudent.instruments.includes(inst))} onClick={() => toggleNewInst(inst)}>
-                    <span style={{ fontSize: 22 }}>{INST_ICON[inst]}</span>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{inst}</span>
+                    <span style={{ fontSize: 23 }}>{INST_ICON[inst]}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a' }}>{inst}</span>
                   </button>
                 ))}
               </div>
@@ -823,10 +823,10 @@ function SignupPage({ school, slug, instrument }) {
       return (
         <div style={{ ...S.stepFade, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 60 }} key={stepKey}>
           <div style={{ width: 44, height: 44, border: '3px solid #f0f0ee', borderTopColor: accent, borderRadius: '50%', animation: 'spin 0.8s linear infinite', marginBottom: 24 }} />
-          <p style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', textAlign: 'center', maxWidth: 280, lineHeight: 1.5, margin: 0 }}>
+          <p style={{ fontSize: 17, fontWeight: 700, color: '#1a1a1a', textAlign: 'center', maxWidth: 280, lineHeight: 1.5, margin: 0 }}>
             Finding your perfect match...
           </p>
-          <p style={{ fontSize: 13, color: '#aaa', marginTop: 8, textAlign: 'center' }}>we take this very seriously.</p>
+          <p style={{ fontSize: 14, color: '#aaa', marginTop: 8, textAlign: 'center' }}>we take this very seriously.</p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       );
@@ -834,31 +834,31 @@ function SignupPage({ school, slug, instrument }) {
     return (
       <div style={{ ...S.stepFade, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingTop: 20 }} key={stepKey}>
         {renderBadge()}
-        <div style={{ fontSize: 64, fontWeight: 800, color: accent, lineHeight: 1, marginBottom: 4 }}>
+        <div style={{ fontSize: 65, fontWeight: 800, color: accent, lineHeight: 1, marginBottom: 4 }}>
           {matchScore}%
         </div>
-        <div style={{ fontSize: 12, fontWeight: 700, color: '#aaa', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: '#aaa', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>
           compatibility
         </div>
         <h1 style={{ ...S.headline, textAlign: 'center' }}>We found your match.</h1>
-        <p style={{ fontSize: 15, color: '#555', lineHeight: 1.7, maxWidth: 400, marginBottom: 8 }}>
+        <p style={{ fontSize: 16, color: '#555', lineHeight: 1.7, maxWidth: 400, marginBottom: 8 }}>
           We're reaching out ASAP — expect to hear from us within the hour during business hours.
         </p>
         {school.offer && (
-          <div style={{ display: 'inline-block', background: accent + '12', color: accent, padding: '6px 16px', borderRadius: 20, fontSize: 13, fontWeight: 700, marginBottom: 24 }}>
+          <div style={{ display: 'inline-block', background: accent + '12', color: accent, padding: '6px 16px', borderRadius: 20, fontSize: 14, fontWeight: 700, marginBottom: 24 }}>
             ✓ {school.offer}
           </div>
         )}
         <div style={{ width: '100%', padding: '20px 24px', background: '#f8f8f6', borderRadius: 14, border: '1px solid #f0f0ee', marginBottom: 24, textAlign: 'left' }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#aaa', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Your enrollment</div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a', marginBottom: 4 }}>{student.firstName} {student.lastName}</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#aaa', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Your enrollment</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', marginBottom: 4 }}>{student.firstName} {student.lastName}</div>
           {selectedInstruments.length > 0 && (
-            <div style={{ fontSize: 14, color: '#666' }}>{selectedInstruments.join(', ')}</div>
+            <div style={{ fontSize: 15, color: '#666' }}>{selectedInstruments.join(', ')}</div>
           )}
-          <div style={{ fontSize: 13, color: '#aaa', marginTop: 4 }}>{school.name}</div>
+          <div style={{ fontSize: 14, color: '#aaa', marginTop: 4 }}>{school.name}</div>
         </div>
         {error && (
-          <div style={{ width: '100%', padding: '12px 16px', background: '#fff0ee', border: '1px solid #ffd0c4', borderRadius: 10, fontSize: 14, color: '#c0392b', marginBottom: 16 }}>
+          <div style={{ width: '100%', padding: '12px 16px', background: '#fff0ee', border: '1px solid #ffd0c4', borderRadius: 10, fontSize: 15, color: '#c0392b', marginBottom: 16 }}>
             {error}
           </div>
         )}
@@ -869,7 +869,7 @@ function SignupPage({ school, slug, instrument }) {
         >
           {submitting ? 'Submitting...' : 'Complete Enrollment →'}
         </button>
-        <p style={{ fontSize: 12, color: '#bbb', marginTop: 12 }}>
+        <p style={{ fontSize: 13, color: '#bbb', marginTop: 12 }}>
           {school.phone && (
             <a href={'tel:' + school.phone.replace(/\D/g, '')} style={{ color: '#aaa', textDecoration: 'none' }}>
               {school.phone}

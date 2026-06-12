@@ -1,4 +1,4 @@
-// 06-conversations — What is being said, what has AI handled, and what needs review?
+﻿// 06-conversations — What is being said, what has AI handled, and what needs review?
 function ConversationsView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -109,18 +109,18 @@ function ConversationsView({ onNavigate }) {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Conversations</h1>
-        <div style={{ fontSize: 12, color: T.t3 }}>What is being said, what has AI handled, and what needs review?</div>
+        <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Conversations</h1>
+        <div style={{ fontSize: 13, color: T.t3 }}>What is being said, what has AI handled, and what needs review?</div>
       </div>
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {/* Thread list */}
         <div style={{ width: 300, flexShrink: 0, borderRight: `1px solid ${T.border}`, overflowY: 'auto' }}>
           {loading && (
-            <div style={{ padding: 24, fontSize: 13, color: T.t4 }}>Loading…</div>
+            <div style={{ padding: 24, fontSize: 14, color: T.t4 }}>Loading…</div>
           )}
           {!loading && threads.length === 0 && (
-            <div style={{ padding: 24, fontSize: 13, color: T.t4 }}>No messages yet.</div>
+            <div style={{ padding: 24, fontSize: 14, color: T.t4 }}>No messages yet.</div>
           )}
           {threads.map(t => (
             <div key={t.key}
@@ -136,11 +136,11 @@ function ConversationsView({ onNavigate }) {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   {t.unread && <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#6366F1', flexShrink: 0 }} />}
-                  <span style={{ fontSize: 13, fontWeight: t.unread ? 600 : 500, color: T.t1 }}>{t.name}</span>
+                  <span style={{ fontSize: 14, fontWeight: t.unread ? 600 : 500, color: T.t1 }}>{t.name}</span>
                 </div>
-                <span style={{ fontSize: 11, color: T.t4, whiteSpace: 'nowrap', marginLeft: 8 }}>{fmtTime(t.last_at)}</span>
+                <span style={{ fontSize: 12, color: T.t4, whiteSpace: 'nowrap', marginLeft: 8 }}>{fmtTime(t.last_at)}</span>
               </div>
-              <div style={{ fontSize: 12, color: T.t3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div style={{ fontSize: 13, color: T.t3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {t.last_message}
               </div>
             </div>
@@ -151,7 +151,7 @@ function ConversationsView({ onNavigate }) {
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           {!selectedPhone && (
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: 13, color: T.t4 }}>Select a conversation</span>
+              <span style={{ fontSize: 14, color: T.t4 }}>Select a conversation</span>
             </div>
           )}
 
@@ -160,17 +160,17 @@ function ConversationsView({ onNavigate }) {
               {/* Thread header */}
               <div style={{ padding: '12px 20px', borderBottom: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: T.t1 }}>{selected ? selected.name : ''}</div>
-                  <div style={{ fontSize: 11, color: T.t4 }}>{selected ? selected.phone : ''}</div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: T.t1 }}>{selected ? selected.name : ''}</div>
+                  <div style={{ fontSize: 12, color: T.t4 }}>{selected ? selected.phone : ''}</div>
                 </div>
                 {!takeover && (
                   <button onClick={handleTakeover}
-                    style={{ fontSize: 12, fontWeight: 600, color: '#6366F1', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 6, padding: '6px 14px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                    style={{ fontSize: 13, fontWeight: 600, color: '#6366F1', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 6, padding: '6px 14px', cursor: 'pointer', fontFamily: 'inherit' }}>
                     Take Over
                   </button>
                 )}
                 {takeover && (
-                  <span style={{ fontSize: 11, fontWeight: 600, color: '#F59E0B', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 6, padding: '4px 10px' }}>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: '#F59E0B', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 6, padding: '4px 10px' }}>
                     Manual Mode
                   </span>
                 )}
@@ -186,11 +186,11 @@ function ConversationsView({ onNavigate }) {
                         maxWidth: '70%', padding: '9px 13px', borderRadius: out ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
                         background: out ? '#6366F1' : (T.card || '#1E1E2E'),
                         color: out ? '#fff' : T.t1,
-                        fontSize: 13, lineHeight: 1.5,
+                        fontSize: 14, lineHeight: 1.5,
                       }}>
                         {m.message_body}
                       </div>
-                      <div style={{ fontSize: 10, color: T.t4, marginTop: 3 }}>
+                      <div style={{ fontSize: 11, color: T.t4, marginTop: 3 }}>
                         {out && m.from_agent ? m.from_agent + ' · ' : ''}{fmtTime(m.sent_at)}
                       </div>
                     </div>
@@ -211,13 +211,13 @@ function ConversationsView({ onNavigate }) {
                     style={{
                       flex: 1, resize: 'none', padding: '8px 12px', borderRadius: 6,
                       border: `1px solid ${T.border}`, background: T.input || T.card || '#1E1E2E',
-                      color: T.t1, fontSize: 13, fontFamily: 'inherit', outline: 'none',
+                      color: T.t1, fontSize: 14, fontFamily: 'inherit', outline: 'none',
                     }}
                   />
                   <button onClick={sendReply} disabled={sending || !draft.trim()}
                     style={{
                       padding: '0 18px', borderRadius: 6, border: 'none', cursor: sending || !draft.trim() ? 'not-allowed' : 'pointer',
-                      background: '#6366F1', color: '#fff', fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
+                      background: '#6366F1', color: '#fff', fontSize: 14, fontWeight: 600, fontFamily: 'inherit',
                       opacity: sending || !draft.trim() ? 0.5 : 1,
                     }}>
                     {sending ? '…' : 'Send'}

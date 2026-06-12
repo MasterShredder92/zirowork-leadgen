@@ -1,4 +1,4 @@
-window.PortalLogin = function PortalLogin({ onLogin }) {
+﻿window.PortalLogin = function PortalLogin({ onLogin }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
@@ -53,33 +53,33 @@ window.PortalLogin = function PortalLogin({ onLogin }) {
       borderRadius: 7, flexShrink: 0,
     },
     logoText: {
-      fontSize: 15, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.3px',
+      fontSize: 16, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.3px',
     },
     logoSub: {
-      fontSize: 12, color: 'var(--t3)', fontWeight: 500,
+      fontSize: 13, color: 'var(--t3)', fontWeight: 500,
     },
     heading: {
-      fontSize: 20, fontWeight: 700, color: 'var(--t1)',
+      fontSize: 21, fontWeight: 700, color: 'var(--t1)',
       letterSpacing: '-0.4px', marginBottom: 5,
     },
-    sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 28 },
-    label: { display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--t3)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 7 },
+    sub: { fontSize: 14, color: 'var(--t3)', marginBottom: 28 },
+    label: { display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--t3)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 7 },
     input: {
       width: '100%', padding: '10px 12px',
       background: 'var(--bg)', border: '1px solid var(--bmed)',
-      borderRadius: 8, fontSize: 14, color: 'var(--t1)',
+      borderRadius: 8, fontSize: 15, color: 'var(--t1)',
       outline: 'none', fontFamily: 'inherit',
     },
     fieldWrap: { marginBottom: 16 },
     btn: {
       width: '100%', padding: '11px 0',
       background: 'var(--accent)', color: '#fff',
-      border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600,
+      border: 'none', borderRadius: 8, fontSize: 15, fontWeight: 600,
       cursor: 'pointer', marginTop: 10, fontFamily: 'inherit',
       opacity: loading ? 0.6 : 1,
     },
     err: {
-      marginTop: 12, fontSize: 12, color: '#B91C1C',
+      marginTop: 12, fontSize: 13, color: '#B91C1C',
       background: '#FEE2E2', borderRadius: 6, padding: '8px 10px',
     },
   };

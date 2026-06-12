@@ -1,4 +1,4 @@
-// ─── Login ───────────────────────────────────────────────────
+﻿// ─── Login ───────────────────────────────────────────────────
 function LoginView({ onSwitchToSignup, onLoginComplete }) {
   const [email, setEmail]       = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -32,7 +32,7 @@ function LoginView({ onSwitchToSignup, onLoginComplete }) {
           {loading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
-      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: 'var(--text-4)' }}>
+      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: 'var(--text-4)' }}>
         New studio?{' '}
         <span onClick={onSwitchToSignup} style={{ color: 'var(--accent)', cursor: 'pointer', fontWeight: 600 }}>
           Create account

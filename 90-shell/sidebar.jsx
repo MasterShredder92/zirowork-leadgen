@@ -1,4 +1,4 @@
-// sidebar.jsx — ZiroWork Operator CRM
+﻿// sidebar.jsx — ZiroWork Operator CRM
 // Preserved visual system. Business nouns remapped to operator context.
 const { useState, useEffect, useRef } = React;
 const L = window.LucideReact || {};
@@ -109,11 +109,11 @@ function CommandPalette({ onClose, onNavigate }) {
         <input autoFocus value={q} onChange={e => setQ(e.target.value)}
           onKeyDown={e => { if (e.key === 'Escape') onClose(); if (e.key === 'Enter' && filtered[0]) { onNavigate(filtered[0].nav); onClose(); }}}
           placeholder="Where do you want to go?"
-          style={{ background: 'transparent', border: 'none', outline: 'none', fontSize: 13, color: T.t1, width: '100%', fontFamily: "'Plus Jakarta Sans', sans-serif" }} />
+          style={{ background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: T.t1, width: '100%', fontFamily: "'Plus Jakarta Sans', sans-serif" }} />
       </div>
       <div style={{ padding: '6px 6px 8px' }}>
         {filtered.length === 0 && (
-          <div style={{ padding: '12px 10px', fontSize: 12, color: T.t4, textAlign: 'center' }}>No results</div>
+          <div style={{ padding: '12px 10px', fontSize: 13, color: T.t4, textAlign: 'center' }}>No results</div>
         )}
         {filtered.map(({ label, icon, nav }) => {
           const Icon = L[icon];
@@ -122,7 +122,7 @@ function CommandPalette({ onClose, onNavigate }) {
               display: 'flex', alignItems: 'center', gap: 10, width: '100%',
               padding: '8px 10px', borderRadius: TOKENS.radius.lg, border: 'none',
               background: 'transparent', color: T.t2, cursor: 'pointer', textAlign: 'left',
-              fontSize: 13, fontFamily: "'Plus Jakarta Sans', sans-serif", transition: 'all 0.1s',
+              fontSize: 14, fontFamily: "'Plus Jakarta Sans', sans-serif", transition: 'all 0.1s',
             }}
               onMouseEnter={e => { e.currentTarget.style.background = T.hover; e.currentTarget.style.color = T.t1; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.t2; }}>
@@ -133,9 +133,9 @@ function CommandPalette({ onClose, onNavigate }) {
         })}
       </div>
       <div style={{ padding: '6px 12px 8px', borderTop: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: 10, color: T.t4, fontFamily: 'ui-monospace,monospace' }}>↵ select</span>
-        <span style={{ fontSize: 10, color: T.t4, fontFamily: 'ui-monospace,monospace' }}>esc close</span>
-        <span style={{ marginLeft: 'auto', fontSize: 10, color: T.t4 }}>ZiroWork Operator</span>
+        <span style={{ fontSize: 11, color: T.t4, fontFamily: 'ui-monospace,monospace' }}>↵ select</span>
+        <span style={{ fontSize: 11, color: T.t4, fontFamily: 'ui-monospace,monospace' }}>esc close</span>
+        <span style={{ marginLeft: 'auto', fontSize: 11, color: T.t4 }}>ZiroWork Operator</span>
       </div>
     </div>
   );
@@ -172,7 +172,7 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
     padding: '6px 8px', borderRadius: 7, border: active ? `1px solid ${T.activeB || 'rgba(255,255,255,0.06)'}` : '1px solid transparent',
     background: active ? (T.active || 'rgba(255,255,255,0.08)') : 'transparent',
     color: active ? (T.t1 || '#EFEDEA') : (T.t2 || '#8B8986'),
-    cursor: 'pointer', textAlign: 'left', fontSize: 13,
+    cursor: 'pointer', textAlign: 'left', fontSize: 14,
     fontWeight: active ? 500 : 400, fontFamily: "'Plus Jakarta Sans', sans-serif", transition: 'all 0.1s',
   });
 
@@ -221,8 +221,8 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
               )}
             </div>
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: T.t1, letterSpacing: '-0.2px', lineHeight: 1.2 }}>{operatorName}</div>
-              <div style={{ fontSize: 10, color: T.t3, marginTop: 1 }}>Operator CRM · click ⚡ to act</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: T.t1, letterSpacing: '-0.2px', lineHeight: 1.2 }}>{operatorName}</div>
+              <div style={{ fontSize: 11, color: T.t3, marginTop: 1 }}>Operator CRM · click ⚡ to act</div>
             </div>
             {L.ChevronRight && <L.ChevronRight size={12} color={T.t4} style={{ marginLeft: 'auto', flexShrink: 0 }} />}
           </div>
@@ -236,8 +236,8 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
         <div style={{ padding: '0 12px 8px', flexShrink: 0 }}>
           <div onClick={fireBolt} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '6px 10px', borderRadius: 8, cursor: 'text', background: T.hover, border: `1px solid ${T.border}` }}>
             {L.Search && <L.Search size={12} color={T.t3} strokeWidth={1.8} />}
-            <span style={{ fontSize: 12, color: T.t4 }}>Search…</span>
-            <span style={{ marginLeft: 'auto', fontSize: 10, color: T.t5, fontFamily: 'ui-monospace,monospace' }}>⌘K</span>
+            <span style={{ fontSize: 13, color: T.t4 }}>Search…</span>
+            <span style={{ marginLeft: 'auto', fontSize: 11, color: T.t5, fontFamily: 'ui-monospace,monospace' }}>⌘K</span>
           </div>
         </div>
 
@@ -245,7 +245,7 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
         <nav style={{ flex: 1, padding: '0 8px 8px' }}>
           {NAV.map(({ section, items }) => (
             <div key={section} style={{ marginBottom: 4 }}>
-              <div style={{ padding: '10px 8px 4px', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: T.t4 }}>{section}</div>
+              <div style={{ padding: '10px 8px 4px', fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: T.t4 }}>{section}</div>
               {items.map(item => {
                 const Icon  = L[item.icon];
                 const active = currentView === item.id;
@@ -270,7 +270,7 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
           <button onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             window.toggleTheme && window.toggleTheme(Math.round(rect.left + rect.width / 2), Math.round(rect.top + rect.height / 2));
-          }} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '6px 8px', borderRadius: 7, border: 'none', background: 'transparent', color: T.t3, cursor: 'pointer', fontSize: 12, fontFamily: "'Plus Jakarta Sans', sans-serif", transition: 'all 0.1s' }}
+          }} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '6px 8px', borderRadius: 7, border: 'none', background: 'transparent', color: T.t3, cursor: 'pointer', fontSize: 13, fontFamily: "'Plus Jakarta Sans', sans-serif", transition: 'all 0.1s' }}
             onMouseEnter={e => { e.currentTarget.style.background = T.hover; e.currentTarget.style.color = T.t1; }}
             onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = T.t3; }}>
             {L.Circle && <L.Circle size={14} strokeWidth={1.7} />}
@@ -290,8 +290,8 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
               overflow: 'hidden', zIndex: 100,
             }}>
               <div style={{ padding: '10px 12px 8px', borderBottom: `1px solid ${T.border}` }}>
-                <div style={{ fontSize: 12, fontWeight: 500, color: T.t1 }}>{userName}</div>
-                <div style={{ fontSize: 10, color: T.t3, marginTop: 1 }}>ZiroWork Operator</div>
+                <div style={{ fontSize: 13, fontWeight: 500, color: T.t1 }}>{userName}</div>
+                <div style={{ fontSize: 11, color: T.t3, marginTop: 1 }}>ZiroWork Operator</div>
               </div>
               <div style={{ padding: '6px 6px 6px' }}>
                 {[
@@ -307,7 +307,7 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
                       display: 'flex', alignItems: 'center', gap: 9, width: '100%',
                       padding: '7px 10px', borderRadius: 7, border: 'none',
                       background: 'transparent', color: label === 'Sign out' ? T.t3 : T.t2,
-                      cursor: 'pointer', fontSize: 12, textAlign: 'left',
+                      cursor: 'pointer', fontSize: 13, textAlign: 'left',
                       fontFamily: "'Plus Jakarta Sans', sans-serif", transition: 'all 0.1s',
                     }}
                       onMouseEnter={e => { e.currentTarget.style.background = T.hover; e.currentTarget.style.color = T.t1; }}
@@ -323,12 +323,12 @@ function Sidebar({ currentView, onNavigate, mobileOpen, onMobileClose }) {
           <button onClick={() => setUserMenuOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: 9, width: '100%', padding: '6px 8px', borderRadius: 7, border: 'none', background: userMenuOpen ? T.hover : 'transparent', color: T.t1, cursor: 'pointer', textAlign: 'left', fontFamily: "'Plus Jakarta Sans', sans-serif", transition: 'background 0.1s' }}
             onMouseEnter={e => { if (!userMenuOpen) e.currentTarget.style.background = T.hover; }}
             onMouseLeave={e => { if (!userMenuOpen) e.currentTarget.style.background = 'transparent'; }}>
-            <div style={{ width: 26, height: 26, borderRadius: '50%', flexShrink: 0, background: T.isDark ? 'rgba(255,255,255,0.12)' : '#1C1C1A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#F7F2E8', fontWeight: 600 }}>
+            <div style={{ width: 26, height: 26, borderRadius: '50%', flexShrink: 0, background: T.isDark ? 'rgba(255,255,255,0.12)' : '#1C1C1A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#F7F2E8', fontWeight: 600 }}>
               {userInitials}
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <div style={{ fontSize: 12, fontWeight: 500, color: T.t1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userName}</div>
-              <div style={{ fontSize: 10, color: T.t3, marginTop: 1 }}>Operator</div>
+              <div style={{ fontSize: 13, fontWeight: 500, color: T.t1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{userName}</div>
+              <div style={{ fontSize: 11, color: T.t3, marginTop: 1 }}>Operator</div>
             </div>
             {L.ChevronsUpDown && <L.ChevronsUpDown size={12} color={T.t4} style={{ flexShrink: 0 }} />}
           </button>

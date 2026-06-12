@@ -1,4 +1,4 @@
-window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
+﻿window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
   const [data, setData] = React.useState(null);
   const [form, setForm] = React.useState(null);
   const [saving, setSaving] = React.useState(false);
@@ -261,34 +261,34 @@ window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
 
   const s = {
     page: { padding: '32px 36px', overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
-    heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
-    sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 28 },
+    heading: { fontSize: 23, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
+    sub: { fontSize: 14, color: 'var(--t3)', marginBottom: 28 },
     section: { marginBottom: 32 },
     sectionHead: {
       paddingBottom: 10, marginBottom: 18, borderBottom: '1px solid var(--border)',
-      fontSize: 11, fontWeight: 700, color: 'var(--t3)',
+      fontSize: 12, fontWeight: 700, color: 'var(--t3)',
       letterSpacing: '0.08em', textTransform: 'uppercase',
     },
     grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 },
     grid3: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 },
     fieldWrap: { marginBottom: 14 },
-    label: { display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--t2)', marginBottom: 5 },
+    label: { display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--t2)', marginBottom: 5 },
     input: {
       width: '100%', padding: '9px 12px',
       background: 'var(--bg)', border: '1px solid var(--bmed)',
-      borderRadius: 7, fontSize: 13, color: 'var(--t1)',
+      borderRadius: 7, fontSize: 14, color: 'var(--t1)',
       outline: 'none', fontFamily: 'inherit',
     },
     textarea: {
       width: '100%', padding: '9px 12px',
       background: 'var(--bg)', border: '1px solid var(--bmed)',
-      borderRadius: 7, fontSize: 13, color: 'var(--t1)',
+      borderRadius: 7, fontSize: 14, color: 'var(--t1)',
       outline: 'none', fontFamily: 'inherit', resize: 'vertical',
     },
     select: {
       padding: '9px 10px',
       background: 'var(--bg)', border: '1px solid var(--bmed)',
-      borderRadius: 7, fontSize: 13, color: 'var(--t1)',
+      borderRadius: 7, fontSize: 14, color: 'var(--t1)',
       outline: 'none', fontFamily: 'inherit', cursor: 'pointer',
     },
     priceWrap: {
@@ -297,22 +297,22 @@ window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
       borderRadius: 7, overflow: 'hidden',
     },
     priceSymbol: {
-      padding: '9px 10px 9px 12px', fontSize: 13, color: 'var(--t3)', flexShrink: 0,
+      padding: '9px 10px 9px 12px', fontSize: 14, color: 'var(--t3)', flexShrink: 0,
     },
     priceInput: {
       flex: 1, minWidth: 0, padding: '9px 12px 9px 2px', background: 'transparent',
-      border: 'none', fontSize: 13, color: 'var(--t1)', outline: 'none',
+      border: 'none', fontSize: 14, color: 'var(--t1)', outline: 'none',
       fontFamily: 'inherit',
     },
     chipRow: { display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' },
     chip: (active) => ({
-      padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600,
+      padding: '4px 12px', borderRadius: 20, fontSize: 13, fontWeight: 600,
       background: active ? 'var(--accent-bg)' : 'var(--bg)',
       color: active ? 'var(--accent)' : 'var(--t4)',
       border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
     }),
-    note: { fontSize: 11, color: 'var(--t4)', marginTop: 6 },
-    link: { fontSize: 12, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none' },
+    note: { fontSize: 12, color: 'var(--t4)', marginTop: 6 },
+    link: { fontSize: 13, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none' },
     colorRow: { display: 'flex', alignItems: 'center', gap: 8 },
     colorSwatch: {
       width: 36, height: 36, padding: 2, flexShrink: 0,
@@ -326,12 +326,12 @@ window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
     testimonialRow: { display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 10 },
     removeBtn: {
       padding: '7px 12px', background: 'var(--bg)', color: 'var(--t3)',
-      border: '1px solid var(--bmed)', borderRadius: 7, fontSize: 12, fontWeight: 600,
+      border: '1px solid var(--bmed)', borderRadius: 7, fontSize: 13, fontWeight: 600,
       cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0,
     },
     addBtn: {
       padding: '8px 16px', background: 'var(--bg)', color: 'var(--t2)',
-      border: '1px solid var(--bmed)', borderRadius: 7, fontSize: 12, fontWeight: 600,
+      border: '1px solid var(--bmed)', borderRadius: 7, fontSize: 13, fontWeight: 600,
       cursor: 'pointer', fontFamily: 'inherit',
     },
     photoGrid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 12 },
@@ -343,34 +343,34 @@ window.PortalMyBusiness = function PortalMyBusiness({ tenantId }) {
     photoDel: {
       position: 'absolute', top: 5, right: 5, width: 20, height: 20,
       borderRadius: '50%', background: 'rgba(0,0,0,0.55)', color: '#fff',
-      border: 'none', cursor: 'pointer', fontSize: 12, lineHeight: '20px',
+      border: 'none', cursor: 'pointer', fontSize: 13, lineHeight: '20px',
       padding: 0, fontFamily: 'inherit',
     },
     instrumentBlock: { marginBottom: 18 },
-    instrumentName: { fontSize: 13, fontWeight: 700, color: 'var(--t1)', marginBottom: 8 },
-    readonlyLine: { fontSize: 13, color: 'var(--t2)' },
-    metaLine: { fontSize: 11, color: 'var(--t4)', marginTop: 10 },
-    errText: { fontSize: 12, color: '#DC2626', fontWeight: 600 },
+    instrumentName: { fontSize: 14, fontWeight: 700, color: 'var(--t1)', marginBottom: 8 },
+    readonlyLine: { fontSize: 14, color: 'var(--t2)' },
+    metaLine: { fontSize: 12, color: 'var(--t4)', marginTop: 10 },
+    errText: { fontSize: 13, color: '#DC2626', fontWeight: 600 },
     actions: { display: 'flex', alignItems: 'center', gap: 12, marginTop: 4 },
     saveBtn: {
       padding: '9px 22px', background: 'var(--accent)', color: '#fff',
-      border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600,
+      border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600,
       cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1,
       fontFamily: 'inherit',
     },
-    savedMsg: { fontSize: 12, color: '#059669', fontWeight: 600 },
+    savedMsg: { fontSize: 13, color: '#059669', fontWeight: 600 },
   };
 
   if (loading) return (
     <div style={{ ...s.page, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ color: 'var(--t3)', fontSize: 13 }}>Loading…</div>
+      <div style={{ color: 'var(--t3)', fontSize: 14 }}>Loading…</div>
     </div>
   );
 
   if (!form) return (
     <div style={s.page}>
       <div style={s.heading}>My Business</div>
-      <div style={{ color: 'var(--t3)', fontSize: 13, marginTop: 8 }}>No business profile found.</div>
+      <div style={{ color: 'var(--t3)', fontSize: 14, marginTop: 8 }}>No business profile found.</div>
     </div>
   );
 

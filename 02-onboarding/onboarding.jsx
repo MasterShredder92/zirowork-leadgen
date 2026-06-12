@@ -1,4 +1,4 @@
-// 02-onboarding — What is missing before a client can launch?
+﻿// 02-onboarding — What is missing before a client can launch?
 function ClientOnboardingView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -23,10 +23,10 @@ function ClientOnboardingView({ onNavigate }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Client Onboarding</h1>
-          <div style={{ fontSize: 12, color: T.t3 }}>What is missing before a client can launch?</div>
+          <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Client Onboarding</h1>
+          <div style={{ fontSize: 13, color: T.t3 }}>What is missing before a client can launch?</div>
         </div>
-        <button onClick={() => setWizardOpen(true)} style={{ padding: '8px 16px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <button onClick={() => setWizardOpen(true)} style={{ padding: '8px 16px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           + New Client
         </button>
       </div>
@@ -34,7 +34,7 @@ function ClientOnboardingView({ onNavigate }) {
       {/* Scrollable content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
         {pending.length === 0 ? (
-          <div style={{ padding: '48px 0', textAlign: 'center', color: T.t4, fontSize: 13 }}>No clients currently onboarding.</div>
+          <div style={{ padding: '48px 0', textAlign: 'center', color: T.t4, fontSize: 14 }}>No clients currently onboarding.</div>
         ) : (
           <div>
             {pending.map(client => {
@@ -44,12 +44,12 @@ function ClientOnboardingView({ onNavigate }) {
                 <div key={client.id} style={{ paddingTop: 24, paddingBottom: 28, borderBottom: `1px solid ${T.border}` }}>
                   <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 16 }}>
                     <div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: T.t1, marginBottom: 2 }}>{client.name}</div>
-                      <div style={{ fontSize: 12, color: T.t4 }}>{client.city}</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: T.t1, marginBottom: 2 }}>{client.name}</div>
+                      <div style={{ fontSize: 13, color: T.t4 }}>{client.city}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: 28, fontWeight: 700, color: pct === 100 ? '#22C55E' : T.accent, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums' }}>{pct}%</div>
-                      <div style={{ fontSize: 11, color: T.t4 }}>{done}/{CHECKLIST.length} complete</div>
+                      <div style={{ fontSize: 29, fontWeight: 700, color: pct === 100 ? '#22C55E' : T.accent, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums' }}>{pct}%</div>
+                      <div style={{ fontSize: 12, color: T.t4 }}>{done}/{CHECKLIST.length} complete</div>
                     </div>
                   </div>
                   <div style={{ height: 4, background: T.border, borderRadius: 4, marginBottom: 16 }}>
@@ -60,7 +60,7 @@ function ClientOnboardingView({ onNavigate }) {
                       const checked = !!client[item.key];
                       return (
                         <div key={item.key}
-                          style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: checked ? T.t2 : T.t4, cursor: 'pointer' }}
+                          style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: checked ? T.t2 : T.t4, cursor: 'pointer' }}
                           onClick={async () => {
                             if (!window.sb) return;
                             await window.sb.from('clients').update({ [item.key]: !client[item.key] }).eq('id', client.id);

@@ -1,4 +1,4 @@
-// Client Portal — root component
+﻿// Client Portal — root component
 // Auth gate → 4-view shell with sidebar nav
 
 (function () {
@@ -27,7 +27,7 @@
           padding: '7px 9px', marginBottom: 10, borderRadius: 7,
           background: 'transparent', border: '1px solid var(--border)',
           color: 'var(--t2)', cursor: 'pointer', fontFamily: 'inherit',
-          fontSize: 12, fontWeight: 500,
+          fontSize: 13, fontWeight: 500,
         }}>
         {dark
           ? <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -54,8 +54,8 @@
         width: 24, height: 24, background: 'var(--accent)',
         borderRadius: 5, flexShrink: 0,
       },
-      logoText: { fontSize: 14, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.3px' },
-      logoSub: { fontSize: 11, color: 'var(--t3)', fontWeight: 500 },
+      logoText: { fontSize: 15, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.3px' },
+      logoSub: { fontSize: 12, color: 'var(--t3)', fontWeight: 500 },
       nav: { flex: 1, padding: '10px 10px' },
       navItem: (active) => ({
         display: 'flex', alignItems: 'center', gap: 10,
@@ -65,21 +65,21 @@
         userSelect: 'none',
       }),
       navIcon: (active) => ({
-        fontSize: 14, width: 18, textAlign: 'center', flexShrink: 0,
+        fontSize: 15, width: 18, textAlign: 'center', flexShrink: 0,
         color: active ? 'var(--accent)' : 'var(--t3)',
       }),
       navLabel: (active) => ({
-        fontSize: 13, fontWeight: active ? 600 : 500,
+        fontSize: 14, fontWeight: active ? 600 : 500,
         color: active ? 'var(--t1)' : 'var(--t2)',
       }),
       footer: {
         padding: '12px 14px',
         borderTop: '1px solid var(--border)',
       },
-      schoolName: { fontSize: 12, fontWeight: 600, color: 'var(--t2)', marginBottom: 2 },
-      schoolSub: { fontSize: 11, color: 'var(--t4)', marginBottom: 10 },
+      schoolName: { fontSize: 13, fontWeight: 600, color: 'var(--t2)', marginBottom: 2 },
+      schoolSub: { fontSize: 12, color: 'var(--t4)', marginBottom: 10 },
       logoutBtn: {
-        fontSize: 11, color: 'var(--t3)', background: 'none',
+        fontSize: 12, color: 'var(--t3)', background: 'none',
         border: 'none', cursor: 'pointer', padding: 0,
         fontFamily: 'inherit', fontWeight: 500,
       },
@@ -188,7 +188,7 @@
 
     if (checking) return (
       <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: 'var(--t3)', fontSize: 13 }}>Loading…</div>
+        <div style={{ color: 'var(--t3)', fontSize: 14 }}>Loading…</div>
       </div>
     );
 

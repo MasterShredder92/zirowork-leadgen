@@ -1,4 +1,4 @@
-// 03-campaigns — Which piano/guitar/voice/drum funnels are running and producing?
+﻿// 03-campaigns — Which piano/guitar/voice/drum funnels are running and producing?
 function CampaignsView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -10,7 +10,7 @@ function CampaignsView({ onNavigate }) {
   const pageColor    = s => ({ live: '#22C55E', draft: '#F59E0B', broken: '#EF4444' }[s] || '#6B7280');
   const pageLabel    = s => ({ live: 'Live', draft: 'Draft', broken: 'Broken' }[s] || s);
 
-  const cell = { padding: '11px 16px', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
+  const cell = { padding: '11px 16px', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
   const firstCell = { ...cell, paddingLeft: 0 };
   const lastCell = { ...cell, paddingRight: 0 };
   const numCell = { ...cell, textAlign: 'right', fontVariantNumeric: 'tabular-nums' };
@@ -20,10 +20,10 @@ function CampaignsView({ onNavigate }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Campaigns</h1>
-          <div style={{ fontSize: 12, color: T.t3 }}>Which piano/guitar/voice/drum funnels are running and producing?</div>
+          <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Campaigns</h1>
+          <div style={{ fontSize: 13, color: T.t3 }}>Which piano/guitar/voice/drum funnels are running and producing?</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {L.Plus && <L.Plus size={14} strokeWidth={1.75} />} New Campaign
         </button>
       </div>
@@ -42,7 +42,7 @@ function CampaignsView({ onNavigate }) {
                 { label: 'Enrolled', align: 'right' },
                 { label: 'Conv %', align: 'right' },
               ].map((h, i, arr) => (
-                <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
+                <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
               ))}
             </tr>
           </thead>
@@ -57,12 +57,12 @@ function CampaignsView({ onNavigate }) {
                     <div style={{ fontWeight: 500, color: T.t1 }}>{c.client_name}</div>
                   </td>
                   <td style={cell}>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: programColor(c.program), background: programColor(c.program) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: programColor(c.program), background: programColor(c.program) + '1A', padding: '2px 8px', borderRadius: 20 }}>
                       {c.program}
                     </span>
                   </td>
                   <td style={cell}>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: pageColor(c.landing_page), background: pageColor(c.landing_page) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: pageColor(c.landing_page), background: pageColor(c.landing_page) + '1A', padding: '2px 8px', borderRadius: 20 }}>
                       {pageLabel(c.landing_page)}
                     </span>
                   </td>

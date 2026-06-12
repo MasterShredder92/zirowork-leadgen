@@ -1,4 +1,4 @@
-function ThankYouPage({ school, slug }) {
+﻿function ThankYouPage({ school, slug }) {
   const accent = school.accent || '#E04D27';
   const params = new URLSearchParams(window.location.search);
   const instrument = params.get('instrument') || 'music';
@@ -25,7 +25,7 @@ function ThankYouPage({ school, slug }) {
         color: accent,
         padding: '3px 14px',
         borderRadius: 20,
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: 700,
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
@@ -65,7 +65,7 @@ function ThankYouPage({ school, slug }) {
 
       {/* Subheadline */}
       <p style={{
-        fontSize: 18,
+        fontSize: 19,
         color: '#555',
         margin: '0 0 12px',
         textAlign: 'center',
@@ -78,7 +78,7 @@ function ThankYouPage({ school, slug }) {
 
       {/* Body */}
       <p style={{
-        fontSize: 15,
+        fontSize: 16,
         color: '#888',
         margin: '0 0 36px',
         textAlign: 'center',
@@ -99,7 +99,7 @@ function ThankYouPage({ school, slug }) {
             padding: '12px 24px',
             background: '#f8f8f6',
             borderRadius: 10,
-            fontSize: 15,
+            fontSize: 16,
             fontWeight: 700,
             color: '#1a1a1a',
             textDecoration: 'none',
@@ -107,7 +107,7 @@ function ThankYouPage({ school, slug }) {
             border: '1px solid #f0f0ee',
           }}
         >
-          <span style={{ fontSize: 16 }}>📞</span>
+          <span style={{ fontSize: 17 }}>📞</span>
           {school.phone}
         </a>
       )}
@@ -116,7 +116,7 @@ function ThankYouPage({ school, slug }) {
       <a
         href={'/schools/' + slug + '/' + backInstrument}
         style={{
-          fontSize: 14,
+          fontSize: 15,
           color: accent,
           fontWeight: 700,
           textDecoration: 'none',
@@ -132,7 +132,7 @@ function ThankYouPage({ school, slug }) {
       <div style={{
         position: 'absolute',
         bottom: 24,
-        fontSize: 12,
+        fontSize: 13,
         color: '#ccc',
         textAlign: 'center',
       }}>

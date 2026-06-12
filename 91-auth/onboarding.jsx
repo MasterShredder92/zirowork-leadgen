@@ -1,4 +1,4 @@
-const { useState } = React;
+﻿const { useState } = React;
 
 const STEPS = [
   {
@@ -56,14 +56,14 @@ function OnboardingView({ studio, onComplete }) {
 
         {/* Copy */}
         <div style={{ textAlign: 'center', marginBottom: current.features ? 32 : 40 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
             {current.eyebrow}
           </div>
-          <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--text)', lineHeight: 1.25, marginBottom: 14 }}>
+          <div style={{ fontSize: 27, fontWeight: 700, color: 'var(--text)', lineHeight: 1.25, marginBottom: 14 }}>
             {current.title(studio)}
           </div>
           {current.body && (
-            <div style={{ fontSize: 14, color: 'var(--text-3)', lineHeight: 1.75, maxWidth: 360, margin: '0 auto' }}>
+            <div style={{ fontSize: 15, color: 'var(--text-3)', lineHeight: 1.75, maxWidth: 360, margin: '0 auto' }}>
               {current.body}
             </div>
           )}
@@ -89,8 +89,8 @@ function OnboardingView({ studio, onComplete }) {
                     {Icon && <Icon size={16} strokeWidth={1.75} color="var(--accent)" />}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{f.label}</div>
-                    <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 1 }}>{f.desc}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{f.label}</div>
+                    <div style={{ fontSize: 13, color: 'var(--text-3)', marginTop: 1 }}>{f.desc}</div>
                   </div>
                 </div>
               );
@@ -100,7 +100,7 @@ function OnboardingView({ studio, onComplete }) {
 
         {/* CTA */}
         <button onClick={next} style={{
-          width: '100%', padding: '12px 0', fontSize: 14, fontWeight: 600,
+          width: '100%', padding: '12px 0', fontSize: 15, fontWeight: 600,
           background: 'var(--accent)', color: '#fff', border: 'none',
           borderRadius: 8, cursor: 'pointer', fontFamily: 'inherit',
         }}>
@@ -111,7 +111,7 @@ function OnboardingView({ studio, onComplete }) {
         {!isLast && (
           <div onClick={onComplete} style={{
             textAlign: 'center', marginTop: 14,
-            fontSize: 12, color: 'var(--text-4)', cursor: 'pointer',
+            fontSize: 13, color: 'var(--text-4)', cursor: 'pointer',
           }}>
             Skip
           </div>

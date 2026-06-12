@@ -1,4 +1,4 @@
-window.PortalOverview = function PortalOverview({ tenantId }) {
+﻿window.PortalOverview = function PortalOverview({ tenantId }) {
   const [metrics, setMetrics] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
@@ -70,16 +70,16 @@ window.PortalOverview = function PortalOverview({ tenantId }) {
       padding: '20px 24px', borderBottom: '1px solid var(--border)',
     },
     content: { padding: '20px 24px' },
-    heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
-    sub: { fontSize: 13, color: 'var(--t3)' },
+    heading: { fontSize: 23, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
+    sub: { fontSize: 14, color: 'var(--t3)' },
     grid: {
       display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
       borderBottom: '1px solid var(--border)', paddingBottom: 24, marginBottom: 24,
     },
     stat: { paddingRight: 24 },
-    label: { fontSize: 11, fontWeight: 700, color: 'var(--t3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 },
-    value: { fontSize: 28, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.5px', fontVariantNumeric: 'tabular-nums' },
-    meta: { fontSize: 12, color: 'var(--t3)', marginTop: 6 },
+    label: { fontSize: 12, fontWeight: 700, color: 'var(--t3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 },
+    value: { fontSize: 29, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.5px', fontVariantNumeric: 'tabular-nums' },
+    meta: { fontSize: 13, color: 'var(--t3)', marginTop: 6 },
     activityRow: {
       display: 'flex', alignItems: 'center', gap: 12,
       paddingTop: 4,
@@ -89,13 +89,13 @@ window.PortalOverview = function PortalOverview({ tenantId }) {
       background: '#10B981', flexShrink: 0,
       boxShadow: '0 0 0 3px rgba(16,185,129,0.15)',
     },
-    activityText: { fontSize: 13, color: 'var(--t2)' },
+    activityText: { fontSize: 14, color: 'var(--t2)' },
     activityBold: { fontWeight: 600, color: 'var(--t1)' },
   };
 
   if (loading) return (
     <div style={{ ...s.page, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ color: 'var(--t3)', fontSize: 13 }}>Loading your data…</div>
+      <div style={{ color: 'var(--t3)', fontSize: 14 }}>Loading your data…</div>
     </div>
   );
 
@@ -106,7 +106,7 @@ window.PortalOverview = function PortalOverview({ tenantId }) {
         <div style={s.sub}>Your pipeline at a glance</div>
       </div>
       <div style={s.content}>
-        <div style={{ color: 'var(--t3)', fontSize: 13 }}>No data yet. Leads will appear here once your campaign is live.</div>
+        <div style={{ color: 'var(--t3)', fontSize: 14 }}>No data yet. Leads will appear here once your campaign is live.</div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-function DrumsWidget({ accent }) {
+﻿function DrumsWidget({ accent }) {
   const { useState } = React;
   const [flash, setFlash] = useState({});
   const AUDIO_BASE = null;
@@ -70,12 +70,12 @@ function DrumsWidget({ accent }) {
               fontFamily: "'Plus Jakarta Sans', sans-serif",
             }}
           >
-            <span style={{ fontSize: 22 }}>{pad.emoji}</span>
-            <span style={{ fontSize: 11, fontWeight: 600, color: flash[pad.id] ? '#fff' : '#999', letterSpacing: '0.04em' }}>{pad.label}</span>
+            <span style={{ fontSize: 23 }}>{pad.emoji}</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: flash[pad.id] ? '#fff' : '#999', letterSpacing: '0.04em' }}>{pad.label}</span>
           </button>
         ))}
       </div>
-      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: '#aaa' }}>
+      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: '#aaa' }}>
         Tap the pads to play. Kick is the big one in the bottom right.
       </div>
     </div>

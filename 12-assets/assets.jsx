@@ -1,4 +1,4 @@
-// 12-assets — What logos, photos, teacher bios, testimonials, offers, and brand voice are available?
+﻿// 12-assets — What logos, photos, teacher bios, testimonials, offers, and brand voice are available?
 function AssetsView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -28,17 +28,17 @@ function AssetsView({ onNavigate }) {
   };
 
   const filtered = filter === 'all' ? assets : assets.filter(a => a.type === filter);
-  const cell = { padding: '12px 0', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}` };
+  const cell = { padding: '12px 0', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}` };
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Header */}
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Assets</h1>
-          <div style={{ fontSize: 12, color: T.t3 }}>What logos, photos, teacher bios, testimonials, offers, and brand voice are available?</div>
+          <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Assets</h1>
+          <div style={{ fontSize: 13, color: T.t3 }}>What logos, photos, teacher bios, testimonials, offers, and brand voice are available?</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {L.Upload && <L.Upload size={14} strokeWidth={1.75} />} Upload
         </button>
       </div>
@@ -50,7 +50,7 @@ function AssetsView({ onNavigate }) {
           const active = filter === t;
           return (
             <button key={t} onClick={() => setFilter(t)}
-              style={{ padding: '5px 14px', borderRadius: 20, fontSize: 12, fontWeight: 500, cursor: 'pointer', border: active ? 'none' : `1px solid ${T.border}`, background: active ? T.accent : 'transparent', color: active ? '#fff' : T.t3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              style={{ padding: '5px 14px', borderRadius: 20, fontSize: 13, fontWeight: 500, cursor: 'pointer', border: active ? 'none' : `1px solid ${T.border}`, background: active ? T.accent : 'transparent', color: active ? '#fff' : T.t3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {t}
             </button>
           );
@@ -61,7 +61,7 @@ function AssetsView({ onNavigate }) {
         <thead>
           <tr>
             {['Client', 'Type', 'Name', 'Status'].map(h => (
-              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: 'left' }}>{h}</th>
+              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: 'left' }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -74,13 +74,13 @@ function AssetsView({ onNavigate }) {
               <td style={cell}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: T.t3 }}>
                   {typeIcon(a.type)}
-                  <span style={{ fontSize: 12 }}>{a.type}</span>
+                  <span style={{ fontSize: 13 }}>{a.type}</span>
                 </div>
               </td>
               <td style={cell}>{a.name}</td>
               <td style={cell}>
                 <button onClick={() => cycleStatus(a)}
-                  style={{ fontSize: 11, fontWeight: 600, color: statusColor(a.status), background: statusColor(a.status) + '1A', padding: '2px 8px', borderRadius: 20, border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  style={{ fontSize: 12, fontWeight: 600, color: statusColor(a.status), background: statusColor(a.status) + '1A', padding: '2px 8px', borderRadius: 20, border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                   {a.status}
                 </button>
               </td>

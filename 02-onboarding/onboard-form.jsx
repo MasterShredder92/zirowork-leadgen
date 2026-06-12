@@ -1,4 +1,4 @@
-// 02-onboarding/onboard-form.jsx
+﻿// 02-onboarding/onboard-form.jsx
 // Shared wizard — used by ClientOnboardingView (CRM) and onboard.html (public)
 function OnboardForm({ standalone, onSuccess, onCancel }) {
   const T = window.T || {};
@@ -163,11 +163,11 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
 
   const inp = {
     width: '100%', padding: '8px 10px', background: 'var(--bg)',
-    border: `1px solid ${T.border}`, borderRadius: 7, fontSize: 13, color: T.t1,
+    border: `1px solid ${T.border}`, borderRadius: 7, fontSize: 14, color: T.t1,
     fontFamily: "'Plus Jakarta Sans', sans-serif", boxSizing: 'border-box',
   };
   const fLabel = (text, req) => (
-    <div style={{ fontSize: 11, fontWeight: 600, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+    <div style={{ fontSize: 12, fontWeight: 600, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
       {text}{req && <span style={{ color: T.accent, marginLeft: 3 }}>*</span>}
     </div>
   );
@@ -176,7 +176,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     <div>
       {!standalone && (
       <div style={{ marginBottom: scrapeReady ? 12 : 20, padding: '12px 14px', background: T.accent + '12', border: `1px solid ${T.accent}40`, borderRadius: 8 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: T.accent, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Start here — auto-fill from website</div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: T.accent, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Start here — auto-fill from website</div>
         <div style={{ display: 'flex', gap: 8 }}>
           <input
             style={{ ...inp, flex: 1 }}
@@ -187,39 +187,39 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           <button
             onClick={scrapeWebsite}
             disabled={!form.website || scraping}
-            style={{ padding: '8px 16px', borderRadius: 7, border: 'none', background: T.accent, color: '#fff', fontSize: 12, fontWeight: 700, cursor: form.website && !scraping ? 'pointer' : 'not-allowed', opacity: form.website && !scraping ? 1 : 0.4, fontFamily: "'Plus Jakarta Sans', sans-serif", whiteSpace: 'nowrap' }}>
+            style={{ padding: '8px 16px', borderRadius: 7, border: 'none', background: T.accent, color: '#fff', fontSize: 13, fontWeight: 700, cursor: form.website && !scraping ? 'pointer' : 'not-allowed', opacity: form.website && !scraping ? 1 : 0.4, fontFamily: "'Plus Jakarta Sans', sans-serif", whiteSpace: 'nowrap' }}>
             {scraping ? 'Scraping…' : 'Auto-fill ↓'}
           </button>
         </div>
-        {scrapeMsg && <div style={{ fontSize: 11, marginTop: 5, color: scrapeMsg.startsWith('Could') ? '#ef4444' : T.accent }}>{scrapeMsg}</div>}
+        {scrapeMsg && <div style={{ fontSize: 12, marginTop: 5, color: scrapeMsg.startsWith('Could') ? '#ef4444' : T.accent }}>{scrapeMsg}</div>}
       </div>
       )}
 
       {scrapeReady && (
         <div style={{ marginBottom: 16, padding: '12px 14px', background: T.accent + '18', border: `1px solid ${T.accent}50`, borderRadius: 8 }}>
-          <div style={{ fontSize: 12, color: T.accent, fontWeight: 700, marginBottom: form.about ? 6 : 10 }}>Fields pre-filled from your site — review below and correct anything wrong.</div>
+          <div style={{ fontSize: 13, color: T.accent, fontWeight: 700, marginBottom: form.about ? 6 : 10 }}>Fields pre-filled from your site — review below and correct anything wrong.</div>
           {form.about && (
-            <div style={{ fontSize: 12, color: T.t2, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10, padding: '8px 10px', background: 'var(--bg)', borderRadius: 6, border: `1px solid ${T.border}` }}>"{form.about}"</div>
+            <div style={{ fontSize: 13, color: T.t2, fontStyle: 'italic', lineHeight: 1.5, marginBottom: 10, padding: '8px 10px', background: 'var(--bg)', borderRadius: 6, border: `1px solid ${T.border}` }}>"{form.about}"</div>
           )}
           {(scrapedMeta.primary_color || scrapedMeta.accent_color) && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-              <span style={{ fontSize: 11, color: T.t3, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Brand colors detected</span>
+              <span style={{ fontSize: 12, color: T.t3, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Brand colors detected</span>
               {scrapedMeta.primary_color && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                   <div style={{ width: 20, height: 20, borderRadius: 4, background: scrapedMeta.primary_color, border: `1px solid ${T.border}` }} />
-                  <span style={{ fontSize: 11, color: T.t2 }}>{scrapedMeta.primary_color}</span>
+                  <span style={{ fontSize: 12, color: T.t2 }}>{scrapedMeta.primary_color}</span>
                 </div>
               )}
               {scrapedMeta.accent_color && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                   <div style={{ width: 20, height: 20, borderRadius: 4, background: scrapedMeta.accent_color, border: `1px solid ${T.border}` }} />
-                  <span style={{ fontSize: 11, color: T.t2 }}>{scrapedMeta.accent_color}</span>
+                  <span style={{ fontSize: 12, color: T.t2 }}>{scrapedMeta.accent_color}</span>
                 </div>
               )}
             </div>
           )}
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-            <button onClick={() => setStep(s => s + 1)} style={{ padding: '6px 14px', borderRadius: 6, border: 'none', background: T.accent, color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Looks good → Step 2</button>
+            <button onClick={() => setStep(s => s + 1)} style={{ padding: '6px 14px', borderRadius: 6, border: 'none', background: T.accent, color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Looks good → Step 2</button>
           </div>
         </div>
       )}
@@ -237,7 +237,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           if (d.length === 11 && d[0] === '1') d = d.slice(1);
           setForm(f => ({ ...f, studio_phone: v, area_code: d.length >= 10 ? d.slice(0, 3) : '' }));
         }} placeholder="(531) 270-0848" />
-        <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>Your ZiroWork number is auto-provisioned in this area code.</div>
+        <div style={{ fontSize: 12, color: T.t4, marginTop: 4 }}>Your ZiroWork number is auto-provisioned in this area code.</div>
       </div>
       <div style={{ marginBottom: 14 }}>{fLabel('Booking / Contact Email', standalone)}<input style={inp} value={form.email} onChange={e => set('email', e.target.value)} placeholder="hello@yourstudio.com" /></div>
       <div style={{ marginBottom: 14 }}>{fLabel('Street Address')}<input style={inp} value={form.address} onChange={e => set('address', e.target.value)} placeholder="1234 Music Ave, Suite 200" /></div>
@@ -257,7 +257,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     <div>
       <div style={{ marginBottom: 18 }}>
         {fLabel('Which Instruments Do You Want Leads For?', true)}
-        <div style={{ fontSize: 11, color: T.t4, marginTop: 2, marginBottom: 4, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12, color: T.t4, marginTop: 2, marginBottom: 4, lineHeight: 1.5 }}>
           Each instrument you pick gets its own landing page and campaign built for it. We're live with these four — more instruments coming soon.
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 6 }}>
@@ -265,7 +265,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
             const on = form.instruments.includes(inst);
             return (
               <button key={inst} onClick={() => toggleInst(inst)} style={{
-                padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                padding: '6px 14px', borderRadius: 20, fontSize: 13, fontWeight: 600, cursor: 'pointer',
                 border: 'none', fontFamily: "'Plus Jakarta Sans', sans-serif",
                 background: on ? T.accent : (T.border || '#e2e8f0'), color: on ? '#fff' : T.t3,
               }}>{inst}</button>
@@ -279,7 +279,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 6 }}>
             {form.instruments.map(inst => (
               <div key={inst} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: 'var(--bg)', border: `1px solid ${T.border}`, borderRadius: 8 }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: T.t2, width: 90, flexShrink: 0 }}>{inst}</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: T.t2, width: 90, flexShrink: 0 }}>{inst}</span>
                 <input
                   style={{ ...inp, flex: 1 }}
                   value={form.program_prices[inst]?.price || ''}
@@ -316,11 +316,11 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
                 onChange={e => setScrapedMeta(m => ({ ...m, [k]: e.target.value }))}
                 style={{ width: 30, height: 30, padding: 0, border: `1px solid ${T.border}`, borderRadius: 6, background: 'none', cursor: 'pointer' }}
               />
-              <span style={{ fontSize: 11, color: T.t3 }}>{label}{scrapedMeta[k] ? ' · ' + scrapedMeta[k] : ''}</span>
+              <span style={{ fontSize: 12, color: T.t3 }}>{label}{scrapedMeta[k] ? ' · ' + scrapedMeta[k] : ''}</span>
             </div>
           ))}
         </div>
-        <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>Detected from your website — click a swatch to correct. The primary color styles your landing pages.</div>
+        <div style={{ fontSize: 12, color: T.t4, marginTop: 4 }}>Detected from your website — click a swatch to correct. The primary color styles your landing pages.</div>
       </div>
       <div style={{ marginBottom: 14 }}>{fLabel('Studio Tagline')}<input style={inp} value={form.tagline} onChange={e => set('tagline', e.target.value)} placeholder="Building confidence through music since 2010" /></div>
       <div style={{ marginBottom: 14 }}>
@@ -329,7 +329,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
       </div>
       <div style={{ marginBottom: 6 }}>
         {fLabel('Testimonials (up to 3)')}
-        <div style={{ fontSize: 11, color: T.t4, marginBottom: 8, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12, color: T.t4, marginBottom: 8, lineHeight: 1.5 }}>
           These appear throughout your landing page. Real quotes from real families convert better than any copy you can write.
         </div>
       </div>
@@ -354,7 +354,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
 
       <div style={{ marginBottom: 4 }}>
         {fLabel('Studio Photos (up to 4)')}
-        <div style={{ fontSize: 11, color: T.t4, marginBottom: 8, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12, color: T.t4, marginBottom: 8, lineHeight: 1.5 }}>
           Photos of your actual studio, teachers, or recitals convert significantly better than stock images. You can skip and add later.
         </div>
       </div>
@@ -366,7 +366,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
               <img src={url} alt={'Studio photo ' + (i + 1)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <button
                 onClick={() => set('photos', (form.photos || []).filter((_, idx) => idx !== i))}
-                style={{ position: 'absolute', top: 4, right: 4, width: 20, height: 20, borderRadius: '50%', background: 'rgba(0,0,0,0.6)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 12, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
+                style={{ position: 'absolute', top: 4, right: 4, width: 20, height: 20, borderRadius: '50%', background: 'rgba(0,0,0,0.6)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 13, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
                 ×
               </button>
             </div>
@@ -405,12 +405,12 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
               e.target.value = '';
             }}
           />
-          <span style={{ fontSize: 12, color: T.t3, fontWeight: 600 }}>
+          <span style={{ fontSize: 13, color: T.t3, fontWeight: 600 }}>
             {photoUploading ? 'Uploading...' : '+ Upload photos'}
           </span>
         </label>
       )}
-      {photoError && <div style={{ fontSize: 11, color: '#EF4444', marginTop: 4 }}>{photoError}</div>}
+      {photoError && <div style={{ fontSize: 12, color: '#EF4444', marginTop: 4 }}>{photoError}</div>}
     </div>
   );
 
@@ -418,19 +418,19 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     <div>
       {blockers.length > 0 && (
         <div style={{ padding: '12px 14px', background: '#EF44440D', border: '1px solid #EF444430', borderRadius: 8, marginBottom: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: '#EF4444', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Missing — required before launch</div>
-          {blockers.map(b => <div key={b} style={{ fontSize: 12, color: '#EF4444', marginBottom: 2 }}>· {b}</div>)}
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#EF4444', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Missing — required before launch</div>
+          {blockers.map(b => <div key={b} style={{ fontSize: 13, color: '#EF4444', marginBottom: 2 }}>· {b}</div>)}
         </div>
       )}
       <div style={{ padding: '12px 14px', background: '#22C55E0D', border: '1px solid #22C55E30', borderRadius: 8, marginBottom: 14 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: '#22C55E', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Will be created automatically</div>
-        {willCreate.map(w => <div key={w} style={{ fontSize: 12, color: T.t2, marginBottom: 2 }}>· {w}</div>)}
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#22C55E', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Will be created automatically</div>
+        {willCreate.map(w => <div key={w} style={{ fontSize: 13, color: T.t2, marginBottom: 2 }}>· {w}</div>)}
       </div>
       <div style={{ border: `1px solid ${T.border}`, borderRadius: 8, overflow: 'hidden' }}>
         {summary.map((row, i) => (
           <div key={row.label} style={{ display: 'flex', gap: 16, padding: '10px 14px', borderBottom: i < summary.length - 1 ? `1px solid ${T.border}` : 'none' }}>
-            <span style={{ fontSize: 11, fontWeight: 600, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.06em', width: 72, flexShrink: 0, paddingTop: 1 }}>{row.label}</span>
-            <span style={{ fontSize: 12, color: row.value ? T.t1 : T.t4 }}>{row.value || '—'}</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.06em', width: 72, flexShrink: 0, paddingTop: 1 }}>{row.label}</span>
+            <span style={{ fontSize: 13, color: row.value ? T.t1 : T.t4 }}>{row.value || '—'}</span>
           </div>
         ))}
       </div>
@@ -438,7 +438,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         <div style={{ marginTop: 14 }}>
           {fLabel('Create Your Portal Password', true)}
           <input style={inp} type="password" value={form.password} onChange={e => set('password', e.target.value)} placeholder="8+ characters" />
-          <div style={{ fontSize: 11, color: T.t4, marginTop: 4 }}>You'll log into your ZiroWork portal with {form.email || 'your email'} + this password.</div>
+          <div style={{ fontSize: 12, color: T.t4, marginTop: 4 }}>You'll log into your ZiroWork portal with {form.email || 'your email'} + this password.</div>
         </div>
       )}
     </div>
@@ -550,10 +550,10 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
     return (
       <div style={{ background: T.cardBg || 'var(--surface)', borderRadius: 16, width: '100%', maxWidth: 480, border: `1px solid ${T.border}`, padding: '48px 40px', textAlign: 'center' }}>
         <div style={{ width: 44, height: 44, borderRadius: 12, background: T.accent, margin: '0 auto 22px' }} />
-        <div style={{ fontSize: 24, fontWeight: 800, color: T.t1, letterSpacing: '-0.02em', marginBottom: 10 }}>Let's get your school set up</div>
-        <div style={{ fontSize: 14, color: T.t3, lineHeight: 1.6, maxWidth: 360, margin: '0 auto 26px' }}>Paste your website and we'll pull in your programs, photos, and details automatically — so you barely have to type.</div>
+        <div style={{ fontSize: 25, fontWeight: 800, color: T.t1, letterSpacing: '-0.02em', marginBottom: 10 }}>Let's get your school set up</div>
+        <div style={{ fontSize: 15, color: T.t3, lineHeight: 1.6, maxWidth: 360, margin: '0 auto 26px' }}>Paste your website and we'll pull in your programs, photos, and details automatically — so you barely have to type.</div>
         <input
-          style={{ ...inp, padding: '13px 16px', fontSize: 15, textAlign: 'center', marginBottom: 12 }}
+          style={{ ...inp, padding: '13px 16px', fontSize: 16, textAlign: 'center', marginBottom: 12 }}
           value={form.website}
           onChange={e => { set('website', e.target.value); setScrapeMsg(''); }}
           onKeyDown={e => { if (e.key === 'Enter') startFromWebsite(); }}
@@ -563,20 +563,20 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         {scraping ? (
           <div style={{ padding: '10px 0 4px' }}>
             <div style={{ width: 28, height: 28, border: `3px solid ${T.border}`, borderTopColor: T.accent, borderRadius: '50%', margin: '0 auto 12px', animation: 'zwspin 0.8s linear infinite' }} />
-            <div style={{ fontSize: 13, color: T.accent, fontWeight: 600 }}>{loadMsg}</div>
+            <div style={{ fontSize: 14, color: T.accent, fontWeight: 600 }}>{loadMsg}</div>
             <style>{`@keyframes zwspin { to { transform: rotate(360deg); } }`}</style>
           </div>
         ) : (
           <button
             onClick={startFromWebsite}
             disabled={!form.website}
-            style={{ width: '100%', padding: '13px', background: T.accent, color: '#fff', border: 'none', borderRadius: 9, fontSize: 15, fontWeight: 700, cursor: form.website ? 'pointer' : 'not-allowed', opacity: form.website ? 1 : 0.45, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            style={{ width: '100%', padding: '13px', background: T.accent, color: '#fff', border: 'none', borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: form.website ? 'pointer' : 'not-allowed', opacity: form.website ? 1 : 0.45, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             Get started →
           </button>
         )}
-        {scrapeMsg && !scraping && <div style={{ fontSize: 12, marginTop: 10, color: scrapeMsg.startsWith('Could') ? '#EF4444' : T.t3 }}>{scrapeMsg}</div>}
+        {scrapeMsg && !scraping && <div style={{ fontSize: 13, marginTop: 10, color: scrapeMsg.startsWith('Could') ? '#EF4444' : T.t3 }}>{scrapeMsg}</div>}
         <div style={{ marginTop: 18 }}>
-          <button onClick={() => { setScrapeMsg(''); setStep(1); setPhase('wizard'); }} style={{ background: 'none', border: 'none', color: T.t4, fontSize: 12, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", textDecoration: 'underline' }}>
+          <button onClick={() => { setScrapeMsg(''); setStep(1); setPhase('wizard'); }} style={{ background: 'none', border: 'none', color: T.t4, fontSize: 13, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", textDecoration: 'underline' }}>
             I don't have a website — set up manually
           </button>
         </div>
@@ -590,20 +590,20 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#22C55E20', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
           {L.Check && <L.Check size={24} color="#22C55E" strokeWidth={2.5} />}
         </div>
-        <div style={{ fontSize: 18, fontWeight: 700, color: T.t1, marginBottom: 8 }}>
+        <div style={{ fontSize: 19, fontWeight: 700, color: T.t1, marginBottom: 8 }}>
           {standalone ? "You're in!" : `${form.studio_name || 'Studio'} is queued.`}
         </div>
-        <div style={{ fontSize: 13, color: T.t3, marginBottom: 20, lineHeight: 1.6 }}>
+        <div style={{ fontSize: 14, color: T.t3, marginBottom: 20, lineHeight: 1.6 }}>
           {standalone
             ? "Your account is live and your landing pages are ready. Head to your portal to see everything."
             : "Profile created. Complete the checklist below to get this client fully live."}
         </div>
         {blockers.length > 0 && !standalone && (
-          <div style={{ fontSize: 12, color: '#F59E0B', marginBottom: 16 }}>{blockers.length} item{blockers.length > 1 ? 's' : ''} still needed before launch.</div>
+          <div style={{ fontSize: 13, color: '#F59E0B', marginBottom: 16 }}>{blockers.length} item{blockers.length > 1 ? 's' : ''} still needed before launch.</div>
         )}
         <button
           onClick={standalone ? () => { window.location.href = '/dashboard'; } : () => onCancel && onCancel()}
-          style={{ padding: '10px 28px', background: T.accent, color: '#fff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          style={{ padding: '10px 28px', background: T.accent, color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {standalone ? 'Go to my portal →' : 'Done'}
         </button>
       </div>
@@ -615,16 +615,16 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
       <div style={{ padding: '20px 24px 14px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: T.t1 }}>
+            <div style={{ fontSize: 17, fontWeight: 700, color: T.t1 }}>
               {standalone ? 'Get your school set up with ZiroWork' : 'New Client Onboarding'}
             </div>
-            <div style={{ fontSize: 12, color: T.t3, marginTop: 2 }}>
+            <div style={{ fontSize: 13, color: T.t3, marginTop: 2 }}>
               Step {step} of {STEPS.length} · {currentStep.label}
               {!currentStep.required && <span style={{ color: T.t4, marginLeft: 4 }}>(optional)</span>}
             </div>
           </div>
           {!standalone && (
-            <button onClick={() => onCancel && onCancel()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.t4, fontSize: 22, lineHeight: 1, padding: '0 2px' }}>×</button>
+            <button onClick={() => onCancel && onCancel()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.t4, fontSize: 23, lineHeight: 1, padding: '0 2px' }}>×</button>
           )}
         </div>
         <div style={{ display: 'flex', gap: 4 }}>
@@ -641,22 +641,22 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
       <div style={{ padding: '14px 24px', borderTop: `1px solid ${T.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
         <button
           onClick={() => step > 1 ? setStep(s => s - 1) : (!standalone && onCancel && onCancel())}
-          style={{ padding: '8px 18px', background: 'transparent', color: T.t3, border: `1px solid ${T.border}`, borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", visibility: step === 1 && standalone ? 'hidden' : 'visible' }}>
+          style={{ padding: '8px 18px', background: 'transparent', color: T.t3, border: `1px solid ${T.border}`, borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", visibility: step === 1 && standalone ? 'hidden' : 'visible' }}>
           {step === 1 ? 'Cancel' : '← Back'}
         </button>
         {step < STEPS.length ? (
           <button
             onClick={() => setStep(s => s + 1)}
-            style={{ padding: '8px 20px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            style={{ padding: '8px 20px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             Next →
           </button>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
-            {saveError && <div style={{ fontSize: 11, color: '#EF4444' }}>{saveError}</div>}
+            {saveError && <div style={{ fontSize: 12, color: '#EF4444' }}>{saveError}</div>}
             <button
               disabled={saving || (standalone && blockers.length > 0)}
               onClick={handleSubmit}
-              style={{ padding: '8px 22px', background: '#22C55E', color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              style={{ padding: '8px 22px', background: '#22C55E', color: '#fff', border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {saving ? 'Saving...' : 'Create Profile'}
             </button>
           </div>

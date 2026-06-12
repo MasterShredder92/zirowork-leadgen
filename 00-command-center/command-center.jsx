@@ -1,4 +1,4 @@
-// 00-command-center — What needs attention right now across all clients?
+﻿// 00-command-center — What needs attention right now across all clients?
 function CommandCenterView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -70,7 +70,7 @@ function CommandCenterView({ onNavigate }) {
   const healthLabel = h => ({ healthy: 'Healthy', at_risk: 'At Risk', stuck: 'Stuck', onboarding: 'Onboarding' }[h] || '—');
 
   // Flush-left table cells: first column hugs the left margin, last hugs the right (Attio table look)
-  const cell = { padding: '11px 16px', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
+  const cell = { padding: '11px 16px', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
   const firstCell = { ...cell, paddingLeft: 0 };
   const lastCell = { ...cell, paddingRight: 0 };
   const numCell = { ...cell, textAlign: 'right', color: T.t2, fontVariantNumeric: 'tabular-nums' };
@@ -79,8 +79,8 @@ function CommandCenterView({ onNavigate }) {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Header */}
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Command Center</h1>
-        <div style={{ fontSize: 12, color: T.t3 }}>What needs attention right now across all clients</div>
+        <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Command Center</h1>
+        <div style={{ fontSize: 13, color: T.t3 }}>What needs attention right now across all clients</div>
       </div>
 
       {/* KPI band — inline stats, no boxes */}
@@ -94,9 +94,9 @@ function CommandCenterView({ onNavigate }) {
               onMouseLeave={e => { const v = e.currentTarget.querySelector('[data-kpi-value]'); if (v) v.style.color = T.t1; }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
                 {Icon && <Icon size={12} color={T.t4} strokeWidth={1.75} />}
-                <span style={{ fontSize: 10, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>{k.label}</span>
+                <span style={{ fontSize: 11, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>{k.label}</span>
               </div>
-              <div data-kpi-value style={{ fontSize: 28, fontWeight: 700, color: T.t1, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums', transition: 'color 0.15s' }}>{k.value}</div>
+              <div data-kpi-value style={{ fontSize: 29, fontWeight: 700, color: T.t1, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums', transition: 'color 0.15s' }}>{k.value}</div>
             </div>
           );
         })}
@@ -108,7 +108,7 @@ function CommandCenterView({ onNavigate }) {
         {/* Needs Attention — flat rows, hairline separated */}
         {attention.length > 0 && (
           <div style={{ marginBottom: 32 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 2 }}>Needs Attention</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 2 }}>Needs Attention</div>
             {attention.map((a, i) => {
               const Icon = L[a.icon];
               return (
@@ -117,7 +117,7 @@ function CommandCenterView({ onNavigate }) {
                   onMouseEnter={e => e.currentTarget.style.background = T.hover}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                   {Icon && <Icon size={15} color={a.color} strokeWidth={1.8} />}
-                  <span style={{ fontSize: 13, color: T.t1 }}>{a.label}</span>
+                  <span style={{ fontSize: 14, color: T.t1 }}>{a.label}</span>
                   {L.ArrowRight && <L.ArrowRight size={13} color={T.t4} style={{ marginLeft: 'auto' }} />}
                 </div>
               );
@@ -128,9 +128,9 @@ function CommandCenterView({ onNavigate }) {
         {/* Client Overview — borderless table */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 2 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Client Overview</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: T.t4, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Client Overview</div>
             <button onClick={() => onNavigate && onNavigate('clients')}
-              style={{ fontSize: 12, color: T.accent, background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              style={{ fontSize: 13, color: T.accent, background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               View all →
             </button>
           </div>
@@ -145,7 +145,7 @@ function CommandCenterView({ onNavigate }) {
                   { label: 'Enrolled 30d', align: 'right' },
                   { label: 'Escalations', align: 'right' },
                 ].map((h, i, arr) => (
-                  <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
+                  <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
                 ))}
               </tr>
             </thead>
@@ -157,15 +157,15 @@ function CommandCenterView({ onNavigate }) {
                   onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
                   <td style={firstCell}>
                     <div style={{ fontWeight: 500, color: T.t1 }}>{c.name}</div>
-                    <div style={{ fontSize: 11, color: T.t4 }}>{c.city}, {c.state}</div>
+                    <div style={{ fontSize: 12, color: T.t4 }}>{c.city}, {c.state}</div>
                   </td>
                   <td style={cell}>
                     {c.health ? (
-                      <span style={{ fontSize: 11, fontWeight: 600, color: healthColor(c.health), background: healthColor(c.health) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: healthColor(c.health), background: healthColor(c.health) + '1A', padding: '2px 8px', borderRadius: 20 }}>
                         {healthLabel(c.health)}
                       </span>
                     ) : (
-                      <span style={{ fontSize: 11, fontWeight: 600, color: '#6B7280', background: 'rgba(107,114,128,0.12)', padding: '2px 8px', borderRadius: 20 }}>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: '#6B7280', background: 'rgba(107,114,128,0.12)', padding: '2px 8px', borderRadius: 20 }}>
                         Onboarding
                       </span>
                     )}

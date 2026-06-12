@@ -1,4 +1,4 @@
-// 10-reporting — Why should each client keep paying ZiroWork?
+﻿// 10-reporting — Why should each client keep paying ZiroWork?
 function ReportingView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -58,8 +58,8 @@ function ReportingView({ onNavigate }) {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Header */}
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Reporting</h1>
-        <div style={{ fontSize: 12, color: T.t3 }}>Why should each client keep paying ZiroWork?</div>
+        <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Reporting</h1>
+        <div style={{ fontSize: 13, color: T.t3 }}>Why should each client keep paying ZiroWork?</div>
       </div>
 
       {/* Scrollable content */}
@@ -133,8 +133,8 @@ function ReportingView({ onNavigate }) {
               {/* Client heading — label over hairline */}
               <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', paddingBottom: 8, borderBottom: `1px solid ${T.border}`, marginBottom: 16 }}>
                 <div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: T.t1 }}>{client.name}</div>
-                  <div style={{ fontSize: 11, color: T.t4 }}>{client.city}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: T.t1 }}>{client.name}</div>
+                  <div style={{ fontSize: 12, color: T.t4 }}>{client.city}</div>
                 </div>
                 {L.ExternalLink && (
                   <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.t4, padding: 4 }}>
@@ -153,9 +153,9 @@ function ReportingView({ onNavigate }) {
                   { label: 'Revenue / ROI', value: roiMultiple, sub: revenueStr ? revenueStr + ' est. monthly' : null, accent: true },
                 ].map(stat => (
                   <div key={stat.label}>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>{stat.label}</div>
-                    <div style={{ fontSize: 28, fontWeight: 700, color: stat.accent ? green : T.t1, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums' }}>{stat.value}</div>
-                    {stat.sub && <div style={{ fontSize: 11, color: T.t4, marginTop: 3 }}>{stat.sub}</div>}
+                    <div style={{ fontSize: 11, fontWeight: 700, color: T.t3, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>{stat.label}</div>
+                    <div style={{ fontSize: 29, fontWeight: 700, color: stat.accent ? green : T.t1, letterSpacing: '-0.6px', fontVariantNumeric: 'tabular-nums' }}>{stat.value}</div>
+                    {stat.sub && <div style={{ fontSize: 12, color: T.t4, marginTop: 3 }}>{stat.sub}</div>}
                   </div>
                 ))}
               </div>

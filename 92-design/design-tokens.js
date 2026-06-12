@@ -1,4 +1,4 @@
-// design-tokens.js — Centralized design system tokens
+﻿// design-tokens.js — Centralized design system tokens
 // Mirrors design-system.md decisions. Replaces inline hardcoded values.
 // All theme-aware colors use functions to reflect current T.isDark state.
 
@@ -110,19 +110,19 @@ const TOKENS = {
   // ═══════════════════════════════════════════════════════════════════════
 
   typography: {
-    h1: { fontSize: 24, fontWeight: 700 },      // Page title
-    h2: { fontSize: 16, fontWeight: 700 },      // Section title
-    h3: { fontSize: 13, fontWeight: 700 },      // Small heading (drawer tabs)
-    body: { fontSize: 12, fontWeight: 400 },    // Table cells, general content
-    bodyMed: { fontSize: 12, fontWeight: 500 }, // Secondary body
-    bodyBold: { fontSize: 12, fontWeight: 600 }, // Emphasized body
-    label: { fontSize: 11, fontWeight: 600 },   // Form labels, column headers
-    labelUp: { fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' },
-    meta: { fontSize: 11, fontWeight: 400 },    // Timestamps, metadata
-    small: { fontSize: 10, fontWeight: 500 },   // Stat labels, badges
-    smallUp: { fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em' },
-    stat: { fontSize: 20, fontWeight: 600 },    // KPI numbers
-    statLarge: { fontSize: 24, fontWeight: 700 }, // Large stat values
+    h1: { fontSize: 25, fontWeight: 700 },      // Page title
+    h2: { fontSize: 17, fontWeight: 700 },      // Section title
+    h3: { fontSize: 14, fontWeight: 700 },      // Small heading (drawer tabs)
+    body: { fontSize: 13, fontWeight: 400 },    // Table cells, general content
+    bodyMed: { fontSize: 13, fontWeight: 500 }, // Secondary body
+    bodyBold: { fontSize: 13, fontWeight: 600 }, // Emphasized body
+    label: { fontSize: 12, fontWeight: 600 },   // Form labels, column headers
+    labelUp: { fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' },
+    meta: { fontSize: 12, fontWeight: 400 },    // Timestamps, metadata
+    small: { fontSize: 11, fontWeight: 500 },   // Stat labels, badges
+    smallUp: { fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em' },
+    stat: { fontSize: 21, fontWeight: 600 },    // KPI numbers
+    statLarge: { fontSize: 25, fontWeight: 700 }, // Large stat values
   },
 
   // ═══════════════════════════════════════════════════════════════════════
@@ -184,7 +184,7 @@ const TOKENS = {
         borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)'}`,
       }),
       title: {
-        fontSize: 18,
+        fontSize: 19,
         fontWeight: 700,
         margin: 0,
         letterSpacing: '-0.3px',
@@ -221,7 +221,7 @@ const TOKENS = {
       headerCell: (isDark) => ({
         textAlign: 'left',
         padding: '10px 14px',
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 600,
         letterSpacing: '0.07em',
         textTransform: 'uppercase',
@@ -260,7 +260,7 @@ const TOKENS = {
     // FORM — Input, label, button styles
     form: {
       label: (isDark) => ({
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: 600,
         color: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)',
         display: 'block',
@@ -272,7 +272,7 @@ const TOKENS = {
         border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.11)'}`,
         background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
         color: isDark ? '#fff' : '#000',
-        fontSize: 12,
+        fontSize: 13,
         fontFamily: 'inherit',
         width: '100%',
         boxSizing: 'border-box',
@@ -289,7 +289,7 @@ const TOKENS = {
             color: '#fff',
             border: 'none',
             borderRadius: 6,
-            fontSize: 12,
+            fontSize: 13,
             fontWeight: 600,
             cursor: 'pointer',
             fontFamily: 'inherit',
@@ -303,7 +303,7 @@ const TOKENS = {
             color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)',
             border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.11)'}`,
             borderRadius: 6,
-            fontSize: 12,
+            fontSize: 13,
             fontWeight: 600,
             cursor: 'pointer',
             fontFamily: 'inherit',
@@ -342,7 +342,7 @@ const TOKENS = {
         display: 'inline-block',
         padding: '2px 8px',
         borderRadius: 16,
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 600,
         background: isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.055)',
         color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)',
@@ -351,7 +351,7 @@ const TOKENS = {
         display: 'inline-block',
         padding: '2px 8px',
         borderRadius: 16,
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 600,
         background: isDark ? 'rgba(34,197,94,0.15)' : '#D1F4E8',
         color: isDark ? '#4ADE80' : '#034636',
@@ -360,7 +360,7 @@ const TOKENS = {
         display: 'inline-block',
         padding: '2px 8px',
         borderRadius: 16,
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 600,
         background: isDark ? 'rgba(251,191,36,0.15)' : '#FEE9A6',
         color: isDark ? '#FCD34D' : '#78350F',
@@ -369,7 +369,7 @@ const TOKENS = {
         display: 'inline-block',
         padding: '2px 8px',
         borderRadius: 16,
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 600,
         background: isDark ? 'rgba(239,68,68,0.15)' : '#FDCCCB',
         color: isDark ? '#F87171' : '#7F1D1D',
@@ -378,7 +378,7 @@ const TOKENS = {
         display: 'inline-block',
         padding: '2px 8px',
         borderRadius: 16,
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 600,
         background: isDark ? 'rgba(59,130,246,0.15)' : '#BFDBFE',
         color: isDark ? '#3B82F6' : '#0C2340',
@@ -387,7 +387,7 @@ const TOKENS = {
         display: 'inline-block',
         padding: '6px 14px',
         borderRadius: 20,
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: 500,
         background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
         color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)',
@@ -408,7 +408,7 @@ const TOKENS = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 7,
+        fontSize: 8,
         fontWeight: 700,
         flexShrink: 0,
         border: '1.5px solid var(--surface)',
@@ -472,7 +472,7 @@ const TOKENS = {
       // Stage type badge (uppercase, colored bg)
       stageBadge: {
         display: 'inline-block',
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 700,
         letterSpacing: '0.07em',
         padding: '2px 8px',
@@ -506,7 +506,7 @@ const TOKENS = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: 700,
         flexShrink: 0,
       },
@@ -518,7 +518,7 @@ const TOKENS = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 9,
+        fontSize: 10,
         fontWeight: 700,
         flexShrink: 0,
         border: '1px solid rgba(0,0,0,0.1)',
@@ -621,7 +621,7 @@ const TOKENS = {
       }),
       // Drawer title
       title: {
-        fontSize: 18,
+        fontSize: 19,
         fontWeight: 700,
         margin: 0,
       },
@@ -666,7 +666,7 @@ const TOKENS = {
       },
       // Section title
       title: {
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: 700,
         letterSpacing: '0.05em',
         textTransform: 'uppercase',
@@ -692,7 +692,7 @@ const TOKENS = {
       },
       // Stat label (small, uppercase)
       label: {
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 700,
         letterSpacing: '0.07em',
         textTransform: 'uppercase',
@@ -700,12 +700,12 @@ const TOKENS = {
       },
       // Stat value (large number)
       value: {
-        fontSize: 20,
+        fontSize: 21,
         fontWeight: 600,
       },
       // Stat unit/subtext (small secondary text)
       unit: {
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: 400,
         opacity: 0.7,
       },
@@ -763,7 +763,7 @@ const TOKENS = {
         color: isActive
           ? (isDark ? '#fff' : '#000')
           : (isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'),
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: isActive ? 600 : 500,
         cursor: 'pointer',
         transition: 'all 0.15s',
@@ -782,7 +782,7 @@ const TOKENS = {
         color: isDark ? '#fff' : '#fff',
         padding: '6px 10px',
         borderRadius: 4,
-        fontSize: 10,
+        fontSize: 11,
         fontWeight: 500,
         position: 'absolute',
         zIndex: 1000,

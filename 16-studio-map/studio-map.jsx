@@ -1,4 +1,4 @@
-// ─── Studio Map ──────────────────────────────────────────────────────────────
+﻿// ─── Studio Map ──────────────────────────────────────────────────────────────
 // Obsidian-style force graph. Dark bg, muted glow nodes, physics always on.
 // Three views: Funnel Tree | Lead Journey | Operator Blockers
 // ─────────────────────────────────────────────────────────────────────────────
@@ -288,7 +288,7 @@ window.StudioMapView = function StudioMapView() {
 
   function NodeInfoPanel() {
     if (!nodeInfo) return (
-      <span style={{ color: TEXT_DIM, fontStyle: 'italic', fontSize: 12 }}>Click a node to inspect</span>
+      <span style={{ color: TEXT_DIM, fontStyle: 'italic', fontSize: 13 }}>Click a node to inspect</span>
     );
     const t = nodeInfo._type;
     const d = nodeInfo._raw || {};
@@ -325,7 +325,7 @@ window.StudioMapView = function StudioMapView() {
     ];
 
     return rows.map(([k, v]) => (
-      <div key={k} style={{ marginBottom: 6, fontSize: 12, lineHeight: 1.4 }}>
+      <div key={k} style={{ marginBottom: 6, fontSize: 13, lineHeight: 1.4 }}>
         <span style={{ color: TEXT_DIM }}>{k}: </span>
         <span style={{ color: TEXT_MAIN }}>{String(v ?? '—')}</span>
       </div>
@@ -347,12 +347,12 @@ window.StudioMapView = function StudioMapView() {
       display: 'flex', flexDirection: 'column', overflow: 'hidden',
     },
     section:  { borderBottom: `1px solid ${BORDER_CLR}`, padding: '10px 12px' },
-    secLabel: { fontSize: 10, fontWeight: 600, color: TEXT_DIM, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 },
+    secLabel: { fontSize: 11, fontWeight: 600, color: TEXT_DIM, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 },
   };
 
   function tabStyle(active) {
     return {
-      flex: 1, padding: '5px 4px', fontSize: 11, fontWeight: 500,
+      flex: 1, padding: '5px 4px', fontSize: 12, fontWeight: 500,
       background: active ? 'rgba(255,255,255,0.08)' : 'transparent',
       color: active ? TEXT_MAIN : TEXT_DIM,
       border: `1px solid ${active ? 'rgba(255,255,255,0.15)' : BORDER_CLR}`,
@@ -389,7 +389,7 @@ window.StudioMapView = function StudioMapView() {
               background: 'rgba(255,255,255,0.04)',
               border: `1px solid ${BORDER_CLR}`,
               color: TEXT_MAIN, padding: '6px 10px',
-              borderRadius: 4, fontSize: 12, outline: 'none',
+              borderRadius: 4, fontSize: 13, outline: 'none',
             }}
           />
           {showDrop && (
@@ -401,7 +401,7 @@ window.StudioMapView = function StudioMapView() {
               {searchMatches.map(n => (
                 <div key={n.id} onClick={() => focusNode(n.id)}
                   style={{
-                    padding: '5px 10px', fontSize: 12, cursor: 'pointer',
+                    padding: '5px 10px', fontSize: 13, cursor: 'pointer',
                     borderLeft: `2px solid ${n.color?.border || '#888'}`,
                     color: TEXT_MAIN,
                   }}
@@ -423,7 +423,7 @@ window.StudioMapView = function StudioMapView() {
         <div style={{ flex: 1, overflowY: 'auto', padding: '10px 12px' }}>
           <div style={S.secLabel}>Legend</div>
           {smLegend(activeView).map(item => (
-            <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, fontSize: 12 }}>
+            <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, fontSize: 13 }}>
               <div style={{
                 width: 8, height: 8, borderRadius: '50%',
                 background: item.color + '44',
@@ -437,7 +437,7 @@ window.StudioMapView = function StudioMapView() {
         </div>
 
         {/* Stats */}
-        <div style={{ padding: '8px 12px', borderTop: `1px solid ${BORDER_CLR}`, fontSize: 11, color: TEXT_DIM }}>
+        <div style={{ padding: '8px 12px', borderTop: `1px solid ${BORDER_CLR}`, fontSize: 12, color: TEXT_DIM }}>
           {statsText}
         </div>
       </div>

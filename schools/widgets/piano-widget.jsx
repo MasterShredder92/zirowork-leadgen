@@ -1,4 +1,4 @@
-function PianoWidget({ accent }) {
+﻿function PianoWidget({ accent }) {
   const { useState, useCallback, useRef } = React;
   const [pressed, setPressed] = useState({});
   const audioCtx = useRef(null);
@@ -76,7 +76,7 @@ function PianoWidget({ accent }) {
               alignItems: 'flex-end',
               justifyContent: 'center',
               paddingBottom: 8,
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 600,
               color: '#888',
               userSelect: 'none',
@@ -110,7 +110,7 @@ function PianoWidget({ accent }) {
           />
         ))}
       </div>
-      <div style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: '#aaa' }}>
+      <div style={{ textAlign: 'center', marginTop: 16, fontSize: 14, color: '#aaa' }}>
         Click or tap the keys to play
       </div>
     </div>

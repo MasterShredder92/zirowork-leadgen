@@ -1,4 +1,4 @@
-// 13-integrations — Which forms, phone numbers, SMS, payment links, calendars, and email routes are connected or broken?
+﻿// 13-integrations — Which forms, phone numbers, SMS, payment links, calendars, and email routes are connected or broken?
 function IntegrationsView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -13,7 +13,7 @@ function IntegrationsView({ onNavigate }) {
   const broken = integrations.filter(i => i.status === 'broken').length;
   const missing = integrations.filter(i => i.status === 'not_connected').length;
 
-  const cell = { padding: '12px 0', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}` };
+  const cell = { padding: '12px 0', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}` };
 
   async function markConnected(id) {
     if (!window.sb) return;
@@ -25,8 +25,8 @@ function IntegrationsView({ onNavigate }) {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
       {/* Header */}
       <div style={{ padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Integrations</h1>
-        <div style={{ fontSize: 12, color: T.t3 }}>Which forms, phone numbers, SMS, payment links, calendars, and email routes are connected or broken?</div>
+        <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Integrations</h1>
+        <div style={{ fontSize: 13, color: T.t3 }}>Which forms, phone numbers, SMS, payment links, calendars, and email routes are connected or broken?</div>
       </div>
 
       {/* Summary band — inline stats, no boxes */}
@@ -34,14 +34,14 @@ function IntegrationsView({ onNavigate }) {
         <div style={{ display: 'flex', gap: 40, padding: '16px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
           {broken > 0 && (
             <div>
-              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Broken</div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#EF4444', fontVariantNumeric: 'tabular-nums' }}>{broken}</div>
+              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Broken</div>
+              <div style={{ fontSize: 23, fontWeight: 700, color: '#EF4444', fontVariantNumeric: 'tabular-nums' }}>{broken}</div>
             </div>
           )}
           {missing > 0 && (
             <div>
-              <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Not Connected</div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#F59E0B', fontVariantNumeric: 'tabular-nums' }}>{missing}</div>
+              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Not Connected</div>
+              <div style={{ fontSize: 23, fontWeight: 700, color: '#F59E0B', fontVariantNumeric: 'tabular-nums' }}>{missing}</div>
             </div>
           )}
         </div>
@@ -53,7 +53,7 @@ function IntegrationsView({ onNavigate }) {
         <thead>
           <tr>
             {['Client', 'Type', 'Detail', 'Status', ''].map(h => (
-              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: 'left' }}>{h}</th>
+              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: 'left' }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -63,16 +63,16 @@ function IntegrationsView({ onNavigate }) {
               onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
               onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
               <td style={cell}><div style={{ fontWeight: 500, color: T.t1 }}>{int.client_name}</div></td>
-              <td style={cell}><span style={{ fontSize: 12, color: T.t3 }}>{int.type}</span></td>
+              <td style={cell}><span style={{ fontSize: 13, color: T.t3 }}>{int.type}</span></td>
               <td style={cell}>{int.detail}</td>
               <td style={cell}>
-                <span style={{ fontSize: 11, fontWeight: 600, color: statusColor(int.status), background: statusColor(int.status) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: statusColor(int.status), background: statusColor(int.status) + '1A', padding: '2px 8px', borderRadius: 20 }}>
                   {statusLabel(int.status)}
                 </span>
               </td>
               <td style={cell}>
                 {int.status !== 'connected' && (
-                  <button onClick={() => markConnected(int.id)} style={{ padding: '4px 10px', border: `1px solid ${T.border}`, borderRadius: 6, background: 'none', fontSize: 11, color: T.t3, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  <button onClick={() => markConnected(int.id)} style={{ padding: '4px 10px', border: `1px solid ${T.border}`, borderRadius: 6, background: 'none', fontSize: 12, color: T.t3, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                     Fix
                   </button>
                 )}

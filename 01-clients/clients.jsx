@@ -1,4 +1,4 @@
-// 01-clients — Which schools are live, onboarding, healthy, stuck, or at risk?
+﻿// 01-clients — Which schools are live, onboarding, healthy, stuck, or at risk?
 function ClientsView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
@@ -22,10 +22,10 @@ function ClientsView({ onNavigate }) {
   const healthLabel = h => ({ healthy: 'Healthy', at_risk: 'At Risk', stuck: 'Stuck' }[h] || 'Onboarding');
 
   const pill = (color, label) => (
-    <span style={{ fontSize: 11, fontWeight: 600, color, background: color + '1A', padding: '2px 8px', borderRadius: 20 }}>{label}</span>
+    <span style={{ fontSize: 12, fontWeight: 600, color, background: color + '1A', padding: '2px 8px', borderRadius: 20 }}>{label}</span>
   );
 
-  const cell = { padding: '11px 16px', fontSize: 13, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
+  const cell = { padding: '11px 16px', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
   const firstCell = { ...cell, paddingLeft: 0 };
   const lastCell = { ...cell, paddingRight: 0 };
   const numCell = { ...cell, textAlign: 'right', fontVariantNumeric: 'tabular-nums' };
@@ -35,10 +35,10 @@ function ClientsView({ onNavigate }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Clients</h1>
-          <div style={{ fontSize: 12, color: T.t3 }}>Which schools are live, onboarding, healthy, stuck, or at risk?</div>
+          <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Clients</h1>
+          <div style={{ fontSize: 13, color: T.t3 }}>Which schools are live, onboarding, healthy, stuck, or at risk?</div>
         </div>
-        <button onClick={() => { if (onNavigate) onNavigate('onboarding'); }} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <button onClick={() => { if (onNavigate) onNavigate('onboarding'); }} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {L.Plus && <L.Plus size={14} strokeWidth={1.75} />} Add Client
         </button>
       </div>
@@ -52,7 +52,7 @@ function ClientsView({ onNavigate }) {
               padding: '5px 12px', borderRadius: 6, border: `1px solid ${filter === f.id ? T.accent : T.border}`,
               background: filter === f.id ? T.accent + '18' : 'transparent',
               color: filter === f.id ? T.accent : T.t3,
-              fontSize: 12, fontWeight: 500, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif",
             }}>{f.label}</button>
           ))}
         </div>
@@ -70,7 +70,7 @@ function ClientsView({ onNavigate }) {
                 { label: 'MRR', align: 'right' },
                 { label: 'Campaigns', align: 'right' },
               ].map((h, i, arr) => (
-                <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
+                <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
               ))}
             </tr>
           </thead>
@@ -82,7 +82,7 @@ function ClientsView({ onNavigate }) {
                 onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
                 <td style={firstCell}>
                   <div style={{ fontWeight: 500, color: T.t1 }}>{c.name}</div>
-                  <div style={{ fontSize: 11, color: T.t4 }}>{c.city}, {c.state}</div>
+                  <div style={{ fontSize: 12, color: T.t4 }}>{c.city}, {c.state}</div>
                 </td>
                 <td style={cell}>
                   {pill(c.status === 'live' ? '#22C55E' : '#6B7280', c.status === 'live' ? 'Live' : 'Onboarding')}

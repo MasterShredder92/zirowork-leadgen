@@ -1,4 +1,4 @@
-window.PortalUpload = function PortalUpload({ tenantId, userId }) {
+﻿window.PortalUpload = function PortalUpload({ tenantId, userId }) {
   const [file, setFile] = React.useState(null);
   const [desc, setDesc] = React.useState('');
   const [dragging, setDragging] = React.useState(false);
@@ -83,8 +83,8 @@ window.PortalUpload = function PortalUpload({ tenantId, userId }) {
 
   const s = {
     page: { padding: '32px 36px', overflowY: 'auto', height: '100%', animation: 'fadeIn 0.2s ease' },
-    heading: { fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
-    sub: { fontSize: 13, color: 'var(--t3)', marginBottom: 28 },
+    heading: { fontSize: 23, fontWeight: 700, letterSpacing: '-0.4px', color: 'var(--t1)', marginBottom: 4 },
+    sub: { fontSize: 14, color: 'var(--t3)', marginBottom: 28 },
     dropzone: {
       border: `1px dashed ${dragging ? 'var(--accent)' : 'var(--bmed)'}`,
       borderRadius: 10, padding: '36px 24px', textAlign: 'center',
@@ -95,33 +95,33 @@ window.PortalUpload = function PortalUpload({ tenantId, userId }) {
       marginBottom: 10, lineHeight: 0, display: 'flex', justifyContent: 'center',
       color: dragging ? 'var(--accent)' : 'var(--t4)',
     },
-    dropText: { fontSize: 13, color: 'var(--t2)', marginBottom: 4 },
-    dropSub: { fontSize: 11, color: 'var(--t4)' },
+    dropText: { fontSize: 14, color: 'var(--t2)', marginBottom: 4 },
+    dropSub: { fontSize: 12, color: 'var(--t4)' },
     fileName: {
       display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 10,
       background: 'var(--accent-bg)', color: 'var(--accent)',
-      fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 20,
+      fontSize: 13, fontWeight: 600, padding: '4px 10px', borderRadius: 20,
     },
-    label: { display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--t2)', marginBottom: 5 },
+    label: { display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--t2)', marginBottom: 5 },
     textarea: {
       width: '100%', padding: '10px 12px',
       background: 'var(--bg)', border: '1px solid var(--bmed)',
-      borderRadius: 7, fontSize: 13, color: 'var(--t1)',
+      borderRadius: 7, fontSize: 14, color: 'var(--t1)',
       resize: 'vertical', minHeight: 72, outline: 'none',
       fontFamily: 'inherit', marginBottom: 14,
     },
     btn: {
       padding: '9px 20px', background: 'var(--accent)', color: '#fff',
-      border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600,
+      border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600,
       cursor: uploading || !file || !desc.trim() ? 'not-allowed' : 'pointer',
       opacity: uploading || !file || !desc.trim() ? 0.5 : 1,
       fontFamily: 'inherit',
     },
     successBanner: {
       marginTop: 12, padding: '10px 14px', borderRadius: 7,
-      background: '#D1F4E8', color: '#034636', fontSize: 12, fontWeight: 600,
+      background: '#D1F4E8', color: '#034636', fontSize: 13, fontWeight: 600,
     },
-    historyHead: { fontSize: 13, fontWeight: 700, color: 'var(--t1)', marginTop: 32, marginBottom: 12 },
+    historyHead: { fontSize: 14, fontWeight: 700, color: 'var(--t1)', marginTop: 32, marginBottom: 12 },
     historyItem: {
       display: 'flex', alignItems: 'flex-start', gap: 10,
       padding: '12px 0', borderBottom: '1px solid var(--border)',
@@ -131,9 +131,9 @@ window.PortalUpload = function PortalUpload({ tenantId, userId }) {
       borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
       flexShrink: 0,
     },
-    histName: { fontSize: 13, fontWeight: 600, color: 'var(--t1)', marginBottom: 2 },
-    histDesc: { fontSize: 12, color: 'var(--t3)' },
-    histDate: { fontSize: 11, color: 'var(--t4)', marginLeft: 'auto', flexShrink: 0, paddingTop: 2 },
+    histName: { fontSize: 14, fontWeight: 600, color: 'var(--t1)', marginBottom: 2 },
+    histDesc: { fontSize: 13, color: 'var(--t3)' },
+    histDate: { fontSize: 12, color: 'var(--t4)', marginLeft: 'auto', flexShrink: 0, paddingTop: 2 },
   };
 
   return (
