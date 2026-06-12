@@ -117,7 +117,7 @@ Deno.serve(async (req) => {
     }
 
     const history = await loadHistory(db, tenantId, fromPhone);
-    const userMessage = `Conversation history:\n${history}\n\nNew reply from lead: ${body}\n\nRespond to this reply in Andrea's voice. Reply with only ESCALATE (nothing else) if: the lead asks about pricing/payment/contracts, asks to speak to a human, or you are unsure how to respond.`;
+    const userMessage = `Conversation history:\n${history}\n\nNew reply from lead: ${body}\n\nRespond to this reply in Brooke's voice. Reply with only ESCALATE (nothing else) if: the lead asks about pricing/payment/contracts, asks to speak to a human, or you are unsure how to respond.`;
 
     const response = await callClaude(MESSAGING_SYSTEM_PROMPT, userMessage);
     const responseText = response.trim();

@@ -17,7 +17,7 @@ export async function loadHistory(
 
   return data
     .map((row) => {
-      const speaker = row.direction === 'outbound' ? 'Andrea' : 'Lead';
+      const speaker = row.direction === 'outbound' ? 'Brooke' : 'Lead';
       return `${speaker}: ${row.message_body}`;
     })
     .join('\n');

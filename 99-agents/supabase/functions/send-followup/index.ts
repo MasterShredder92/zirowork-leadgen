@@ -72,7 +72,7 @@ ${dayLabel}
 Conversation history:
 ${history || '(no prior messages logged)'}
 
-Write a brief, natural follow-up SMS. Match Andrea's voice. No more than 2 sentences.`;
+Write a brief, natural follow-up SMS. Match Brooke's voice. No more than 2 sentences.`;
 
       const message = await callClaude(MESSAGING_SYSTEM_PROMPT, userMessage);
 
