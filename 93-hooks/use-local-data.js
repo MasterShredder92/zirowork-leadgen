@@ -1,72 +1,8 @@
 window.SEED_DATA = {
-  clients: [
-    {
-      id: 'demo-001',
-      slug: 'demo-music',
-      name: 'Demo Music Academy',
-      email: 'demo@demomusic.com',
-      studio_phone: '(555) 123-4567',
-      city: 'Portland',
-      state: 'OR',
-      logo_url: null,
-      accent_color: '#E04D27',
-      tagline: 'Learn music from world-class teachers',
-      offer: 'First lesson free',
-      created_at: '2026-01-01T00:00:00Z',
-      program_prices: {
-        Piano: { price: '65' },
-        Guitar: { price: '65' },
-        Vocals: { price: '60' },
-        Drums: { price: '65' },
-      },
-    }
-  ],
-  leads: [
-    {
-      id: 'lead-001',
-      client_id: 'demo-001',
-      client_name: 'Demo Music Academy',
-      student_name: 'Sarah Chen',
-      parent_name: 'Michael Chen',
-      program: 'Piano',
-      email: 'sarah.chen@demo.com',
-      phone: '(555) 987-6543',
-      age: 8,
-      stage: 'new',
-      created_at: '2026-06-01T10:00:00Z',
-    }
-  ],
-  bookings: [
-    {
-      id: 'booking-001',
-      lead_id: 'lead-001',
-      client_id: 'demo-001',
-      student_name: 'Sarah Chen',
-      parent_name: 'Michael Chen',
-      program: 'Piano',
-      scheduled_date: '2026-06-15',
-      scheduled_time: '3:30 PM',
-      confirmation_token: 'demo-token-12345',
-      status: 'pending',
-      created_at: '2026-06-01T12:00:00Z',
-    }
-  ],
-  enrollments: [
-    {
-      id: 'enrollment-001',
-      booking_id: 'booking-001',
-      lead_id: 'lead-001',
-      client_id: 'demo-001',
-      client_name: 'Demo Music Academy',
-      student_name: 'Sarah Chen',
-      parent_name: 'Michael Chen',
-      program: 'Piano',
-      outcome: 'enrolled',
-      enrolled_at: '2026-06-01',
-      handed_off_at: '2026-06-01T14:00:00Z',
-      weekly_rate_cents: 6500,
-    }
-  ],
+  clients: [],
+  leads: [],
+  bookings: [],
+  enrollments: [],
   campaigns: [],
   conversations: [],
   escalations: [],

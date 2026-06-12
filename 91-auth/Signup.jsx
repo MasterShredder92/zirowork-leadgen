@@ -66,7 +66,7 @@ function SignupView({ onSwitchToLogin, onSignupComplete }) {
         <div>
           <label style={window.authLabel}>Music school name</label>
           <input type="text" required value={schoolName}
-            onChange={e => setSchoolName(e.target.value)} style={window.authInput} placeholder="Harmony Music Academy" />
+            onChange={e => setSchoolName(e.target.value)} style={window.authInput} placeholder="Your school name" />
         </div>
         <div>
           <label style={window.authLabel}>Email</label>
