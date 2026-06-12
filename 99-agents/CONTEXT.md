@@ -6,7 +6,7 @@
 > This is a **separate backend deployment** from the React CRM. Different runtime, different host.
 
 ## You are here
-Agent backend — **Supabase Edge Functions** (Deno/TypeScript). Handles SMS sending, lead scoring, follow-ups, enrollment handoff, monthly reports, school scraping, and intake forms. No Python server. No n8n. No external scheduler — scheduling is pg_cron on the platform Supabase. SMS goes out via **Twilio** (`_shared/twilio.ts`).
+Agent backend — **Supabase Edge Functions** (Deno/TypeScript). Handles SMS sending, lead scoring, follow-ups, enrollment handoff, monthly reports, school scraping, and intake forms. No Python server. No n8n. No external scheduler — scheduling is pg_cron on the platform Supabase. SMS goes out via **OpenPhone** (`_shared/openphone.ts`).
 
 The **conceptual agent roster** below (ziro-admin, ziro-messaging, ziro-leads, etc.) is the **doctrine layer** — the methodology, voice, and behavior contracts each function follows. It lives in `knowledge/`. The agents are NOT separate Python services; they are the playbook the edge functions execute.
 
@@ -18,16 +18,17 @@ supabase/                — THE LIVE BACKEND (Deno edge functions)
     _shared/             — shared modules used across functions:
       types.ts           — WebhookPayload, LeadRecord, TenantConfig, ScoringResult
       claude.ts          — callClaude(system, user) → string
-      twilio.ts          — sendSMS(to, body), SMS_ENABLED flag (Twilio REST)
-      openphone.ts       — legacy OpenPhone sender; not imported by any function (Twilio is the live path).
-                           A leftover `openphone_number_id` config field is still read in score-and-send.ts/types.ts
+      openphone.ts       — sendSMS(to, body), SMS_ENABLED flag (OpenPhone REST). THE LIVE SENDER —
+                           imported by score-and-send, send-followup, on-reply, enrollment-handoff.
+                           Tenant phone routing uses the `openphone_number_id` config field.
+      twilio.ts          — legacy/unused; NO function imports it. OpenPhone is the live path.
       prompts.ts         — LEADS_SYSTEM_PROMPT + MESSAGING_SYSTEM_PROMPT
       conversation.ts    — loadHistory() for SMS threads
       score-and-send.ts  — scoreAndSend(lead, tenantId): Claude scores → SMS → log → CRM sync
     intake-form/         — serves the hosted lead-capture form (index.ts; optional SMS-consent checkbox recorded on the lead; /privacy + /terms routes redirect to app.zirowork.com canonical pages)
     on-new-lead/         — webhook handler + Eastern-time gate + pending_leads queue. Tenant from URL segment OR record.client_id (single static leads-table DB webhook serves all tenants); ignores source='webhook' rows (scoreAndSend's own CRM syncs — loop guard)
     process-pending/     — cron handler: fetches due pending_leads, calls scoreAndSend
-    on-reply/            — inbound SMS handler (Twilio signature validation → A2P keywords STOP/START/HELP w/ registered confirmation messages → opted_out gate → AI reply)
+    on-reply/            — inbound SMS handler: OpenPhone webhook (`message.received`), tenant matched via config.openphone_number_id → A2P keywords STOP/START/HELP w/ registered confirmation messages → opted_out gate → AI reply. NOTE: no inbound webhook signature validation yet.
     send-followup/       — drip follow-ups to 'new' leads (capped, opt-out aware)
     enrollment-handoff/  — enrollment confirmation + client-portal handoff
     monthly-report/      — per-tenant monthly report generation
@@ -77,7 +78,7 @@ Your task explicitly names: the agent backend, an edge function (on-new-lead, pr
 | Deploy / onboarding steps | `HANDOFF.md`, `ADKINS_ONBOARDING.md` |
 
 ## Hard stop
-Only the messaging path (ziro-messaging doctrine, executed via `_shared/twilio.ts`) sends SMS. No other function may trigger outbound messages outside that path.
+Only the messaging path (ziro-messaging doctrine, executed via `_shared/openphone.ts`) sends SMS. No other function may trigger outbound messages outside that path.
 You may NOT load React CRM files while working in this folder.
 The empty `agents/` `api-server/` `tools/` `tests/` folders are legacy — do not revive Python or build new logic there. New backend logic goes in `supabase/functions/`.
 If you think you need something not listed — STOP AND ASK first.
