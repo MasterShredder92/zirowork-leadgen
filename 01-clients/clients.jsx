@@ -24,8 +24,9 @@ function ClientDetail({ clientId }) {
   const DURATIONS = ['30', '45', '60'];
   const INSTRUMENT_SLUGS = { Piano: 'piano', Guitar: 'guitar', Voice: 'vocals', Drums: 'drums' };
 
-  function buildForm(client, cfg) {
+  function buildForm(client, cfg, tenant) {
     return {
+      per_enrollment_fee: (tenant && tenant.per_enrollment_fee_cents != null) ? (tenant.per_enrollment_fee_cents / 100) : '',
       name: client.name || '',
       city: client.city || '',
       state: client.state || '',
@@ -59,7 +60,7 @@ function ClientDetail({ clientId }) {
         const seeds = (window.SEED_DATA && window.SEED_DATA.clients) || [];
         const client = seeds.find(c => c.id === clientId) || {};
         setData({ client, tenant: { config: {}, plan_tier: 'studio', status: 'active' } });
-        setForm(buildForm(client, {}));
+        setForm(buildForm(client, {}, null));
         setLoading(false);
         return;
       }
@@ -70,7 +71,7 @@ function ClientDetail({ clientId }) {
       const client = cr.data || {};
       const tenant = tr.data || { config: {} };
       setData({ client, tenant });
-      setForm(buildForm(client, tenant.config || {}));
+      setForm(buildForm(client, tenant.config || {}, tenant));
       setLoading(false);
     }
     load();
@@ -158,7 +159,7 @@ function ClientDetail({ clientId }) {
     }
     const [cr, tr] = await Promise.all([
       window.sb.from('clients').update(clientUpdate).eq('id', clientId),
-      window.sb.from('agent_tenants').update({ name: form.name.trim(), config: newConfig, updated_at: new Date().toISOString() }).eq('tenant_id', clientId),
+      window.sb.from('agent_tenants').update({ name: form.name.trim(), config: newConfig, per_enrollment_fee_cents: form.per_enrollment_fee === '' || form.per_enrollment_fee == null ? null : Math.round(Number(form.per_enrollment_fee) * 100), updated_at: new Date().toISOString() }).eq('tenant_id', clientId),
     ]);
     setSaving(false);
     const err = cr.error || tr.error;
@@ -344,6 +345,15 @@ function ClientDetail({ clientId }) {
                   })}
                 </div>
               )}
+            </div>
+
+            {/* ZiroWork Billing — what WE charge this school per enrolled student (Square) */}
+            <div style={{ marginTop: 20 }}>
+              <div style={secHead}>ZiroWork Billing</div>
+              <div style={fw}>
+                <label style={lbl}>Per-enrollment fee — charged to this school per enrolled student</label>
+                <div style={priceWrap}><span style={priceSym}>$</span><input style={priceInp} type="number" value={form.per_enrollment_fee} onChange={e => set('per_enrollment_fee', e.target.value)} placeholder="150" /></div>
+              </div>
             </div>
 
             {/* Testimonials */}

@@ -8,6 +8,51 @@ function EnrollmentsView({ onNavigate }) {
   React.useEffect(() => { if (rawData) setEnrollments(rawData); }, [rawData]);
   const [enrollingId, setEnrollingId] = useState(null);
   const [rateInput, setRateInput] = useState('');
+  const [feeMap, setFeeMap] = useState({});       // tenant_id -> per-enrollment fee cents
+  const [chargeMap, setChargeMap] = useState({}); // enrollment_id -> latest charge status
+  const [charging, setCharging] = useState({});   // enrollment_id -> in-flight
+  const [chargeMsg, setChargeMsg] = useState({}); // enrollment_id -> error/skip message
+
+  // Load each client's fee + which enrollments are already charged (operator-gated endpoint).
+  React.useEffect(() => {
+    if (!window.sb || !enrollments.length) return;
+    const clientIds = [...new Set(enrollments.map(e => e.client_id).filter(Boolean))];
+    if (clientIds.length) {
+      window.sb.from('agent_tenants').select('tenant_id, per_enrollment_fee_cents').in('tenant_id', clientIds)
+        .then(({ data }) => {
+          if (data) { const m = {}; data.forEach(t => { m[t.tenant_id] = t.per_enrollment_fee_cents; }); setFeeMap(m); }
+        });
+    }
+    window.sb.functions.invoke('billing', { body: { action: 'charges' } }).then(({ data }) => {
+      if (data && data.events) {
+        const m = {};
+        data.events.forEach(ev => { if (ev.enrollment_id && !m[ev.enrollment_id]) m[ev.enrollment_id] = ev.status; });
+        setChargeMap(m);
+      }
+    });
+  }, [enrollments]);
+
+  async function chargeEnrollment(en) {
+    if (!window.sb) return;
+    setCharging(prev => ({ ...prev, [en.id]: true }));
+    setChargeMsg(prev => ({ ...prev, [en.id]: '' }));
+    const { data, error } = await window.sb.functions.invoke('billing', {
+      body: { action: 'charge', tenant_id: en.client_id, enrollment_id: en.id },
+    });
+    setCharging(prev => ({ ...prev, [en.id]: false }));
+    if (error || !data) { setChargeMsg(prev => ({ ...prev, [en.id]: 'Charge failed. Try again.' })); return; }
+    if (data.ok || data.already_charged) {
+      setChargeMap(prev => ({ ...prev, [en.id]: data.status || 'succeeded' }));
+      return;
+    }
+    const reasonMap = {
+      square_not_configured: 'Square not connected yet.',
+      no_fee_configured: 'Set this client’s per-enrollment fee first.',
+      no_card_on_file: 'School hasn’t added a card yet.',
+    };
+    const reason = data.reason || data.error || 'failed';
+    setChargeMsg(prev => ({ ...prev, [en.id]: reasonMap[reason] || ('Charge ' + (data.status || 'failed') + (data.error ? ': ' + data.error : '')) }));
+  }
 
   const outcomeColor = o => ({ enrolled: '#22C55E', lost: '#EF4444', follow_up: '#F59E0B', pending: '#6B7280' }[o] || '#6B7280');
   const outcomeLabel = o => ({ enrolled: 'Enrolled', lost: 'Lost', follow_up: 'Follow-up', pending: 'Pending' }[o] || o);
@@ -132,6 +177,21 @@ function EnrollmentsView({ onNavigate }) {
                       style={{ padding: '3px 10px', border: `1px solid ${T.border}`, borderRadius: 6, background: 'transparent', fontSize: 12, color: T.t3, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                       Cancel
                     </button>
+                  </div>
+                )}
+                {e.outcome === 'enrolled' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+                    {(chargeMap[e.id] === 'succeeded' || chargeMap[e.id] === 'pending') ? (
+                      <span style={{ fontSize: 12, fontWeight: 600, color: '#22C55E' }}>
+                        Charged{chargeMap[e.id] === 'pending' ? ' (pending)' : ''}
+                      </span>
+                    ) : (
+                      <button onClick={() => chargeEnrollment(e)} disabled={!!charging[e.id]}
+                        style={{ padding: '3px 10px', border: `1px solid ${T.accent}55`, borderRadius: 6, background: `${T.accent}14`, fontSize: 12, color: T.accent, cursor: charging[e.id] ? 'not-allowed' : 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif", opacity: charging[e.id] ? 0.6 : 1, whiteSpace: 'nowrap' }}>
+                        {charging[e.id] ? 'Charging…' : (feeMap[e.client_id] ? 'Charge $' + (feeMap[e.client_id] / 100).toFixed(0) : 'Charge')}
+                      </button>
+                    )}
+                    {chargeMsg[e.id] && <span style={{ fontSize: 11, color: '#EF4444', maxWidth: 170, textAlign: 'right' }}>{chargeMsg[e.id]}</span>}
                   </div>
                 )}
               </td>
