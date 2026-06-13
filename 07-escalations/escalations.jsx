@@ -10,7 +10,7 @@ function EscalationsView({ onNavigate }) {
 
   useEffect(() => {
     if (!window.sb) return;
-    window.sb
+    const load = () => window.sb
       .from('ziro_messaging_escalations')
       .select('*')
       .is('resolved_at', null)
@@ -19,6 +19,13 @@ function EscalationsView({ onNavigate }) {
         if (error) { console.error(error); return; }
         setEscalations(data || []);
       });
+    load();
+    // Realtime — keep the human-review queue fresh as escalations are raised/resolved.
+    const channel = window.sb
+      .channel('rt-escalations-view')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'ziro_messaging_escalations' }, load)
+      .subscribe();
+    return () => { window.sb.removeChannel(channel); };
   }, []);
 
   const loadThread = (esc) => {

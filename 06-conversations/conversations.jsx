@@ -71,8 +71,10 @@ function ConversationsView({ onNavigate }) {
 
   async function handleTakeover() {
     if (!window.sb || !selectedPhone) return;
-    const [phone] = selectedPhone.split('|');
-    await window.sb.from('leads').update({ followup_paused: true }).eq('phone', phone);
+    const [phone, tenant_id] = selectedPhone.split('|');
+    // Scope to this thread's tenant — leads.client_id === tenant_id — so we don't
+    // pause follow-ups for a same-phone lead belonging to a different client.
+    await window.sb.from('leads').update({ followup_paused: true }).eq('phone', phone).eq('client_id', tenant_id);
     setTakeover(true);
   }
 

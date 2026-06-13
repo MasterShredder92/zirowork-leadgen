@@ -10,7 +10,11 @@ function LeadsView({ onNavigate }) {
   const [selectedLead, setSelectedLead] = useState(null);
   const [noteText, setNoteText] = useState('');
   const [noteSaving, setNoteSaving] = useState(false);
-  useEffect(() => { setItems(leadsData); }, [leadsData.length]);
+  // Re-sync when the rows OR their content (stage/notes) change — not just the count.
+  // Keying on length alone left the board stale after a realtime update that kept
+  // the same row count (e.g. a stage change), or a client-filter swap of equal size.
+  const leadsSig = leadsData.map(l => `${l.id}:${l.stage}:${l.notes || ''}`).join('|');
+  useEffect(() => { setItems(leadsData); }, [leadsSig]);
 
   const STAGES = [
     { id: 'new',       label: 'New',       color: '#818CF8' },
@@ -123,7 +127,6 @@ function LeadsView({ onNavigate }) {
               ['UTM Medium', selectedLead.utm && selectedLead.utm.utm_medium],
               ['UTM Campaign', selectedLead.utm && selectedLead.utm.utm_campaign],
               ['Priority', selectedLead.priority],
-              ['Score', selectedLead.score],
             ].filter(([, v]) => v != null && v !== '').map(([label, value]) => (
               <div key={label} style={{ display: 'flex', gap: 8 }}>
                 <span style={{ fontSize: 12, color: T.t4, width: 90, flexShrink: 0, paddingTop: 2 }}>{label}</span>
@@ -219,7 +222,7 @@ function LeadsView({ onNavigate }) {
                       onClick={() => openDetail(lead)}
                       onMouseEnter={e => e.currentTarget.style.background = T.hover || (T.isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)')}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                      <div style={{ fontSize: 14, fontWeight: 500, color: T.t1, marginBottom: 4 }}>{lead.parent_name}</div>
+                      <div style={{ fontSize: 14, fontWeight: 500, color: T.t1, marginBottom: 4 }}>{lead.parent_name || lead.student_name}</div>
                       <div style={{ fontSize: 12, color: T.t3, marginBottom: 8 }}>{lead.student_name}</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span style={{ fontSize: 11, fontWeight: 600, color: programColor(lead.program), background: programColor(lead.program) + '1A', padding: '2px 7px', borderRadius: 20 }}>

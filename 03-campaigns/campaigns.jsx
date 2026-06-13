@@ -75,6 +75,9 @@ function CampaignsView({ onNavigate }) {
                 </tr>
               );
             })}
+            {campaigns.length === 0 && (
+              <tr><td colSpan={7} style={{ padding: '40px 0', textAlign: 'center', color: T.t4, fontSize: 14 }}>No campaigns yet.</td></tr>
+            )}
           </tbody>
         </table>
       </div>

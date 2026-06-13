@@ -60,8 +60,8 @@ function SettingsView({ onNavigate }) {
       </Section>
 
       <Section title="System">
-        <Row label="Backend" value="DEV — local seed data (no backend wired)" />
-        <Row label="Version" value="ZiroWork Operator CRM — Phase 1" last />
+        <Row label="Backend" value="Supabase — live (project txpgyuetfsrzfxxopwzf)" />
+        <Row label="Version" value="ZiroWork Operator CRM — Phase 2" last />
       </Section>
 
       </div>

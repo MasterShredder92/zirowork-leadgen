@@ -43,7 +43,8 @@ function ReportingView({ onNavigate }) {
         });
         setMsgMetrics({ inboundPhones, firstOutboundByPhone });
         setMsgLoading(false);
-      });
+      })
+      .catch(() => setMsgLoading(false)); // never leave per-client metrics stuck on '…'
   }, []);
 
   // ── Month boundary (JS, no date_trunc needed) ───────────────

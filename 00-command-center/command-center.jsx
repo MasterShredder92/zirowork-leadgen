@@ -3,7 +3,6 @@ function CommandCenterView({ onNavigate }) {
   const T = window.T || {};
   const L = window.LucideReact || {};
   const clients      = useClients().data      || [];
-  const escalations  = useEscalations().data  || [];
   const bookings     = useBookings().data     || [];
   const leads        = useLeads().data        || [];
   const enrollments  = useEnrollments().data  || [];
@@ -13,7 +12,7 @@ function CommandCenterView({ onNavigate }) {
   const totalTrials      = bookings.filter(b => b.status === 'completed' || b.status === 'scheduled').length;
   const totalEnrollments = enrollments.filter(e => e.outcome === 'enrolled').length;
   const totalMRR         = (clients.reduce((s, c) => s + (c.mrr_cents || 0), 0) / 100).toFixed(0);
-  const openEscalations  = escalations.filter(e => e.status === 'open').length;
+  const openEscalations  = Object.values(rollups).reduce((s, r) => s + (r.open_escalations || 0), 0);
   const atRiskClients    = clients.filter(c => c.health === 'at_risk' || c.health === 'stuck').length;
   const pendingBookings  = bookings.filter(b => b.status === 'requested' || b.status === 'scheduled').length;
 
