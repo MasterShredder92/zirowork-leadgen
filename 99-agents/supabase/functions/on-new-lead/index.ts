@@ -6,24 +6,24 @@ const WEBHOOK_SECRET = Deno.env.get('WEBHOOK_SECRET')!;
 const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
 const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-// Returns true if current Eastern time is between 9 AM and 10 PM (inclusive of 9, exclusive of 22)
+// Returns true if current Central time is between 9 AM and 9 PM (inclusive of 9, exclusive of 21)
 function isInWindow(): boolean {
   const hour = parseInt(
     new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/New_York',
+      timeZone: 'America/Chicago',
       hour: 'numeric',
       hour12: false,
     }).format(new Date()),
     10
   );
-  return hour >= 9 && hour < 22;
+  return hour >= 9 && hour < 21;
 }
 
-// Returns ISO UTC timestamp for the next 9 AM Eastern
-function nextNineAMEasternUTC(): string {
+// Returns ISO UTC timestamp for the next 9 AM Central
+function nextNineAMCentralUTC(): string {
   const now = new Date();
   const fmt = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/New_York',
+    timeZone: 'America/Chicago',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -33,16 +33,16 @@ function nextNineAMEasternUTC(): string {
 
   const parts: Record<string, string> = {};
   fmt.formatToParts(now).forEach(({ type, value }) => { parts[type] = value; });
-  const easternHour = parseInt(parts.hour);
+  const centralHour = parseInt(parts.hour);
 
   // If past 9 AM, advance to tomorrow
-  const target = easternHour >= 9 ? new Date(now.getTime() + 86_400_000) : now;
+  const target = centralHour >= 9 ? new Date(now.getTime() + 86_400_000) : now;
   const tp: Record<string, string> = {};
   fmt.formatToParts(target).forEach(({ type, value }) => { tp[type] = value; });
 
-  // Approximate DST: EDT (UTC-4) March–November = 13:00 UTC, EST (UTC-5) = 14:00 UTC
+  // Approximate DST: CDT (UTC-5) March–November = 14:00 UTC, CST (UTC-6) = 15:00 UTC
   const month = parseInt(tp.month);
-  const utcHour = month >= 3 && month <= 11 ? 13 : 14;
+  const utcHour = month >= 3 && month <= 11 ? 14 : 15;
 
   return `${tp.year}-${tp.month}-${tp.day}T${String(utcHour).padStart(2, '0')}:00:00.000Z`;
 }
@@ -112,8 +112,8 @@ Deno.serve(async (req) => {
       return new Response(String(err), { status: 500 });
     }
   } else {
-    // Off-hours — queue for 9 AM Eastern
-    const sendAt = nextNineAMEasternUTC();
+    // Off-hours — queue for 9 AM Central
+    const sendAt = nextNineAMCentralUTC();
     await db.from('pending_leads').insert({
       tenant_id: tenantId,
       lead_id: String(lead.id ?? crypto.randomUUID()),

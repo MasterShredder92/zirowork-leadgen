@@ -26,7 +26,7 @@ supabase/                — THE LIVE BACKEND (Deno edge functions)
       conversation.ts    — loadHistory() for SMS threads
       score-and-send.ts  — scoreAndSend(lead, tenantId): Claude scores → SMS → log → CRM sync
     intake-form/         — serves the hosted lead-capture form (index.ts; optional SMS-consent checkbox recorded on the lead; /privacy + /terms routes redirect to app.zirowork.com canonical pages)
-    on-new-lead/         — webhook handler + Eastern-time gate + pending_leads queue. Tenant from URL segment OR record.client_id (single static leads-table DB webhook serves all tenants); ignores source='webhook' rows (scoreAndSend's own CRM syncs — loop guard)
+    on-new-lead/         — webhook handler + business-hours gate (9am–9pm Central) + pending_leads queue. Tenant from URL segment OR record.client_id (single static leads-table DB webhook serves all tenants); ignores source='webhook' rows (scoreAndSend's own CRM syncs — loop guard)
     process-pending/     — cron handler: fetches due pending_leads, calls scoreAndSend
     on-reply/            — inbound SMS handler: OpenPhone webhook (`message.received`), tenant matched via config.openphone_number_id → A2P keywords STOP/START/HELP w/ registered confirmation messages → opted_out gate → AI reply. NOTE: no inbound webhook signature validation yet.
     send-followup/       — drip follow-ups to 'new' leads (capped, opt-out aware)

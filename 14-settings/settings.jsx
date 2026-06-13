@@ -50,7 +50,7 @@ function SettingsView({ onNavigate }) {
       <Section title="Speed-to-Lead">
         <Row label="Target response time" value="Under 60 seconds" />
         <Row label="AI handoff rule" value="Billing, cancellations, angry parents → escalate" />
-        <Row label="Business hours" value="Mon–Fri 8am–8pm · Sat 9am–5pm" last />
+        <Row label="Contact window" value="Daily, 9am–9pm Central" last />
       </Section>
 
       <Section title="Notifications">

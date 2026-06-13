@@ -7,17 +7,17 @@ import { loadHistory } from '../_shared/conversation.ts';
 const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
 const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-// Mirror on-new-lead's gate: only contact leads 9 AM–10 PM Eastern.
+// Mirror on-new-lead's gate: only contact leads 9 AM–9 PM Central.
 function isInWindow(): boolean {
   const hour = parseInt(
     new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/New_York',
+      timeZone: 'America/Chicago',
       hour: 'numeric',
       hour12: false,
     }).format(new Date()),
     10
   );
-  return hour >= 9 && hour < 22;
+  return hour >= 9 && hour < 21;
 }
 
 Deno.serve(async (req) => {
