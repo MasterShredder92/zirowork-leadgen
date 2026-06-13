@@ -7,6 +7,7 @@ function EscalationsView({ onNavigate }) {
   const [loadingThread, setLoadingThread] = useState({}); // { [escalation.id]: bool }
   const [expandedThread, setExpandedThread] = useState({}); // { [escalation.id]: bool }
   const [acting, setActing] = useState({}); // { [escalation.id]: 'resolve'|'forward' }
+  const [forwardError, setForwardError] = useState({}); // { [escalation.id]: string }
 
   useEffect(() => {
     if (!window.sb) return;
@@ -63,34 +64,33 @@ function EscalationsView({ onNavigate }) {
       });
   };
 
-  const forwardToStudio = (esc) => {
+  const forwardToStudio = async (esc) => {
     if (!window.sb) return;
     setActing(prev => ({ ...prev, [esc.id]: 'forward' }));
+    setForwardError(prev => ({ ...prev, [esc.id]: null }));
     // Get studio_phone from clients table using tenant_id
-    window.sb
+    const { data: client, error: clientErr } = await window.sb
       .from('clients')
       .select('studio_phone, name')
       .eq('id', esc.tenant_id)
-      .single()
-      .then(({ data: client, error: clientErr }) => {
-        if (clientErr) { console.error(clientErr); setActing(prev => ({ ...prev, [esc.id]: null })); return; }
-        const body = `ESCALATION: ${esc.contact_name} needs attention. ${esc.trigger_reason}. Original message: ${esc.original_message}`;
-        window.sb
-          .from('ziro_message_log')
-          .insert({
-            tenant_id: esc.tenant_id,
-            direction: 'outbound',
-            recipient_phone: client.studio_phone,
-            message_body: body,
-            from_agent: 'OPERATOR_FORWARD',
-            status: 'pending_send',
-          })
-          .then(({ error: insertErr }) => {
-            setActing(prev => ({ ...prev, [esc.id]: null }));
-            if (insertErr) { console.error(insertErr); return; }
-            resolveEscalation(esc.id);
-          });
-      });
+      .single();
+    if (clientErr || !client || !client.studio_phone) {
+      setActing(prev => ({ ...prev, [esc.id]: null }));
+      setForwardError(prev => ({ ...prev, [esc.id]: 'No studio phone on file for this client.' }));
+      return;
+    }
+    const body = `ESCALATION: ${esc.contact_name} needs attention. ${esc.trigger_reason}. Original message: ${esc.original_message}`;
+    // Route through the edge function so the SMS ACTUALLY reaches the studio (send first,
+    // then log) — and only resolve the escalation once the forward truly went out.
+    const { data, error } = await window.sb.functions.invoke('send-operator-reply', {
+      body: { tenant_id: esc.tenant_id, phone: client.studio_phone, name: client.name, body, from_agent: 'OPERATOR_FORWARD' },
+    });
+    setActing(prev => ({ ...prev, [esc.id]: null }));
+    if (error || !data || !data.ok) {
+      setForwardError(prev => ({ ...prev, [esc.id]: 'Forward failed to send. Please try again.' }));
+      return;
+    }
+    resolveEscalation(esc.id);
   };
 
   return (
@@ -174,7 +174,8 @@ function EscalationsView({ onNavigate }) {
                   )}
                 </div>
 
-                <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6, flexShrink: 0 }}>
+                  <div style={{ display: 'flex', gap: 8 }}>
                   <button
                     onClick={() => forwardToStudio(esc)}
                     disabled={!!acting[esc.id]}
@@ -189,6 +190,10 @@ function EscalationsView({ onNavigate }) {
                   >
                     {acting[esc.id] === 'resolve' ? 'Resolving…' : 'Resolve'}
                   </button>
+                  </div>
+                  {forwardError[esc.id] && (
+                    <div style={{ fontSize: 11, color: '#EF4444', maxWidth: 220, textAlign: 'right' }}>{forwardError[esc.id]}</div>
+                  )}
                 </div>
               </div>
             </div>

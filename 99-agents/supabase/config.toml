@@ -34,3 +34,6 @@ verify_jwt = false
 
 [functions.billing]
 verify_jwt = false
+
+[functions.send-operator-reply]
+verify_jwt = false

@@ -10,6 +10,7 @@ function ConversationsView({ onNavigate }) {
   const [takeover, setTakeover] = useState(false);
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState('');
   const [loading, setLoading] = useState(true);
   const bottomRef = useRef(null);
 
@@ -66,6 +67,7 @@ function ConversationsView({ onNavigate }) {
     setSelectedPhone(t.key);
     setTakeover(false);
     setDraft('');
+    setSendError('');
     setThreads(prev => prev.map(r => r.key === t.key ? { ...r, unread: false } : r));
   }
 
@@ -82,23 +84,30 @@ function ConversationsView({ onNavigate }) {
     if (!draft.trim() || !selectedPhone || !window.sb) return;
     const [phone, tenant_id] = selectedPhone.split('|');
     const thread = threads.find(t => t.key === selectedPhone);
+    const text = draft.trim();
     setSending(true);
-    const { data, error } = await window.sb.from('ziro_message_log').insert({
-      tenant_id,
-      channel: 'sms',
-      direction: 'outbound',
-      recipient_phone: phone,
-      recipient_name: thread ? thread.name : null,
-      message_body: draft.trim(),
-      sent_at: new Date().toISOString(),
-      from_agent: 'OPERATOR',
-      status: 'sent',
-    }).select().single();
+    setSendError('');
+    // Route through the edge function so the SMS ACTUALLY sends via OpenPhone (the browser
+    // can't hold the OpenPhone secret). The function gates opt-outs, sends, then logs.
+    const { data, error } = await window.sb.functions.invoke('send-operator-reply', {
+      body: { tenant_id, phone, name: thread ? thread.name : null, body: text, from_agent: 'OPERATOR' },
+    });
     setSending(false);
-    if (!error && data) {
-      setMessages(prev => [...prev, data]);
-      setDraft('');
+    if (error || !data || !data.ok) {
+      const reason = (data && data.error) || (error && error.message) || 'send_failed';
+      setSendError(
+        reason === 'opted_out'
+          ? 'This lead opted out of texts (replied STOP). You can’t message them.'
+          : 'Message failed to send. Please try again.'
+      );
+      return;
     }
+    const row = data.row || {
+      id: 'op-' + Date.now(), direction: 'outbound', message_body: text,
+      sent_at: new Date().toISOString(), from_agent: 'OPERATOR',
+    };
+    setMessages(prev => [...prev, row]);
+    setDraft('');
   }
 
   function fmtTime(iso) {
@@ -204,7 +213,11 @@ function ConversationsView({ onNavigate }) {
 
               {/* Compose box — only visible after takeover */}
               {takeover && (
-                <div style={{ padding: '12px 20px', borderTop: `1px solid ${T.border}`, display: 'flex', gap: 8, flexShrink: 0 }}>
+                <div style={{ padding: '12px 20px', borderTop: `1px solid ${T.border}`, flexShrink: 0 }}>
+                  {sendError && (
+                    <div style={{ fontSize: 12, color: '#EF4444', marginBottom: 8 }}>{sendError}</div>
+                  )}
+                  <div style={{ display: 'flex', gap: 8 }}>
                   <textarea
                     value={draft}
                     onChange={e => setDraft(e.target.value)}
@@ -225,6 +238,7 @@ function ConversationsView({ onNavigate }) {
                     }}>
                     {sending ? '…' : 'Send'}
                   </button>
+                  </div>
                 </div>
               )}
             </>
