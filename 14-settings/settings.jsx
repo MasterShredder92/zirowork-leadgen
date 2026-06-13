@@ -38,9 +38,9 @@ function SettingsView({ onNavigate }) {
       <div style={{ maxWidth: 640 }}>
 
       <Section title="Operator Account">
-        <Row label="Operator name" value={operator.name || 'ZiroWork'} action="Edit" />
+        <Row label="Operator name" value={operator.name || 'ZiroWork'} />
         <Row label="Operator user" value={user.full_name || 'Zach Adkins'} />
-        <Row label="Email" value={user.email || 'slavior1992@gmail.com'} action="Edit" />
+        <Row label="Email" value={user.email || 'slavior1992@gmail.com'} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 0' }}>
           <div style={{ fontSize: 14, fontWeight: 500, color: T.t1 }}>Role</div>
           <span style={{ fontSize: 12, fontWeight: 600, color: T.accent, background: T.accent + '18', padding: '3px 10px', borderRadius: 20 }}>Operator</span>
@@ -48,15 +48,15 @@ function SettingsView({ onNavigate }) {
       </Section>
 
       <Section title="Speed-to-Lead">
-        <Row label="Target response time" value="Under 60 seconds" action="Configure" />
-        <Row label="AI handoff rule" value="Billing, cancellations, angry parents → escalate" action="Edit" />
-        <Row label="Business hours" value="Mon–Fri 8am–8pm · Sat 9am–5pm" action="Edit" last />
+        <Row label="Target response time" value="Under 60 seconds" />
+        <Row label="AI handoff rule" value="Billing, cancellations, angry parents → escalate" />
+        <Row label="Business hours" value="Mon–Fri 8am–8pm · Sat 9am–5pm" last />
       </Section>
 
       <Section title="Notifications">
-        <Row label="Escalation alerts" value="Immediate — SMS + email" action="Configure" />
-        <Row label="Daily digest" value="Every day at 7:00 AM" action="Configure" />
-        <Row label="New lead alerts" value="Enabled" action="Configure" last />
+        <Row label="Escalation alerts" value="Immediate — SMS + email" />
+        <Row label="Daily digest" value="Every day at 7:00 AM" />
+        <Row label="New lead alerts" value="Enabled" last />
       </Section>
 
       <Section title="System">

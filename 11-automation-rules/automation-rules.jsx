@@ -26,9 +26,6 @@ function AutomationRulesView({ onNavigate }) {
           <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Automation Rules</h1>
           <div style={{ fontSize: 13, color: T.t3 }}>What should AI say, do, pause, or escalate?</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 14px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {L.Plus && <L.Plus size={14} strokeWidth={1.75} />} Add Rule
-        </button>
       </div>
 
       {/* Scrollable content — flat rows, hairline separated */}

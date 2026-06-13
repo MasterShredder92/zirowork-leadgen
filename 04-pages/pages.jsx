@@ -38,9 +38,6 @@ function PagesView({ onNavigate }) {
           <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Pages</h1>
           <div style={{ fontSize: 13, color: T.t3 }}>Which landing pages and signup pages are draft, ready, live, or broken?</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {L.Plus && <L.Plus size={14} strokeWidth={1.75} />} New Page
-        </button>
       </div>
 
       {/* Scrollable content */}

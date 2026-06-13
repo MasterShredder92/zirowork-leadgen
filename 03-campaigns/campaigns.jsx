@@ -8,8 +8,8 @@ function CampaignsView({ onNavigate }) {
   const rollups = window.useRollups ? window.useRollups().byCampaign : {};
 
   const programColor = p => ({ Piano: '#818CF8', Guitar: '#F59E0B', Voice: '#EC4899', Drums: '#F97316' }[p] || '#6B7280');
-  const pageColor    = s => ({ live: '#22C55E', draft: '#F59E0B', broken: '#EF4444' }[s] || '#6B7280');
-  const pageLabel    = s => ({ live: 'Live', draft: 'Draft', broken: 'Broken' }[s] || s);
+  const statusColor  = s => ({ active: '#22C55E', paused: '#F59E0B', draft: '#6B7280', ended: '#6B7280' }[s] || '#6B7280');
+  const statusLabel  = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
 
   const cell = { padding: '11px 16px', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
   const firstCell = { ...cell, paddingLeft: 0 };
@@ -24,9 +24,6 @@ function CampaignsView({ onNavigate }) {
           <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Campaigns</h1>
           <div style={{ fontSize: 13, color: T.t3 }}>Which piano/guitar/voice/drum funnels are running and producing?</div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: T.accent, color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {L.Plus && <L.Plus size={14} strokeWidth={1.75} />} New Campaign
-        </button>
       </div>
 
       {/* Scrollable content */}
@@ -37,7 +34,7 @@ function CampaignsView({ onNavigate }) {
               {[
                 { label: 'Client', align: 'left' },
                 { label: 'Program', align: 'left' },
-                { label: 'Page Status', align: 'left' },
+                { label: 'Status', align: 'left' },
                 { label: 'Leads', align: 'right' },
                 { label: 'Trials', align: 'right' },
                 { label: 'Enrolled', align: 'right' },
@@ -64,8 +61,8 @@ function CampaignsView({ onNavigate }) {
                     </span>
                   </td>
                   <td style={cell}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: pageColor(c.landing_page), background: pageColor(c.landing_page) + '1A', padding: '2px 8px', borderRadius: 20 }}>
-                      {pageLabel(c.landing_page)}
+                    <span style={{ fontSize: 12, fontWeight: 600, color: statusColor(c.status), background: statusColor(c.status) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                      {statusLabel(c.status)}
                     </span>
                   </td>
                   <td style={numCell}>{r.leads}</td>

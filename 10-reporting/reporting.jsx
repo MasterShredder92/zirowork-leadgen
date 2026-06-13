@@ -137,11 +137,6 @@ function ReportingView({ onNavigate }) {
                   <div style={{ fontSize: 16, fontWeight: 700, color: T.t1 }}>{client.name}</div>
                   <div style={{ fontSize: 12, color: T.t4 }}>{client.city}</div>
                 </div>
-                {L.ExternalLink && (
-                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: T.t4, padding: 4 }}>
-                    <L.ExternalLink size={14} strokeWidth={1.75} />
-                  </button>
-                )}
               </div>
 
               {/* Inline stat band — no per-stat box */}
