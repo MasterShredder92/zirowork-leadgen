@@ -10,7 +10,7 @@
 // Responses are ALWAYS HTTP 200 with { ok, error?, row? } so the browser's
 // functions.invoke() gets a structured result it can show (opt-out, send failure, success).
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { sendSMS } from '../_shared/openphone.ts';
+import { sendSMS } from '../_shared/twilio.ts';
 
 const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
 const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;

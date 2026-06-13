@@ -1,5 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { sendSMS } from '../_shared/openphone.ts';
+import { sendSMS } from '../_shared/twilio.ts';
 import { callClaude } from '../_shared/claude.ts';
 import { MESSAGING_SYSTEM_PROMPT } from '../_shared/prompts.ts';
 import { loadHistory } from '../_shared/conversation.ts';
@@ -7,6 +7,7 @@ import { resolveSettings } from '../_shared/settings.ts';
 
 const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
 const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const TWILIO_PHONE_NUMBER = Deno.env.get('TWILIO_PHONE_NUMBER')!;
 
 // deno-lint-ignore no-explicit-any
 async function logOutbound(db: any, tenantId: string, phone: string, body: string): Promise<void> {
@@ -24,24 +25,36 @@ async function logOutbound(db: any, tenantId: string, phone: string, body: strin
 
 Deno.serve(async (req) => {
   try {
-    const payload = await req.json();
+    // Twilio sends form-encoded data, not JSON
+    const text = await req.text();
+    const params = new URLSearchParams(text);
+    const fromPhone: string = params.get('From') || '';
+    const toPhone: string = params.get('To') || '';
+    const body: string = params.get('Body') || '';
 
-    if (payload.type !== 'message.received') {
+    if (!fromPhone || !toPhone || !body) {
       return new Response('OK', { status: 200 });
     }
 
-    const msg = payload.data.object;
-    const fromPhone: string = msg.from;
-    const phoneNumberId: string = msg.phoneNumberId;
-    const body: string = msg.body;
-
     const db = createClient(PLATFORM_URL, PLATFORM_SERVICE_KEY);
 
-    const { data: tenant } = await db
+    // Verify the message was sent to our Twilio number
+    if (toPhone !== TWILIO_PHONE_NUMBER) {
+      return new Response('OK', { status: 200 });
+    }
+
+    // For now, get the first (only) tenant. In multi-tenant Twilio setups,
+    // store twilio_phone_number in each tenant's config and filter by it.
+    const { data: tenants } = await db
       .from('agent_tenants')
       .select('tenant_id, name, config')
-      .filter("config->>'openphone_number_id'", 'eq', phoneNumberId)
-      .maybeSingle();
+      .limit(1);
+
+    if (!tenants || tenants.length === 0) {
+      return new Response('OK', { status: 200 });
+    }
+
+    const tenant = tenants[0];
 
     if (!tenant) {
       return new Response('OK', { status: 200 });
