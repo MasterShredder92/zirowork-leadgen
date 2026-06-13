@@ -14,8 +14,8 @@ function ClientOnboardingView({ onNavigate }) {
     { key: 'lead_form_webhook', label: 'Lead form webhook configured', derived: true },
     { key: 'protected_slots',   label: 'Protected slots confirmed' },
     { key: 'brand_assets',      label: 'Brand assets uploaded' },
-    { key: 'automation_rules',  label: 'Automation rules configured' },
-    { key: 'integrations',      label: 'Integrations verified' },
+    { key: 'automation_rules',  label: 'Automation rules reviewed' },
+    { key: 'integrations',      label: 'Integrations reviewed' },
   ];
 
   const [wizardOpen, setWizardOpen] = useState(false);

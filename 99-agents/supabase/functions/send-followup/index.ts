@@ -3,38 +3,36 @@ import { sendSMS, SMS_ENABLED } from '../_shared/openphone.ts';
 import { callClaude } from '../_shared/claude.ts';
 import { MESSAGING_SYSTEM_PROMPT } from '../_shared/prompts.ts';
 import { loadHistory } from '../_shared/conversation.ts';
+import { resolveSettings, isInWindow, SETTINGS_DEFAULTS } from '../_shared/settings.ts';
 
 const PLATFORM_URL = Deno.env.get('SUPABASE_URL')!;
 const PLATFORM_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-
-// Mirror on-new-lead's gate: only contact leads 9 AM–9 PM Central.
-function isInWindow(): boolean {
-  const hour = parseInt(
-    new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/Chicago',
-      hour: 'numeric',
-      hour12: false,
-    }).format(new Date()),
-    10
-  );
-  return hour >= 9 && hour < 21;
-}
 
 Deno.serve(async (req) => {
   if (req.headers.get('authorization') !== `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  // Business-hours gate — never drip-text leads overnight (the cron runs hourly).
-  if (!isInWindow()) {
-    return new Response(JSON.stringify({ processed: 0, failed: 0, skipped: 'off-hours' }), {
+  // The send window + cadence are now per-tenant (resolved inside the loop). The cron runs
+  // hourly; leads whose tenant is currently off-hours are skipped individually.
+  const db = createClient(PLATFORM_URL, PLATFORM_SERVICE_KEY);
+
+  // Kill-switch: operator can pause the whole follow-up drip via the "No Reply — 24h Follow-up"
+  // automation rule. Paused → no drips go out this run.
+  const { data: dripRule } = await db
+    .from('automation_rules')
+    .select('status')
+    .eq('key', 'followup_drip')
+    .maybeSingle();
+  if (dripRule && dripRule.status !== 'active') {
+    return new Response(JSON.stringify({ processed: 0, failed: 0, skipped: 'followup_drip_paused' }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const db = createClient(PLATFORM_URL, PLATFORM_SERVICE_KEY);
-
+  // Outer query uses default caps as a floor; precise per-tenant limits are applied per lead.
+  const maxOffsetDays = Math.max(...SETTINGS_DEFAULTS.followupDayOffsets, 2);
   const { data: leads, error } = await db
     .from('leads')
     .select('*, agent_tenants!inner(config, name)')
@@ -42,12 +40,12 @@ Deno.serve(async (req) => {
     .eq('followup_paused', false)
     .eq('opted_out', false)
     .eq('sms_consent', true)
-    .lt('followup_count', 3)
+    .lt('followup_count', SETTINGS_DEFAULTS.maxFollowups)
     // Only follow up leads we have ACTUALLY contacted. A null last_contact_at
     // means the initial outreach hasn't gone out yet (e.g. queued overnight in
     // pending_leads) — following up then would land before the first message.
     .not('last_contact_at', 'is', null)
-    .lt('last_contact_at', new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString())
+    .lt('last_contact_at', new Date(Date.now() - SETTINGS_DEFAULTS.followupDayOffsets[0] * 24 * 60 * 60 * 1000).toISOString())
     .limit(50);
 
   if (error) {
@@ -73,14 +71,21 @@ Deno.serve(async (req) => {
         throw new Error(`Lead ${lead.id} has no phone number`);
       }
 
+      // Per-tenant gates the outer query can't express.
+      const settings = resolveSettings(config);
+      if (!isInWindow(settings)) continue;                          // off-hours for this tenant
+      if (lead.followup_count >= settings.maxFollowups) continue;   // tenant cap
+      const dueOffset = settings.followupDayOffsets[lead.followup_count];
+      if (dueOffset == null) continue;                              // no more scheduled follow-ups
+      if (Date.now() - new Date(lead.last_contact_at).getTime() < dueOffset * 86_400_000) continue; // not due yet
+
       const history = await loadHistory(db, lead.client_id, phone);
 
-      const dayLabel =
-        lead.followup_count === 0
-          ? 'Day 2 follow-up — gentle check-in'
-          : lead.followup_count === 1
-          ? 'Day 4 follow-up — add value, mention a specific benefit'
-          : 'Day 7 follow-up — final attempt, no pressure, leave door open';
+      const guidance =
+        lead.followup_count === 0 ? 'gentle check-in'
+        : lead.followup_count === 1 ? 'add value, mention a specific benefit'
+        : 'final attempt, no pressure, leave door open';
+      const dayLabel = `Day ${dueOffset} follow-up — ${guidance}`;
 
       const userMessage = `You are following up with a lead who hasn't responded.
 

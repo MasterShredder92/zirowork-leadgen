@@ -8,7 +8,18 @@ function PagesView({ onNavigate }) {
   const [filter, setFilter] = React.useState('all');
   const [clientFilter, setClientFilter] = React.useState('all');
   const [collapsed, setCollapsed] = React.useState({});
+  const [statusOverride, setStatusOverride] = React.useState({}); // optimistic id → status
   const statuses = ['all', 'live', 'draft', 'broken'];
+
+  // Toggle a page between live (published) and draft (unpublished). schools/app.jsx only
+  // renders status='live', so draft = unpublished. Optimistic local update, then write.
+  const togglePublish = async (page) => {
+    const newStatus = page.status === 'live' ? 'draft' : 'live';
+    setStatusOverride(o => ({ ...o, [page.id]: newStatus }));
+    if (window.sb) {
+      await window.sb.from('client_pages').update({ status: newStatus }).eq('id', page.id);
+    }
+  };
 
   const statusColor = s => ({ live: '#22C55E', draft: '#F59E0B', broken: '#EF4444' }[s] || '#6B7280');
   const statusLabel = s => ({ live: 'Live', draft: 'Draft', broken: 'Broken' }[s] || s);
@@ -16,10 +27,12 @@ function PagesView({ onNavigate }) {
 
   const clientNames = [...new Set((pages || []).map(p => p.client_name))].sort((a, b) => a.localeCompare(b));
 
-  const filtered = (pages || []).filter(p =>
-    (filter === 'all' || p.status === filter) &&
-    (clientFilter === 'all' || p.client_name === clientFilter)
-  );
+  const filtered = (pages || [])
+    .map(p => statusOverride[p.id] ? { ...p, status: statusOverride[p.id] } : p)
+    .filter(p =>
+      (filter === 'all' || p.status === filter) &&
+      (clientFilter === 'all' || p.client_name === clientFilter)
+    );
 
   // Group filtered pages under their client — collapsible sections so the list stays organized.
   const groups = filtered.reduce((m, p) => { (m[p.client_name] = m[p.client_name] || []).push(p); return m; }, {});
@@ -74,6 +87,7 @@ function PagesView({ onNavigate }) {
                   { label: 'Status', align: 'left' },
                   { label: 'Slug', align: 'left' },
                   { label: 'Updated', align: 'left' },
+                  { label: '', align: 'right' },
                 ].map((h, i, arr) => (
                   <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
                 ))}
@@ -88,7 +102,7 @@ function PagesView({ onNavigate }) {
                   <React.Fragment key={name}>
                     {/* Client group header */}
                     <tr onClick={() => toggleClient(name)} style={{ cursor: 'pointer' }}>
-                      <td colSpan={5} style={{ padding: '16px 0 8px', borderBottom: `1px solid ${T.border}` }}>
+                      <td colSpan={6} style={{ padding: '16px 0 8px', borderBottom: `1px solid ${T.border}` }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           {Chevron && <Chevron size={15} color={T.t4} strokeWidth={2} />}
                           <span style={{ fontSize: 14, fontWeight: 700, color: T.t1 }}>{name}</span>
@@ -109,7 +123,15 @@ function PagesView({ onNavigate }) {
                           <span style={{ fontSize: 12, fontWeight: 600, color: statusColor(pg.status), background: statusColor(pg.status) + '1A', padding: '2px 8px', borderRadius: 20 }}>{statusLabel(pg.status)}</span>
                         </td>
                         <td style={cell}><code style={{ fontSize: 12, color: T.t3 }}>{pg.slug}</code></td>
-                        <td style={lastCell}>{pg.last_updated}</td>
+                        <td style={cell}>{pg.last_updated}</td>
+                        <td style={{ ...lastCell, textAlign: 'right' }}>
+                          {(pg.status === 'live' || pg.status === 'draft') && (
+                            <button onClick={() => togglePublish(pg)}
+                              style={{ padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 500, cursor: 'pointer', border: `1px solid ${T.border}`, background: 'transparent', color: T.t3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                              {pg.status === 'live' ? 'Unpublish' : 'Publish'}
+                            </button>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </React.Fragment>

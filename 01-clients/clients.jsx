@@ -66,7 +66,7 @@ function ClientDetail({ clientId }) {
       }
       const [cr, tr] = await Promise.all([
         window.sb.from('clients').select('*').eq('id', clientId).single(),
-        window.sb.from('agent_tenants').select('*').eq('tenant_id', clientId).single(),
+        window.sb.from('agent_tenants').select('id, tenant_id, name, plan_tier, status, config, square_customer_id, square_card_id, per_enrollment_fee_cents, intake_api_key, integrations_enabled').eq('tenant_id', clientId).single(),
       ]);
       const client = cr.data || {};
       const tenant = tr.data || { config: {} };

@@ -183,7 +183,20 @@
 
     // Design preview bypass: /dashboard/?preview renders the portal with sample data, no login.
     if (new URLSearchParams(window.location.search).has('preview')) {
-      return <Portal user={{ id: 'preview' }} tenantId="preview" />;
+      return (
+        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{
+            flexShrink: 0, padding: '5px 14px', textAlign: 'center',
+            background: 'var(--accent)', color: '#fff',
+            fontSize: 12, fontWeight: 600, letterSpacing: '0.02em',
+          }}>
+            Preview — sample data, not a real account.
+          </div>
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <Portal user={{ id: 'preview' }} tenantId="preview" />
+          </div>
+        </div>
+      );
     }
 
     if (checking) return (

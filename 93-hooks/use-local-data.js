@@ -10,6 +10,7 @@ window.SEED_DATA = {
   client_reports: [],
   automation_rules: [],
   integrations: [],
+  agent_tenants: [],
 };
 
 // ─── Supabase async hooks ────────────────────────────────────────────────────
@@ -69,6 +70,109 @@ function useOperatorTasks(f)   { return _useTable('operator_tasks',   'operator_
 function useClientReports(f)   { return _useTable('client_reports',   'client_reports',   f); }
 function useAutomationRules(f) { return _useTable('automation_rules', 'automation_rules', f); }
 function useIntegrations(f)    { return _useTable('integrations',     'integrations',     f); }
+
+// agent_tenants — like _useTable but with an EXPLICIT safe column select that
+// NEVER pulls supabase_service_key / supabase_url (secrets must not reach the
+// browser). _useTable hardcodes select('*'), so this is its own small hook.
+const TENANT_SAFE_COLS = 'id, tenant_id, name, plan_tier, status, config, square_customer_id, square_card_id, per_enrollment_fee_cents, intake_api_key, integrations_enabled';
+
+function useAgentTenants() {
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+  const [tick, setTick] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!window.sb) {
+      setData(window.SEED_DATA.agent_tenants || []);
+      setLoading(false);
+      return;
+    }
+    window.sb.from('agent_tenants').select(TENANT_SAFE_COLS).then(({ data: rows, error: err }) => {
+      setData(rows || []);
+      setError(err);
+      setLoading(false);
+    });
+  }, [tick]);
+
+  React.useEffect(() => {
+    if (!window.sb) return;
+    const channel = window.sb
+      .channel('rt-agent_tenants')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'agent_tenants' }, () => {
+        setTick(t => t + 1);
+      })
+      .subscribe();
+    return () => { window.sb.removeChannel(channel); };
+  }, []);
+
+  return { data, loading, error, refetch: () => setTick(t => t + 1) };
+}
+
+// deriveIntegrations — HONEST per-client integration status, derived from real
+// client + agent_tenant data. No stored "connected" flag; each row reflects what
+// is actually configured. Match tenant by tenant.tenant_id === client.id.
+function deriveIntegrations(clients, tenants) {
+  const tenantByClient = {};
+  (tenants || []).forEach(t => { if (t.tenant_id) tenantByClient[t.tenant_id] = t; });
+  const rows = [];
+
+  (clients || []).forEach(c => {
+    const t = tenantByClient[c.id] || {};
+    const name = c.name || c.school_name || '—';
+
+    // OpenPhone / SMS
+    const phoneId = t.config && t.config.openphone_number_id;
+    const phoneOk = typeof phoneId === 'string' && phoneId.length > 0;
+    rows.push({
+      client_id: c.id, client_name: name, service: 'openphone', label: 'OpenPhone / SMS',
+      status: phoneOk ? 'connected' : 'missing',
+      detail: phoneOk ? 'Number set' : 'No OpenPhone number set',
+    });
+
+    // Square / Billing
+    const hasCustomer = !!t.square_customer_id;
+    const hasCard = !!t.square_card_id;
+    const fee = t.per_enrollment_fee_cents;
+    const hasFee = typeof fee === 'number' && fee > 0;
+    let sqStatus, sqDetail;
+    if (hasCustomer && hasCard && hasFee) {
+      sqStatus = 'connected';
+      sqDetail = `Card on file · $${(fee / 100).toFixed(2)}/enrollment`;
+    } else if (hasCustomer) {
+      sqStatus = 'incomplete';
+      sqDetail = !hasCard ? 'Customer created, no card on file' : 'No enrollment fee set';
+    } else {
+      sqStatus = 'missing';
+      sqDetail = 'No Square customer';
+    }
+    rows.push({
+      client_id: c.id, client_name: name, service: 'square', label: 'Square / Billing',
+      status: sqStatus, detail: sqDetail,
+    });
+
+    // Lead Webhook
+    const hasWebhook = typeof c.lead_form_webhook === 'string' && c.lead_form_webhook.length > 0;
+    const hasKey = typeof t.intake_api_key === 'string' && t.intake_api_key.length > 0;
+    let lwStatus, lwDetail;
+    if (hasWebhook && hasKey) {
+      lwStatus = 'connected';
+      lwDetail = 'Webhook + API key set';
+    } else if (hasWebhook) {
+      lwStatus = 'incomplete';
+      lwDetail = 'Webhook set, no intake API key';
+    } else {
+      lwStatus = 'missing';
+      lwDetail = 'No lead webhook set';
+    }
+    rows.push({
+      client_id: c.id, client_name: name, service: 'lead_webhook', label: 'Lead Webhook',
+      status: lwStatus, detail: lwDetail,
+    });
+  });
+
+  return rows;
+}
 
 // ─── SINGLE SOURCE OF TRUTH: derived rollups ────────────────────────────────
 // The `clients` and `campaigns` tables carry stored count columns (leads_30d,
@@ -242,6 +346,7 @@ Object.assign(window, {
   useConversations, useEscalations, useBookings, useEnrollments,
   useOperatorTasks, useClientReports,
   useAutomationRules, useIntegrations,
+  useAgentTenants, deriveIntegrations,
   useRollups, deriveRollups, EMPTY_CLIENT_ROLLUP, EMPTY_CAMPAIGN_ROLLUP,
   usePageFunnel, derivePageFunnel,
 });

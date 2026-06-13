@@ -33,6 +33,7 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
   const [submitted, setSubmitted] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const [operatorCreds, setOperatorCreds] = useState(null);
   const [form, setForm] = useState(BLANK);
   const [scraping, setScraping] = useState(false);
   const [scrapeMsg, setScrapeMsg] = useState('');
@@ -541,6 +542,26 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
           return;
         }
       }
+
+      // Operator path: create a portal login too (no password field on this path), but
+      // do NOT sign in — the operator stays logged in as themselves. Surface the temp
+      // credentials so the operator can hand them to the school. Skip if no email.
+      if (!standalone && form.email) {
+        const tempPassword = 'Zw-' + Math.random().toString(36).slice(2, 10);
+        try {
+          const resp = await fetch('https://txpgyuetfsrzfxxopwzf.supabase.co/functions/v1/complete-onboarding', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: form.email, password: tempPassword, tenant_id: clientId, full_name: form.studio_name }),
+          });
+          const out = await resp.json().catch(() => ({}));
+          if (resp.ok && !out.error) {
+            setOperatorCreds({ email: form.email, password: tempPassword });
+          }
+        } catch {
+          // Non-fatal: the client profile was still created. Login can be set up later.
+        }
+      }
     }
     onSuccess && onSuccess(form);
     setSubmitted(true);
@@ -600,6 +621,14 @@ function OnboardForm({ standalone, onSuccess, onCancel }) {
         </div>
         {blockers.length > 0 && !standalone && (
           <div style={{ fontSize: 13, color: '#F59E0B', marginBottom: 16 }}>{blockers.length} item{blockers.length > 1 ? 's' : ''} still needed before launch.</div>
+        )}
+        {!standalone && operatorCreds && (
+          <div style={{ textAlign: 'left', padding: '14px 16px', background: T.accent + '12', border: `1px solid ${T.accent}40`, borderRadius: 8, marginBottom: 16 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: T.accent, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>Portal login created</div>
+            <div style={{ fontSize: 13, color: T.t2, marginBottom: 3 }}>Email: <code style={{ color: T.t1 }}>{operatorCreds.email}</code></div>
+            <div style={{ fontSize: 13, color: T.t2, marginBottom: 8 }}>Temp password: <code style={{ color: T.t1 }}>{operatorCreds.password}</code></div>
+            <div style={{ fontSize: 12, color: T.t4, lineHeight: 1.5 }}>Share with the school; they should change it after logging into /dashboard.</div>
+          </div>
         )}
         <button
           onClick={standalone ? () => { window.location.href = '/dashboard'; } : () => onCancel && onCancel()}

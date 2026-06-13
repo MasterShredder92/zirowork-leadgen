@@ -1,25 +1,63 @@
-﻿// 13-integrations — Which forms, phone numbers, SMS, payment links, calendars, and email routes are connected or broken?
+// 13-integrations — HONEST, derived integration status. No fake toggle: each row
+// reflects what is actually configured (OpenPhone number, Square billing, lead webhook),
+// derived from real clients + agent_tenants data. Platform services are read-only.
 function IntegrationsView({ onNavigate }) {
   const T = window.T || {};
-  const L = window.LucideReact || {};
 
-  const { data: rawData } = window.useIntegrations ? window.useIntegrations() : { data: [] };
-  const [integrations, setIntegrations] = React.useState([]);
-  React.useEffect(() => { if (rawData) setIntegrations(rawData); }, [rawData]);
+  const clients = window.useClients ? window.useClients().data : [];
+  const tenants = window.useAgentTenants ? window.useAgentTenants().data : [];
+  const rows = React.useMemo(
+    () => (window.deriveIntegrations ? window.deriveIntegrations(clients, tenants) : []),
+    [clients, tenants]
+  );
 
-  const statusColor = s => ({ connected: '#22C55E', broken: '#EF4444', not_connected: '#F59E0B' }[s] || '#6B7280');
-  const statusLabel = s => ({ connected: 'Connected', broken: 'Broken', not_connected: 'Not Connected' }[s] || s);
+  const [copiedId, setCopiedId] = React.useState(null);
 
-  const broken = integrations.filter(i => i.status === 'broken').length;
-  const missing = integrations.filter(i => i.status === 'not_connected').length;
+  const statusColor = s => ({ connected: '#22C55E', incomplete: '#F97316', missing: '#F59E0B' }[s] || '#6B7280');
+  const statusLabel = s => ({ connected: 'Connected', incomplete: 'Incomplete', missing: 'Missing' }[s] || s);
+
+  const incomplete = rows.filter(r => r.status === 'incomplete').length;
+  const missing = rows.filter(r => r.status === 'missing').length;
+
+  // group derived rows by client, preserving client order
+  const byClient = [];
+  const idx = {};
+  rows.forEach(r => {
+    if (idx[r.client_id] == null) { idx[r.client_id] = byClient.length; byClient.push({ client_id: r.client_id, client_name: r.client_name, items: [] }); }
+    byClient[idx[r.client_id]].items.push(r);
+  });
+
+  function copyWebhook(r) {
+    const url = `https://txpgyuetfsrzfxxopwzf.supabase.co/functions/v1/on-new-lead/${r.client_id}`;
+    navigator.clipboard.writeText(url);
+    setCopiedId(r.client_id + ':' + r.service);
+    setTimeout(() => setCopiedId(c => (c === r.client_id + ':' + r.service ? null : c)), 2000);
+  }
+
+  const btnStyle = { padding: '4px 10px', border: `1px solid ${T.border}`, borderRadius: 6, background: 'none', fontSize: 12, color: T.t3, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" };
+
+  function actionFor(r) {
+    if (r.status === 'connected') return null;
+    if (r.service === 'openphone') {
+      return <button onClick={() => onNavigate && onNavigate('clients')} style={btnStyle}>Set number</button>;
+    }
+    if (r.service === 'square') {
+      return <button onClick={() => window.open('https://squareup.com/dashboard', '_blank')} style={btnStyle}>Set up billing</button>;
+    }
+    if (r.service === 'lead_webhook') {
+      const copied = copiedId === r.client_id + ':' + r.service;
+      return <button onClick={() => copyWebhook(r)} style={btnStyle}>{copied ? 'Copied' : 'Copy webhook URL'}</button>;
+    }
+    return null;
+  }
 
   const cell = { padding: '12px 0', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}` };
 
-  async function markConnected(id) {
-    if (!window.sb) return;
-    const { error } = await window.sb.from('integrations').update({ status: 'connected' }).eq('id', id);
-    if (!error) setIntegrations(prev => prev.map(i => i.id === id ? { ...i, status: 'connected' } : i));
-  }
+  const platformServices = [
+    { name: 'Claude / Anthropic', detail: 'Active (platform-managed)' },
+    { name: 'OpenPhone API', detail: 'Platform-managed' },
+    { name: 'Square', detail: 'Platform-managed' },
+  ];
 
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: T.bg }}>
@@ -30,17 +68,17 @@ function IntegrationsView({ onNavigate }) {
       </div>
 
       {/* Summary band — inline stats, no boxes */}
-      {(broken > 0 || missing > 0) && (
+      {(incomplete > 0 || missing > 0) && (
         <div style={{ display: 'flex', gap: 40, padding: '16px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
-          {broken > 0 && (
+          {incomplete > 0 && (
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Broken</div>
-              <div style={{ fontSize: 23, fontWeight: 700, color: '#EF4444', fontVariantNumeric: 'tabular-nums' }}>{broken}</div>
+              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Incomplete</div>
+              <div style={{ fontSize: 23, fontWeight: 700, color: '#F97316', fontVariantNumeric: 'tabular-nums' }}>{incomplete}</div>
             </div>
           )}
           {missing > 0 && (
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Not Connected</div>
+              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t3, marginBottom: 4 }}>Missing</div>
               <div style={{ fontSize: 23, fontWeight: 700, color: '#F59E0B', fontVariantNumeric: 'tabular-nums' }}>{missing}</div>
             </div>
           )}
@@ -49,38 +87,44 @@ function IntegrationsView({ onNavigate }) {
 
       {/* Scrollable content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            {['Client', 'Type', 'Detail', 'Status', ''].map(h => (
-              <th key={h} style={{ ...cell, color: T.t4, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: 'left' }}>{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {integrations.map(int => (
-            <tr key={int.id}
-              onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
-              onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
-              <td style={cell}><div style={{ fontWeight: 500, color: T.t1 }}>{int.client_name}</div></td>
-              <td style={cell}><span style={{ fontSize: 13, color: T.t3 }}>{int.type}</span></td>
-              <td style={cell}>{int.detail}</td>
-              <td style={cell}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: statusColor(int.status), background: statusColor(int.status) + '1A', padding: '2px 8px', borderRadius: 20 }}>
-                  {statusLabel(int.status)}
-                </span>
-              </td>
-              <td style={cell}>
-                {int.status !== 'connected' && (
-                  <button onClick={() => markConnected(int.id)} style={{ padding: '4px 10px', border: `1px solid ${T.border}`, borderRadius: 6, background: 'none', fontSize: 12, color: T.t3, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                    Fix
-                  </button>
-                )}
-              </td>
-            </tr>
+
+        {/* Platform Services — static, read-only */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t4, marginBottom: 10 }}>Platform Services</div>
+          {platformServices.map(s => (
+            <div key={s.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid ${T.border}` }}>
+              <div style={{ fontSize: 14, fontWeight: 500, color: T.t1 }}>{s.name}</div>
+              <div style={{ fontSize: 12, color: '#22C55E', fontWeight: 600 }}>{s.detail}</div>
+            </div>
           ))}
-        </tbody>
-      </table>
+          <div style={{ fontSize: 12, color: T.t4, marginTop: 8 }}>Managed via Supabase Edge Function secrets.</div>
+        </div>
+
+        {/* Per-client integrations — derived rows grouped by client */}
+        <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t4, marginBottom: 10 }}>Per-client integrations</div>
+        {byClient.map(group => (
+          <div key={group.client_id} style={{ marginBottom: 22 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: T.t1, marginBottom: 4 }}>{group.client_name}</div>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <tbody>
+                {group.items.map(r => (
+                  <tr key={r.service}
+                    onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
+                    onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
+                    <td style={{ ...cell, width: '22%' }}><span style={{ fontSize: 13, color: T.t2 }}>{r.label}</span></td>
+                    <td style={cell}>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: statusColor(r.status), background: statusColor(r.status) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                        {statusLabel(r.status)}
+                      </span>
+                    </td>
+                    <td style={cell}><span style={{ fontSize: 13, color: T.t3 }}>{r.detail}</span></td>
+                    <td style={{ ...cell, textAlign: 'right' }}>{actionFor(r)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
     </div>
   );
