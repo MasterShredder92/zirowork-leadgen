@@ -35,6 +35,7 @@
             Settings
           </div>
           <div style={{ padding: '10px 16px', fontSize: 13, color: '#EF4444', cursor: 'pointer', transition: 'background 0.1s' }}
+            onClick={async () => { await window.sb.auth.signOut(); window.location.reload(); }}
             onMouseEnter={e => e.target.style.background = 'var(--bg-hover)'}
             onMouseLeave={e => e.target.style.background = 'transparent'}>
             Logout
