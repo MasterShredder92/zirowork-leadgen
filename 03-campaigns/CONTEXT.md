@@ -3,14 +3,14 @@
 > **JUDGMENT IS NOT PERMITTED.** Follow these rules exactly. Situation not covered? STOP AND ASK.
 
 ## You are here
-Campaigns — the per-landing-page funnel: views → clicks → leads → trials → enrolled, one row per page (client × instrument). Shows which pages are producing.
+Campaigns — the per-landing-page funnel: views → clicks → leads → trials → enrolled, one row per page (client × instrument). Filterable by client / program / status / date range, with a summary metric band and a click-through detail panel (funnel bars + conversion donut + 30-day trend). Shows which pages are producing.
 
 ## Files in this folder
 ```
-campaigns.jsx  — funnel table, reads window.usePageFunnel(), exports window.CampaignsView
+campaigns.jsx  — funnel table + filters + detail panel, reads window.usePageFunnel(sinceMs), exports window.CampaignsView
 ```
 
-Counts come from `window.usePageFunnel()` (`93-hooks/use-local-data.js`) — derived, never stored. See `94-knowledge/data-ssot.md`. View tracking is written by `schools/app.jsx` into the `page_events` table.
+Counts come from `window.usePageFunnel(sinceMs)` (`93-hooks/use-local-data.js`) — derived, never stored; `sinceMs` windows the date-range filter. The detail panel's 30-day trend reads raw `page_events` rows via `window.sb`. See `94-knowledge/data-ssot.md`. View tracking is written by `schools/app.jsx` into the `page_events` table.
 
 ## Enter ONLY if
 Your task explicitly names: campaigns, route `campaigns`, or `window.CampaignsView`.

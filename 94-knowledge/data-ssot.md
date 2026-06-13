@@ -55,8 +55,10 @@ Definitions (all derived from source tables, never from stored columns):
 Also in [`93-hooks/use-local-data.js`](../93-hooks/use-local-data.js). Same SSOT discipline as `useRollups` — counts are **derived**, never stored. One row per **landing page** (`client_pages` row = slug + instrument), returning the full top-of-funnel through enrolled:
 
 ```
-usePageFunnel() → [ { id, client_name, instrument, status, slug, views, clicks, leads, trials, enrolled }, … ]
+usePageFunnel(sinceMs?) → [ { id, client_id, client_name, instrument, rawSlug, rawInstrument, status, slug, views, clicks, leads, trials, enrolled }, … ]
 ```
+
+**`sinceMs`** (optional, ms epoch) windows every metric by each fact's own `created_at` — same trailing-window discipline as `useRollups`' 30d. Omit (or pass null) for all-time. The lead→page attribution map is built from **all** leads regardless of window, so an in-window booking/enrollment still resolves to its page even when the lead predates the window. The `03-campaigns` page passes `Date.now() − {7,30,90}d` for its date-range filter; `client_id` / `rawSlug` / `rawInstrument` exist for that page's client filter + the detail panel.
 
 | Field | Source table | Definition |
 |---|---|---|
@@ -70,7 +72,7 @@ usePageFunnel() → [ { id, client_name, instrument, status, slug, views, clicks
 
 **Tracking writes** (the only writer of `page_events`): `schools/app.jsx` `logPageEvent()` fires one `view` row when a landing page loads and one `signup_view` row when the signup page loads, deduped per session. Fire-and-forget + try/catch — tracking can never break a landing page. `page_events` is insert-only; nothing reads a stored count off it.
 
-**Consumer:** `03-campaigns` (the per-page funnel table).
+**Consumer:** `03-campaigns` — the funnel table (filterable by client / program / status / date range) plus a click-through detail panel (funnel bars + conversion donut + 30-day trend). The panel's trend reads raw `page_events` rows for that page directly (`window.sb`, last 30 days) and buckets them client-side — still no stored count.
 
 ### NOT a rollup — do not try to derive these
 

@@ -166,12 +166,20 @@ function parseLeadPage(url) {
   } catch { return null; }
 }
 
-function derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollments }) {
+// sinceMs: optional lower bound (ms epoch). When set, every metric counts only
+// rows whose own created_at is within the window — same discipline as useRollups'
+// trailing-30d. The lead→page attribution map is built from ALL leads regardless
+// of window, so an in-window booking/enrollment still resolves to its page even
+// if the lead itself predates the window.
+function derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollments }, sinceMs) {
   const keyOf = (slug, inst) => `${slug}|${(inst || '').toLowerCase()}`;
+  const since = sinceMs ? new Date(sinceMs).toISOString() : null;
+  const inWin = ts => !since || (ts && ts >= since);
 
   const ev = {};
   const ensureEv = k => (ev[k] = ev[k] || { views: 0, clicks: 0 });
   pageEvents.forEach(e => {
+    if (!inWin(e.created_at)) return;
     const k = keyOf(e.slug, e.instrument);
     if (e.type === 'view') ensureEv(k).views += 1;
     else if (e.type === 'signup_view') ensureEv(k).clicks += 1;
@@ -184,15 +192,16 @@ function derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollment
     const p = parseLeadPage(l.page_url);
     if (!p) return;
     const k = keyOf(p.slug, p.instrument);
-    leadPageKey[l.id] = k;
-    ensureFn(k).leads += 1;
+    leadPageKey[l.id] = k;            // attribution map: ALL leads, unwindowed
+    if (inWin(l.created_at)) ensureFn(k).leads += 1;
   });
   bookings.forEach(b => {
+    if (!inWin(b.created_at)) return;
     const k = b.lead_id ? leadPageKey[b.lead_id] : null;
     if (k) ensureFn(k).trials += 1;
   });
   enrollments.forEach(e => {
-    if (e.outcome !== 'enrolled') return;
+    if (e.outcome !== 'enrolled' || !inWin(e.created_at)) return;
     const k = e.lead_id ? leadPageKey[e.lead_id] : null;
     if (k) ensureFn(k).enrolled += 1;
   });
@@ -203,8 +212,11 @@ function derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollment
     const f = fn[k] || { leads: 0, trials: 0, enrolled: 0 };
     return {
       id: p.id,
+      client_id: p.client_id,
       client_name: p.school_name || '—',
       instrument: INST_LABEL[p.instrument] || p.instrument,
+      rawSlug: p.slug,
+      rawInstrument: p.instrument,
       status: p.status || (p.is_active ? 'live' : 'draft'),
       slug: `${p.slug}/${p.instrument}`,
       views: e.views, clicks: e.clicks,
@@ -213,15 +225,15 @@ function derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollment
   });
 }
 
-function usePageFunnel() {
+function usePageFunnel(sinceMs) {
   const pageEvents  = _useTable('page_events',  'page_events',  undefined, 'fnl').data;
   const clientPages = _useTable('client_pages', 'client_pages', undefined, 'fnl').data;
   const leads       = _useTable('leads',        'leads',        undefined, 'fnl').data;
   const bookings    = _useTable('bookings',     'bookings',     undefined, 'fnl').data;
   const enrollments = _useTable('enrollments',  'enrollments',  undefined, 'fnl').data;
   return React.useMemo(
-    () => derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollments }),
-    [pageEvents, clientPages, leads, bookings, enrollments]
+    () => derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollments }, sinceMs),
+    [pageEvents, clientPages, leads, bookings, enrollments, sinceMs]
   );
 }
 
