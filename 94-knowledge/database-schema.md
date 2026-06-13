@@ -13,7 +13,7 @@ read/write is open in Phase 2.
 
 ---
 
-## Operator CRM tables (13)
+## Operator CRM tables (14)
 
 Read/written by the React CRM (`00–16` views) and the public surfaces (`schools/`, `dashboard/`, `onboard.html`).
 
@@ -56,6 +56,10 @@ Read/written by the React CRM (`00–16` views) and the public surfaces (`school
 ### `client_pages` — landing pages ZiroWork builds (one per school slug + instrument)
 Canonical landing-page table. Written by `onboard-form.jsx`; read by `use-pages.js` (operator) and `schools/app.jsx` (public). (Replaced the old orphan `pages` table, dropped in `021`.)
 `id*` uuid · `client_id*` uuid → clients · `instrument*` text · `slug*` text · `is_active*` bool · `hero_photo_url` text · `teacher_index*` int · `custom_headline` text · `custom_offer` text · `status` text · `school_name` text · `created_at*` timestamptz · `updated_at*` timestamptz
+
+### `page_events` — landing-page funnel tracking (views + signup-page clicks)
+Insert-only. Written by `schools/app.jsx` `logPageEvent()` (anon key) — one row per page load, deduped per session. Read/derived by `usePageFunnel()` in `93-hooks/use-local-data.js` to power the `03-campaigns` funnel. Counts are derived from these rows, never stored.
+`id*` uuid · `slug*` text · `instrument` text · `type*` text (`view` | `signup_view`) · `page_url` text · `created_at*` timestamptz
 
 ---
 

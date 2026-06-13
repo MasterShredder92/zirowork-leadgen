@@ -151,6 +151,7 @@ zirowork-leadgen/
 | `window.T` | `92-design/theme.js` | Theme tokens — used by every view |
 | `window.SEED_DATA` | `93-hooks/use-local-data.js` | Dev seed data fallback |
 | `window.useRollups` | `93-hooks/use-local-data.js` | **SSOT for counts** — derives per-client/per-campaign leads/trials/enrollments/etc. from source tables. Use instead of stored `*_30d` columns. See `94-knowledge/data-ssot.md` |
+| `window.usePageFunnel` | `93-hooks/use-local-data.js` | **SSOT for the landing-page funnel** — per page (slug+instrument): views → clicks → leads → trials → enrolled, derived from `page_events` + leads/bookings/enrollments. Powers `03-campaigns`. See `94-knowledge/data-ssot.md` |
 | `window.currentUser` | `91-auth/Session.jsx` | `{ full_name, role, email }` |
 | `window.currentOperator` | `91-auth/Session.jsx` | `{ name, label }` |
 | `window.useOperatorContext` | `93-hooks/use-studio-context.js` | Operator identity hook |

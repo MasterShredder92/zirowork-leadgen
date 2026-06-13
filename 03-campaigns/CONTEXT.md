@@ -3,12 +3,14 @@
 > **JUDGMENT IS NOT PERMITTED.** Follow these rules exactly. Situation not covered? STOP AND ASK.
 
 ## You are here
-Campaigns — lead generation campaign management (which campaigns are running, for which clients).
+Campaigns — the per-landing-page funnel: views → clicks → leads → trials → enrolled, one row per page (client × instrument). Shows which pages are producing.
 
 ## Files in this folder
 ```
-campaigns.jsx  — main view, campaign list + status, exports window.CampaignsView
+campaigns.jsx  — funnel table, reads window.usePageFunnel(), exports window.CampaignsView
 ```
+
+Counts come from `window.usePageFunnel()` (`93-hooks/use-local-data.js`) — derived, never stored. See `94-knowledge/data-ssot.md`. View tracking is written by `schools/app.jsx` into the `page_events` table.
 
 ## Enter ONLY if
 Your task explicitly names: campaigns, route `campaigns`, or `window.CampaignsView`.

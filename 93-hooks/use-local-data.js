@@ -145,10 +145,91 @@ function useRollups() {
   );
 }
 
+// ─── PAGE FUNNEL: per-landing-page views → clicks → leads → trials → enrolled ─
+// Same SSOT discipline as deriveRollups: counts are DERIVED from source rows
+// (page_events + leads/bookings/enrollments), never read from a stored column.
+// A "page" = one client_pages row (slug + instrument). Views/clicks come from
+// page_events; leads/trials/enrolled attribute back through lead.page_url, which
+// carries the slug + ?instrument the visitor came through. See data-ssot.md.
+const INST_LABEL = { piano: 'Piano', guitar: 'Guitar', vocals: 'Voice', drums: 'Drums' };
+
+function parseLeadPage(url) {
+  if (!url) return null;
+  try {
+    const u = new URL(url, 'https://x');
+    const parts = u.pathname.split('/').filter(Boolean);
+    const i = parts.indexOf('schools');
+    const slug = i >= 0 ? parts[i + 1] : null;
+    const instrument = u.searchParams.get('instrument');
+    if (!slug || !instrument) return null;
+    return { slug, instrument: instrument.toLowerCase() };
+  } catch { return null; }
+}
+
+function derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollments }) {
+  const keyOf = (slug, inst) => `${slug}|${(inst || '').toLowerCase()}`;
+
+  const ev = {};
+  const ensureEv = k => (ev[k] = ev[k] || { views: 0, clicks: 0 });
+  pageEvents.forEach(e => {
+    const k = keyOf(e.slug, e.instrument);
+    if (e.type === 'view') ensureEv(k).views += 1;
+    else if (e.type === 'signup_view') ensureEv(k).clicks += 1;
+  });
+
+  const fn = {};
+  const ensureFn = k => (fn[k] = fn[k] || { leads: 0, trials: 0, enrolled: 0 });
+  const leadPageKey = {};
+  leads.forEach(l => {
+    const p = parseLeadPage(l.page_url);
+    if (!p) return;
+    const k = keyOf(p.slug, p.instrument);
+    leadPageKey[l.id] = k;
+    ensureFn(k).leads += 1;
+  });
+  bookings.forEach(b => {
+    const k = b.lead_id ? leadPageKey[b.lead_id] : null;
+    if (k) ensureFn(k).trials += 1;
+  });
+  enrollments.forEach(e => {
+    if (e.outcome !== 'enrolled') return;
+    const k = e.lead_id ? leadPageKey[e.lead_id] : null;
+    if (k) ensureFn(k).enrolled += 1;
+  });
+
+  return clientPages.map(p => {
+    const k = keyOf(p.slug, p.instrument);
+    const e = ev[k] || { views: 0, clicks: 0 };
+    const f = fn[k] || { leads: 0, trials: 0, enrolled: 0 };
+    return {
+      id: p.id,
+      client_name: p.school_name || '—',
+      instrument: INST_LABEL[p.instrument] || p.instrument,
+      status: p.status || (p.is_active ? 'live' : 'draft'),
+      slug: `${p.slug}/${p.instrument}`,
+      views: e.views, clicks: e.clicks,
+      leads: f.leads, trials: f.trials, enrolled: f.enrolled,
+    };
+  });
+}
+
+function usePageFunnel() {
+  const pageEvents  = _useTable('page_events',  'page_events',  undefined, 'fnl').data;
+  const clientPages = _useTable('client_pages', 'client_pages', undefined, 'fnl').data;
+  const leads       = _useTable('leads',        'leads',        undefined, 'fnl').data;
+  const bookings    = _useTable('bookings',     'bookings',     undefined, 'fnl').data;
+  const enrollments = _useTable('enrollments',  'enrollments',  undefined, 'fnl').data;
+  return React.useMemo(
+    () => derivePageFunnel({ pageEvents, clientPages, leads, bookings, enrollments }),
+    [pageEvents, clientPages, leads, bookings, enrollments]
+  );
+}
+
 Object.assign(window, {
   useClients, useCampaigns, useLeads,
   useConversations, useEscalations, useBookings, useEnrollments,
   useOperatorTasks, useClientReports,
   useAutomationRules, useIntegrations,
   useRollups, deriveRollups, EMPTY_CLIENT_ROLLUP, EMPTY_CAMPAIGN_ROLLUP,
+  usePageFunnel, derivePageFunnel,
 });

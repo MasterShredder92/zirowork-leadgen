@@ -46,7 +46,31 @@ Definitions (all derived from source tables, never from stored columns):
 | `byCampaign.trials` | `bookings` → `leads` | bookings attributed via `booking.lead_id → lead.campaign_id` |
 | `byCampaign.enrolled` | `enrollments` → `leads` | enrolled rows attributed via `enrollment.lead_id → lead.campaign_id` |
 
-**Consumers (must use `useRollups`, never the stored columns):** `00-command-center`, `01-clients`, `03-campaigns`, `16-studio-map`. Reference impl that always did it right: `10-reporting` and `dashboard/views/overview.jsx` / `pipeline.jsx`.
+**Consumers (must use `useRollups`, never the stored columns):** `00-command-center`, `01-clients`, `16-studio-map`. Reference impl that always did it right: `10-reporting` and `dashboard/views/overview.jsx` / `pipeline.jsx`.
+
+---
+
+## The page funnel — `window.usePageFunnel()`
+
+Also in [`93-hooks/use-local-data.js`](../93-hooks/use-local-data.js). Same SSOT discipline as `useRollups` — counts are **derived**, never stored. One row per **landing page** (`client_pages` row = slug + instrument), returning the full top-of-funnel through enrolled:
+
+```
+usePageFunnel() → [ { id, client_name, instrument, status, slug, views, clicks, leads, trials, enrolled }, … ]
+```
+
+| Field | Source table | Definition |
+|---|---|---|
+| `views` | `page_events` | rows where `type === 'view'` for that page's `slug` + `instrument` |
+| `clicks` | `page_events` | rows where `type === 'signup_view'` (a visitor reached the signup page from the landing page) |
+| `leads` | `leads` | attributed to the page via `lead.page_url` (carries `/schools/{slug}/signup?instrument=…`), parsed by `parseLeadPage()` |
+| `trials` | `bookings` → `leads` | bookings whose `lead_id`'s lead attributes to this page |
+| `enrolled` | `enrollments` → `leads` | `outcome === 'enrolled'` rows whose `lead_id`'s lead attributes to this page |
+
+**Why leads attribute by `page_url`, not `campaign_id`:** landing-page leads are inserted with **no** `campaign_id` ([`schools/pages/signup.jsx`](../schools/pages/signup.jsx)), so the old `byCampaign` rollup counted zero for them. The page funnel attributes through `page_url` instead, which every landing-page lead does carry.
+
+**Tracking writes** (the only writer of `page_events`): `schools/app.jsx` `logPageEvent()` fires one `view` row when a landing page loads and one `signup_view` row when the signup page loads, deduped per session. Fire-and-forget + try/catch — tracking can never break a landing page. `page_events` is insert-only; nothing reads a stored count off it.
+
+**Consumer:** `03-campaigns` (the per-page funnel table).
 
 ### NOT a rollup — do not try to derive these
 

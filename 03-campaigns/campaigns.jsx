@@ -1,19 +1,16 @@
-﻿// 03-campaigns — Which piano/guitar/voice/drum funnels are running and producing?
+// 03-campaigns — Per landing-page funnel: views → clicks → leads → trials → enrolled.
 function CampaignsView({ onNavigate }) {
   const T = window.T || {};
-  const L = window.LucideReact || {};
-  const { useState } = React;
-  const [clientId, setClientId] = useState(null);
-  const campaigns = useCampaigns(clientId ? { client_id: clientId } : undefined).data || [];
-  const rollups = window.useRollups ? window.useRollups().byCampaign : {};
+  const pages = window.usePageFunnel ? window.usePageFunnel() : [];
 
   const programColor = p => ({ Piano: '#818CF8', Guitar: '#F59E0B', Voice: '#EC4899', Drums: '#F97316' }[p] || '#6B7280');
-  const statusColor  = s => ({ active: '#22C55E', paused: '#F59E0B', draft: '#6B7280', ended: '#6B7280' }[s] || '#6B7280');
+  const statusColor  = s => ({ live: '#22C55E', active: '#22C55E', paused: '#F59E0B', draft: '#6B7280', ended: '#6B7280' }[s] || '#6B7280');
   const statusLabel  = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+  const pct = (num, den) => den > 0 ? Math.round((num / den) * 100) + '%' : '—';
 
   const cell = { padding: '11px 16px', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}`, textAlign: 'left' };
   const firstCell = { ...cell, paddingLeft: 0 };
-  const lastCell = { ...cell, paddingRight: 0 };
+  const lastCell = { ...cell, paddingRight: 0, textAlign: 'right', fontVariantNumeric: 'tabular-nums' };
   const numCell = { ...cell, textAlign: 'right', fontVariantNumeric: 'tabular-nums' };
 
   return (
@@ -22,7 +19,7 @@ function CampaignsView({ onNavigate }) {
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '20px 24px', borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div>
           <h1 style={{ fontSize: 25, fontWeight: 700, color: T.t1, letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Campaigns</h1>
-          <div style={{ fontSize: 13, color: T.t3 }}>Which piano/guitar/voice/drum funnels are running and producing?</div>
+          <div style={{ fontSize: 13, color: T.t3 }}>Every landing page, from traffic to enrolled — which ones are producing?</div>
         </div>
       </div>
 
@@ -35,45 +32,47 @@ function CampaignsView({ onNavigate }) {
                 { label: 'Client', align: 'left' },
                 { label: 'Program', align: 'left' },
                 { label: 'Status', align: 'left' },
+                { label: 'Views', align: 'right' },
+                { label: 'Clicks', align: 'right' },
+                { label: 'CTR', align: 'right' },
                 { label: 'Leads', align: 'right' },
                 { label: 'Trials', align: 'right' },
                 { label: 'Enrolled', align: 'right' },
-                { label: 'Conv %', align: 'right' },
+                { label: 'Conv', align: 'right' },
               ].map((h, i, arr) => (
                 <th key={h.label} style={{ ...(i === 0 ? firstCell : i === arr.length - 1 ? lastCell : cell), color: T.t4, fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', textAlign: h.align }}>{h.label}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {campaigns.map(c => {
-              const r = rollups[c.id] || window.EMPTY_CAMPAIGN_ROLLUP || {};
-              const conv = r.leads > 0 ? ((r.enrolled / r.leads) * 100).toFixed(0) + '%' : '—';
-              return (
-                <tr key={c.id}
-                  onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
-                  onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
-                  <td style={firstCell}>
-                    <div style={{ fontWeight: 500, color: T.t1 }}>{c.client_name}</div>
-                  </td>
-                  <td style={cell}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: programColor(c.program), background: programColor(c.program) + '1A', padding: '2px 8px', borderRadius: 20 }}>
-                      {c.program}
-                    </span>
-                  </td>
-                  <td style={cell}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: statusColor(c.status), background: statusColor(c.status) + '1A', padding: '2px 8px', borderRadius: 20 }}>
-                      {statusLabel(c.status)}
-                    </span>
-                  </td>
-                  <td style={numCell}>{r.leads}</td>
-                  <td style={numCell}>{r.trials}</td>
-                  <td style={numCell}>{r.enrolled}</td>
-                  <td style={lastCell}>{conv}</td>
-                </tr>
-              );
-            })}
-            {campaigns.length === 0 && (
-              <tr><td colSpan={7} style={{ padding: '40px 0', textAlign: 'center', color: T.t4, fontSize: 14 }}>No campaigns yet.</td></tr>
+            {pages.map(p => (
+              <tr key={p.id}
+                onMouseEnter={e => { [...e.currentTarget.cells].forEach(td => td.style.background = T.rowHover || 'rgba(255,255,255,0.03)'); }}
+                onMouseLeave={e => { [...e.currentTarget.cells].forEach(td => td.style.background = 'transparent'); }}>
+                <td style={firstCell}>
+                  <div style={{ fontWeight: 500, color: T.t1 }}>{p.client_name}</div>
+                </td>
+                <td style={cell}>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: programColor(p.instrument), background: programColor(p.instrument) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                    {p.instrument}
+                  </span>
+                </td>
+                <td style={cell}>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: statusColor(p.status), background: statusColor(p.status) + '1A', padding: '2px 8px', borderRadius: 20 }}>
+                    {statusLabel(p.status)}
+                  </span>
+                </td>
+                <td style={numCell}>{p.views}</td>
+                <td style={numCell}>{p.clicks}</td>
+                <td style={numCell}>{pct(p.clicks, p.views)}</td>
+                <td style={numCell}>{p.leads}</td>
+                <td style={numCell}>{p.trials}</td>
+                <td style={numCell}>{p.enrolled}</td>
+                <td style={lastCell}>{pct(p.enrolled, p.leads)}</td>
+              </tr>
+            ))}
+            {pages.length === 0 && (
+              <tr><td colSpan={10} style={{ padding: '40px 0', textAlign: 'center', color: T.t4, fontSize: 14 }}>No landing pages yet.</td></tr>
             )}
           </tbody>
         </table>

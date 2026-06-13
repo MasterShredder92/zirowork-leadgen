@@ -2,6 +2,19 @@
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4cGd5dWV0ZnNyemZ4eG9wd3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDk5MzQsImV4cCI6MjA5NDc4NTkzNH0.LaSe5Gfho9WIqKQOyBECKHx4CbtIO95RexqoAQMkIvQ'; // public anon key — nosemgrep: generic.secrets.security.detected-jwt-token.detected-jwt-token
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// Funnel tracking — one row per page view, deduped per session so a refresh
+// doesn't double-count. Fire-and-forget: tracking must NEVER break the page.
+function logPageEvent(type, slug, instrument) {
+  try {
+    const key = `pe_${type}_${slug}_${instrument || ''}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, '1');
+    sb.from('page_events')
+      .insert([{ slug, instrument: instrument || null, type, page_url: window.location.href }])
+      .then(() => {}, () => {});
+  } catch (e) { /* no-op */ }
+}
+
 function LandingLayout({ school, intakeUrl, instrument, children }) {
   const accent = school.accent || '#E04D27';
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -122,6 +135,10 @@ function App() {
           const { data: tenants } = await sb.from('agent_tenants').select('*').eq('tenant_id', client.id).limit(1);
           const config = tenants?.[0]?.config || {};
           const school = buildSchool(client, config, null, slug);
+          if (isSignup) {
+            const sp = new URLSearchParams(window.location.search);
+            logPageEvent('signup_view', slug, sp.get('instrument') || null);
+          }
           setState({ loading: false, notFound: false, school, client, intakeUrl: null, instrument: null });
         } catch {
           setState(s => ({ ...s, loading: false, notFound: true }));
@@ -144,6 +161,7 @@ function App() {
 
         if (!pages?.length) { setState(s => ({ ...s, loading: false, notFound: true })); return; }
         const page = pages[0];
+        logPageEvent('view', slug, instrument);
 
         const [{ data: clients }, { data: tenants }] = await Promise.all([
           sb.from('clients').select('*').eq('id', page.client_id).limit(1),
