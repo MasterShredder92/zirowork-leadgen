@@ -85,6 +85,7 @@ function ConversationsView({ onNavigate }) {
     setSending(true);
     const { data, error } = await window.sb.from('ziro_message_log').insert({
       tenant_id,
+      channel: 'sms',
       direction: 'outbound',
       recipient_phone: phone,
       recipient_name: thread ? thread.name : null,
