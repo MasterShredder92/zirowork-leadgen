@@ -51,19 +51,6 @@
         ]
       }
     ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash /c/Users/admin/.claude/projects/zirowork-reimagines-5.28.2026/.brain/cleanup/cleanup.sh",
-            "statusMessage": "Checking repo health...",
-            "timeout": 10,
-            "async": true
-          }
-        ]
-      }
-    ],
     "Stop": [
       {
         "hooks": [
