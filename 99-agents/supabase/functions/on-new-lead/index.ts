@@ -57,12 +57,16 @@ Deno.serve(async (req) => {
   const settings = resolveSettings(tenantRow?.config);
 
   // Kill-switch: if the operator paused the "New Lead — Instant Reply" automation rule,
-  // don't message and don't queue. The lead still lives in the CRM.
-  const { data: outreachRule } = await db
+  // don't message and don't queue. The lead still lives in the CRM. A rule scoped to
+  // THIS client (client_id = tenantId) wins; otherwise the global rule (client_id IS NULL)
+  // applies as a fallback.
+  const { data: outreachRules } = await db
     .from('automation_rules')
-    .select('status')
+    .select('status, client_id')
     .eq('key', 'new_lead_outreach')
-    .maybeSingle();
+    .or(`client_id.eq.${tenantId},client_id.is.null`);
+  const outreachRule = (outreachRules || []).find((r) => r.client_id === tenantId)
+    ?? (outreachRules || []).find((r) => r.client_id === null);
   if (outreachRule && outreachRule.status !== 'active') {
     await db.from('ziro_events').insert({
       event_id: crypto.randomUUID(),

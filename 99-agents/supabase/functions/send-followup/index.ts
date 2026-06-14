@@ -17,14 +17,16 @@ Deno.serve(async (req) => {
   // hourly; leads whose tenant is currently off-hours are skipped individually.
   const db = createClient(PLATFORM_URL, PLATFORM_SERVICE_KEY);
 
-  // Kill-switch: operator can pause the whole follow-up drip via the "No Reply — 24h Follow-up"
-  // automation rule. Paused → no drips go out this run.
-  const { data: dripRule } = await db
+  // Kill-switch: operator can pause the follow-up drip via the "No Reply — 24h Follow-up"
+  // automation rule. The GLOBAL rule (client_id IS NULL) bails the whole run; per-client
+  // rules are re-checked inside the loop below so one client's pause doesn't stop everyone.
+  const { data: globalDripRule } = await db
     .from('automation_rules')
     .select('status')
     .eq('key', 'followup_drip')
+    .is('client_id', null)
     .maybeSingle();
-  if (dripRule && dripRule.status !== 'active') {
+  if (globalDripRule && globalDripRule.status !== 'active') {
     return new Response(JSON.stringify({ processed: 0, failed: 0, skipped: 'followup_drip_paused' }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -70,6 +72,16 @@ Deno.serve(async (req) => {
       if (!phone) {
         throw new Error(`Lead ${lead.id} has no phone number`);
       }
+
+      // Per-client kill-switch: a followup_drip rule scoped to THIS client overrides
+      // the global default. Paused → skip this lead's follow-up.
+      const { data: clientDripRule } = await db
+        .from('automation_rules')
+        .select('status')
+        .eq('key', 'followup_drip')
+        .eq('client_id', lead.client_id)
+        .maybeSingle();
+      if (clientDripRule && clientDripRule.status !== 'active') continue;
 
       // Per-tenant gates the outer query can't express.
       const settings = resolveSettings(config);

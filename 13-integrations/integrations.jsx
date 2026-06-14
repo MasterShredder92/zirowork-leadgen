@@ -13,6 +13,54 @@ function IntegrationsView({ onNavigate }) {
 
   const [copiedId, setCopiedId] = React.useState(null);
 
+  // ── Live timestamps for platform services ──────────────────────────────────
+  const [timestamps, setTimestamps] = React.useState({ twilio: null, square: null, webhook: null });
+
+  function relativeTime(isoStr) {
+    if (!isoStr) return null;
+    const diffMs = Date.now() - new Date(isoStr).getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return 'just now';
+    if (diffMin < 60) return `${diffMin} min ago`;
+    const diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return `${diffHr} hr ago`;
+    const diffDay = Math.floor(diffHr / 24);
+    return `${diffDay} day${diffDay !== 1 ? 's' : ''} ago`;
+  }
+
+  async function fetchTimestamps() {
+    if (!window.sb) return;
+    try {
+      const [twilioRes, squareRes, webhookRes] = await Promise.all([
+        window.sb.from('ziro_message_log').select('created_at').order('created_at', { ascending: false }).limit(1),
+        window.sb.from('billing_events').select('created_at').eq('status', 'succeeded').order('created_at', { ascending: false }).limit(1),
+        window.sb.from('leads').select('created_at').order('created_at', { ascending: false }).limit(1),
+      ]);
+      setTimestamps({
+        twilio: twilioRes.data?.[0]?.created_at ?? null,
+        square: squareRes.data?.[0]?.created_at ?? null,
+        webhook: webhookRes.data?.[0]?.created_at ?? null,
+      });
+    } catch (_) {
+      // network failure — keep previous values
+    }
+  }
+
+  React.useEffect(() => {
+    fetchTimestamps();
+    window.addEventListener('focus', fetchTimestamps);
+    return () => window.removeEventListener('focus', fetchTimestamps);
+  }, []);
+
+  // Returns a subtitle string for a given timestamp value.
+  function activityLabel(ts, prefix) {
+    if (!ts) return null;
+    const diffHr = (Date.now() - new Date(ts).getTime()) / 3600000;
+    if (diffHr > 24) return 'No recent activity';
+    return `${prefix}: ${relativeTime(ts)}`;
+  }
+
+  // ── Status helpers ─────────────────────────────────────────────────────────
   const statusColor = s => ({ connected: '#22C55E', incomplete: '#F97316', missing: '#F59E0B' }[s] || '#6B7280');
   const statusLabel = s => ({ connected: 'Connected', incomplete: 'Incomplete', missing: 'Missing' }[s] || s);
 
@@ -53,10 +101,27 @@ function IntegrationsView({ onNavigate }) {
 
   const cell = { padding: '12px 0', fontSize: 14, color: T.t2, borderBottom: `1px solid ${T.border}` };
 
+  // Platform services with live timestamps
+  const twilioActivity = activityLabel(timestamps.twilio, 'Last reply');
+  const squareActivity = activityLabel(timestamps.square, 'Last charge');
+  const webhookActivity = activityLabel(timestamps.webhook, 'Last lead');
+
   const platformServices = [
-    { name: 'Claude / Anthropic', detail: 'Active (platform-managed)' },
-    { name: 'OpenPhone API', detail: 'Platform-managed' },
-    { name: 'Square', detail: 'Platform-managed' },
+    {
+      name: 'Twilio SMS',
+      detail: 'Active (platform-managed)',
+      activity: twilioActivity,
+    },
+    {
+      name: 'Square Billing',
+      detail: 'Platform-managed',
+      activity: squareActivity,
+    },
+    {
+      name: 'Lead Webhook',
+      detail: 'Platform-managed',
+      activity: webhookActivity,
+    },
   ];
 
   return (
@@ -88,13 +153,24 @@ function IntegrationsView({ onNavigate }) {
       {/* Scrollable content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
 
-        {/* Platform Services — static, read-only */}
+        {/* Platform Services — live timestamps from Supabase */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: T.t4, marginBottom: 10 }}>Platform Services</div>
           {platformServices.map(s => (
             <div key={s.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid ${T.border}` }}>
               <div style={{ fontSize: 14, fontWeight: 500, color: T.t1 }}>{s.name}</div>
-              <div style={{ fontSize: 12, color: '#22C55E', fontWeight: 600 }}>{s.detail}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {s.activity && (
+                  <span style={{
+                    fontSize: 12,
+                    color: s.activity === 'No recent activity' ? T.t4 : T.t3,
+                    fontStyle: s.activity === 'No recent activity' ? 'italic' : 'normal',
+                  }}>
+                    {s.activity}
+                  </span>
+                )}
+                <span style={{ fontSize: 12, color: '#22C55E', fontWeight: 600 }}>{s.detail}</span>
+              </div>
             </div>
           ))}
           <div style={{ fontSize: 12, color: T.t4, marginTop: 8 }}>Managed via Supabase Edge Function secrets.</div>
