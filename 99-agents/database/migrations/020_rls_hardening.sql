@@ -22,26 +22,26 @@
 DROP POLICY IF EXISTS lesson_plans_service_role ON lesson_plans;
 
 -- Authenticated-only read + write
-CREATE POLICY IF NOT EXISTS lesson_plans_authenticated_select
+CREATE POLICY lesson_plans_authenticated_select
   ON lesson_plans
   FOR SELECT
   TO authenticated
   USING (true);
 
-CREATE POLICY IF NOT EXISTS lesson_plans_authenticated_insert
+CREATE POLICY lesson_plans_authenticated_insert
   ON lesson_plans
   FOR INSERT
   TO authenticated
   WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS lesson_plans_authenticated_update
+CREATE POLICY lesson_plans_authenticated_update
   ON lesson_plans
   FOR UPDATE
   TO authenticated
   USING (true)
   WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS lesson_plans_authenticated_delete
+CREATE POLICY lesson_plans_authenticated_delete
   ON lesson_plans
   FOR DELETE
   TO authenticated
@@ -53,26 +53,26 @@ CREATE POLICY IF NOT EXISTS lesson_plans_authenticated_delete
 
 DROP POLICY IF EXISTS lesson_plan_files_service_role ON lesson_plan_files;
 
-CREATE POLICY IF NOT EXISTS lesson_plan_files_authenticated_select
+CREATE POLICY lesson_plan_files_authenticated_select
   ON lesson_plan_files
   FOR SELECT
   TO authenticated
   USING (true);
 
-CREATE POLICY IF NOT EXISTS lesson_plan_files_authenticated_insert
+CREATE POLICY lesson_plan_files_authenticated_insert
   ON lesson_plan_files
   FOR INSERT
   TO authenticated
   WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS lesson_plan_files_authenticated_update
+CREATE POLICY lesson_plan_files_authenticated_update
   ON lesson_plan_files
   FOR UPDATE
   TO authenticated
   USING (true)
   WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS lesson_plan_files_authenticated_delete
+CREATE POLICY lesson_plan_files_authenticated_delete
   ON lesson_plan_files
   FOR DELETE
   TO authenticated
@@ -84,26 +84,26 @@ CREATE POLICY IF NOT EXISTS lesson_plan_files_authenticated_delete
 
 DROP POLICY IF EXISTS student_teacher_history_service_role ON student_teacher_history;
 
-CREATE POLICY IF NOT EXISTS student_teacher_history_authenticated_select
+CREATE POLICY student_teacher_history_authenticated_select
   ON student_teacher_history
   FOR SELECT
   TO authenticated
   USING (true);
 
-CREATE POLICY IF NOT EXISTS student_teacher_history_authenticated_insert
+CREATE POLICY student_teacher_history_authenticated_insert
   ON student_teacher_history
   FOR INSERT
   TO authenticated
   WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS student_teacher_history_authenticated_update
+CREATE POLICY student_teacher_history_authenticated_update
   ON student_teacher_history
   FOR UPDATE
   TO authenticated
   USING (true)
   WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS student_teacher_history_authenticated_delete
+CREATE POLICY student_teacher_history_authenticated_delete
   ON student_teacher_history
   FOR DELETE
   TO authenticated
@@ -128,7 +128,7 @@ DROP POLICY IF EXISTS billing_events_service_role ON billing_events;
 
 -- INSERT/UPDATE/DELETE restricted to authenticated (service-role bypasses anyway,
 -- but this closes the gap if anon somehow gets a valid JWT)
-CREATE POLICY IF NOT EXISTS billing_events_authenticated_insert
+CREATE POLICY billing_events_authenticated_insert
   ON billing_events
   FOR INSERT
   TO authenticated
