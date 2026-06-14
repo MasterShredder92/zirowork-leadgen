@@ -12,6 +12,7 @@
     { "source": "/onboarding", "destination": "/onboard.html" },
     { "source": "/schools/:path*", "destination": "/schools/index.html" },
     { "source": "/dashboard", "destination": "/dashboard/index.html" },
-    { "source": "/dashboard/:path*", "destination": "/dashboard/index.html" }
+    { "source": "/dashboard/:path*", "destination": "/dashboard/index.html" },
+    { "source": "/((?!schools|dashboard|onboarding|home|privacy|terms|legal|www|96-public|99-agents).*)", "destination": "/index.html" }
   ]
 }
