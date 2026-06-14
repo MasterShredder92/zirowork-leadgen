@@ -20,16 +20,23 @@
 
 ## Phase Status
 
-**Phase 1 — COMPLETE**
+**Phase 1 — ✅ COMPLETE (2026-06-13)**
 - Supabase live: `window.sb` wired in `index.html`
-- Auth bypassed: `91-auth/Session.jsx` seeds `window.currentUser` and `window.currentOperator`
-- 13 real Supabase tables populated. `window.SEED_DATA` is fallback only.
-- All 16 pages reading real data. 9 writes wired.
+- Auth live: `91-auth/Session.jsx` enforces Supabase login, seeds `window.currentUser` and `window.currentOperator`
+- 18 real Supabase tables populated with RLS. `window.SEED_DATA` is fallback only.
+- All 16 operator pages reading real data. 9 writes wired. Forms→SMS→Leads working end-to-end.
 
-**Phase 2 — IN PROGRESS**
-- Agent backend (`99-agents/`): DEPLOYED. All 9 edge functions live and reachable (complete-onboarding, scrape-school, on-new-lead, process-pending, on-reply, send-followup, enrollment-handoff, monthly-report, intake-form). SQL migrations run (old codenames replaced with ziro_* naming).
-- Studio Map: researched (vis-network via CDN). Not yet built.
-- Agent tables LIVE in Supabase (agent_tenants, ziro_events, ziro_message_log, ziro_messaging_escalations, pending_leads, and the rest; 6 orphan tables dropped 2026-06-10 by migration 023). 3 pg_cron jobs scheduled and active (process-pending every 5 min, send-followup hourly, monthly-report 1st of month 6am).
+**Phase 2 — ✅ COMPLETE (2026-06-13 TIER 0 MVP)**
+- Agent backend (`99-agents/`): DEPLOYED. All 10 critical edge functions live and reachable (complete-onboarding, scrape-school, on-new-lead, process-pending, on-reply, send-followup, enrollment-handoff, monthly-report, intake-form, billing). SQL migrations run (RLS hardening deployed 2026-06-13).
+- Landing pages: LIVE. Forms submit to Supabase < 2 sec, leads appear in operator CRM.
+- SMS: Twilio LIVE (+1 402-581-9366). All sends/receives working.
+- Billing: Code ready, waiting for Square API credentials (post-launch configuration).
+- Agent tables LIVE in Supabase (agent_tenants, ziro_events, ziro_message_log, ziro_messaging_escalations, pending_leads, and 13 more). 3 pg_cron jobs active (process-pending every 5 min, send-followup hourly, monthly-report 1st of month 6am).
+- Studio Map: NOT YET (TIER 1).
+
+**Phase 3 — READY (Post-Launch)**
+- RLS hardening: Replace `USING (true)` with role-based filters (multi-operator safety)
+- Observability: Telemetry, outbox, loop-breaker
 
 ---
 
