@@ -1,6 +1,6 @@
 # Migration Progress
 
-PHASE: 1 — empty toolchain
+PHASE: 2 — spine: tokens + hooks → typed modules
 DONE:
   Phase 0:
   - dep-graph.md     (272 lines) — 66 globals (65 in jsx/js modules + window.sb inline in html); spine/leaf classified; 7 dead-code files flagged; 0 cycles; leaf-first order; OnboardForm marked cross-surface
@@ -14,6 +14,10 @@ DONE:
   - Tooling scoped to src/ ON PURPOSE — tsconfig + eslint exclude all legacy folders (00-*…99-agents, schools/, dashboard/) until each view migrates into src/. Do not re-include them.
   - .brain/ active instruction runbooks bannered SUPERSEDED — stale instructions neutralized, stale reference docs left for Phase 5 reconciliation
 
+  Phase 2:
+  - 2.1 DONE: src/app/globals.css — 72 color tokens + 1 shadow ported verbatim from theme.js; dark default + [data-theme="light"] override; --color-row-hover kept at 0.03 (dark) distinct from --color-hover (0.05); verify-phase-2.sh exits 0 (tsc + eslint + build + parity=72 + row-hover sentinel).
+  - 2.2 DECIDED: design-tokens.js NOT ported — 815 lines, only radius.lg/radius.xl consumed (sidebar.jsx), both = Tailwind built-in rounded-lg/rounded-xl (8px/12px). Sidebar uses built-ins at Phase 3; file drops with it. No src/styles/tokens.ts.
+
 IN PROGRESS: none
 
 BLOCKED: none
@@ -23,5 +27,5 @@ NOTES:
   - 43 T tokens have no CSS var equivalent; hex dedup table deferred to Phase 2 (rg now available via toolchain)
   - 3 local modules shared across surfaces (theme.js, icons.jsx, onboard-form.jsx); Phase 4 decides separate apps vs route groups
 
-NEXT: Phase 2 (spine: tokens + hooks → typed modules)
-COMMIT: phase 1 work committed
+NEXT: Phase 2.3
+COMMIT: phase 1 work committed; phase 2.1+2.2 committed
