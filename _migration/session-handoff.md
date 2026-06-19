@@ -1,24 +1,15 @@
 # Handoff
 
-VERIFIED: verify-phase-1.sh exits 0 (tsc + eslint + next build + blank-page serve check)
+VERIFIED: verify-phase-2.sh exits 0 (tsc + eslint + build + 2.1 token parity + 2.3 serve gate) — green with usePages added.
 
 CHANGED:
-  - CLAUDE.md → replaced with migration executor map (Next.js phases 0-5)
-  - ARCHITECT.md → created; old operator CRM CLAUDE.md preserved here
-  - .brain/CLAUDE.md → SUPERSEDED banner added (routes to pre-migration how-to guides)
-  - .brain/how-to/session-close/CONTEXT.md → SUPERSEDED banner added
-  - .brain/how-to/01-component-edit/CONTEXT.md → SUPERSEDED banner added
-  - .brain/how-to/02-api-wire/CONTEXT.md → SUPERSEDED banner added
-  - .brain/how-to/03-view-add/CONTEXT.md → SUPERSEDED banner added
-  - .brain/how-to/repo-cleanup/CONTEXT.md → SUPERSEDED banner added
-  - .brain/whats-left.md → SUPERSEDED banner added
-  - _migration/progress.md → Phase 1 marked DONE, Phase 2 set as NEXT
-  - _migration/session-handoff.md → this file
+  - src/hooks/usePages.ts — added (Wave B); .then()-in-useEffect pattern, tick-based refetch; tsc + eslint + build pass
+  - _migration/progress.md — Wave A + Wave B marked DONE; NEXT updated to Wave C derive pass
 
 BROKEN: nothing
 
-NEXT BEST STEP: begin Phase 2 — port spine (design tokens + shared hooks) to typed modules in src/
-  - Start with token-map.md (phase-0/token-map.md) to identify the 57 T tokens
-  - Create src/app/globals.css @theme block from the token map
-  - Create src/hooks/ typed wrappers for the shared hooks (use-local-data.js, use-studio-context.js)
-  - Gate: verify-phase-2.sh must exit 0 before Phase 3
+NEXT BEST STEP: 2.4 Wave C — derive pass on use-local-data.js before porting
+  - 14 exports: useClients, useCampaigns, useLeads, useConversations, useEscalations, useBookings, useEnrollments, useOperatorTasks, useClientReports, useAutomationRules, useIntegrations, useAgentTenants, useRollups, usePageFunnel
+  - Has realtime subscriptions (window.sb.channel) + seed fallback (_useTable pattern) + derived rollups (deriveRollups, derivePageFunnel)
+  - Realtime and derived hooks need separate treatment from simple table reads
+  - Run a derive pass (like phase-2/derived.md) to capture signatures + dependencies before writing any src/ file

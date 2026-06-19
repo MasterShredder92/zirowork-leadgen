@@ -19,6 +19,9 @@ DONE:
   - 2.2 DECIDED: design-tokens.js NOT ported — 815 lines, only radius.lg/radius.xl consumed (sidebar.jsx), both = Tailwind built-in rounded-lg/rounded-xl (8px/12px). Sidebar uses built-ins at Phase 3; file drops with it. No src/styles/tokens.ts.
   - 2.3 DONE: src/lib/supabase/client.ts (module singleton, anon, no session — mirrors window.sb); src/app/providers.tsx ("use client" boundary; useSyncExternalStore theme, SSR-safe); src/app/layout.tsx (server component; pre-paint themeBoot script; wraps in Providers). @supabase/supabase-js installed. verify-phase-2.sh extended with 2.3 teeth (no hardcoded secrets in src/, serve gate 200 + clean HTML). Gate exits 0.
 
+  - 2.4 Wave A DONE — useIsMobile, useSupabaseTable, useOperatorContext(+useStudioContext stub) ported.
+  - 2.4 Wave B DONE — usePages ported. useStudents/useLessons confirmed dead (Phase-0 dead-code list + 0 call sites + not in any index.html) → NOT ported; deferred to 91-auth dead-code sweep.
+
 IN PROGRESS: none
 
 BLOCKED: none
@@ -28,6 +31,7 @@ NOTES:
   - 43 T tokens have no CSS var equivalent; hex dedup table deferred to Phase 2 (rg now available via toolchain)
   - 3 local modules shared across surfaces (theme.js, icons.jsx, onboard-form.jsx); Phase 4 decides separate apps vs route groups
   - Real @supabase/ssr cookie auth is a SEPARATE tracked change — deliberately not built in 2.3. Current client is anon+RLS only.
+  - ESLint rule react-hooks/set-state-in-effect requires setState calls inside .then() callbacks, not via void load() pattern. Use useSupabaseTable.ts pattern (query.then inside useEffect).
 
-NEXT: Phase 2.4 (hooks — typed wrappers for 93-hooks/ window globals)
-COMMIT: phase 1 committed; phase 2.1+2.2 committed; phase 2.3 committed
+NEXT: 2.4 Wave C — use-local-data.js (14 exports, realtime, seed fallback). Needs its own derive pass before porting.
+COMMIT: phase 1 committed; phase 2.1+2.2 committed; phase 2.3 committed; phase 2.4 Wave A+B committed
