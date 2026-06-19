@@ -1,3 +1,5 @@
+> **SUPERSEDED (Phase 1+).** Tasks below are API wiring items for the pre-migration Babel/`window.*` app. They are not the migration backlog. Current work lives in `_migration/progress.md`.
+
 # Production Wiring Checklist
 
 **Read this when you're ready to go live.** These are all the API endpoints and integrations that need to be wired to Supabase. Ignore until production.

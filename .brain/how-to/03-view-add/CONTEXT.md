@@ -1,3 +1,5 @@
+> **SUPERSEDED (Phase 1+).** New views now go into `src/app/` (App Router) and `src/components/`. Steps below describe adding views to the pre-migration Babel/`window.*` app including patching `index.html` and updating the old CLAUDE.md tree. See `/CLAUDE.md` for current approach and phase gates.
+
 # Stage 03 — Add View
 
 Adding a new page/view to the ZiroWork app.

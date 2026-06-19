@@ -1,3 +1,5 @@
+> **SUPERSEDED (Phase 1+).** API wiring in the migration happens per-view as each view ports to `src/`. Steps below describe wiring the pre-migration Babel/`window.*` app. See `/CLAUDE.md` for current approach and phase gates.
+
 # Stage 02 — Wire API
 
 Replace a mock data source with a live Supabase call. All wiring tasks are listed in `.brain/whats-left.md` — search there, not in source files.

@@ -1,3 +1,5 @@
+> **SUPERSEDED (Phase 1+).** Component work now happens in `src/` under Next.js App Router. Steps below describe editing the pre-migration Babel/`window.*` app. See `/CLAUDE.md` for current approach and phase gates.
+
 # 01 — Edit Component
 
 Editing or fixing a `.jsx` component or a section of `index.html`.

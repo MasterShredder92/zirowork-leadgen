@@ -1,3 +1,5 @@
+> **SUPERSEDED (Phase 1+).** This router and all how-to guides below describe the pre-migration Babel/`window.*` app. Current session flow, phase gates, and task routing live in `/CLAUDE.md` and `_migration/progress.md`. Do not follow the how-to guides for any migration-phase work.
+
 # .brain/ — Session Memory
 
 This folder is short-term memory. It changes every session. Not rules, not architecture — just where we are, what's left, and how to do repeatable tasks.

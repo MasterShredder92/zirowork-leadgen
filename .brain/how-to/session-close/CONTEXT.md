@@ -1,3 +1,5 @@
+> **SUPERSEDED (Phase 1+).** Session-close + commit flow now live in `/CLAUDE.md` and `_migration/progress.md`. Ignore the steps below; they describe the pre-migration app.
+
 # Stage 00 — End of Session
 
 Run at the end of every working session. Non-negotiable.

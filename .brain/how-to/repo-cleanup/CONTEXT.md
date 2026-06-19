@@ -1,3 +1,5 @@
+> **SUPERSEDED (Phase 1+).** Repo structure and the CLAUDE.md it references have changed. Steps below describe cleaning up the pre-migration repo layout. Current repo hygiene lives in `/CLAUDE.md` and `_migration/progress.md`.
+
 # repo-cleanup — Deep Repository Maintenance
 
 **When to use:** Health check flags warnings, end of sprint, or quarterly.
