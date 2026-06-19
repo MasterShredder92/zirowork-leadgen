@@ -138,7 +138,32 @@ dashboard/index.html:117  /dashboard/app.jsx
 
 ---
 
-## 4. Shared vs Unique
+## 4. onboard.html — Public Self-Serve Onboarding (rewritten from `/onboarding`)
+
+**CDN deps (same React/Babel/Supabase versions — no vis-network):**
+```
+https://unpkg.com/react@18.3.1/umd/react.development.js
+https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js
+https://unpkg.com/@babel/standalone@7.29.0/babel.min.js
+https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.1/dist/umd/supabase.min.js
+```
+
+**Local scripts (all 3 SHARED with operator):**
+```
+onboard.html:28   92-design/icons.jsx         ← shared with index.html
+onboard.html:31   92-design/theme.js           ← shared with index.html
+onboard.html:106  02-onboarding/onboard-form.jsx ← shared with index.html
+```
+
+**Total local scripts: 3** — all shared with the operator SPA. `onboard.html` has no private-only files.
+
+**Static entry points (0 local scripts):**
+- `www/index.html` — ZiroWork brand/business page (served at `/home`)
+- `legal/privacy-policy.html`, `legal/terms.html` — static legal pages
+
+---
+
+## 5. Shared vs Unique
 
 ### CDN (shared across ALL surfaces — same versions)
 | CDN | Operator | Schools | Dashboard |
@@ -151,30 +176,42 @@ dashboard/index.html:117  /dashboard/app.jsx
 
 Same versions across all 3 surfaces = strong route-group / monorepo signal.
 
-### Local modules — ZERO shared files across surfaces
-No local JS/JSX file is loaded by more than one surface.
+### Local modules — 3 shared across surfaces
 
-| Module | Operator | Schools | Dashboard |
-|--------|----------|---------|-----------|
-| `92-design/theme.js` | ✓ | ✗ | ✗ |
-| `92-design/design-tokens.js` | ✓ | ✗ | ✗ |
-| `92-design/icons.jsx` | ✓ | ✗ | ✗ |
-| `93-hooks/use-local-data.js` | ✓ | ✗ | ✗ |
-| `93-hooks/use-studio-context.js` | ✓ | ✗ | ✗ |
-| All operator views (`0x-*`) | ✓ | ✗ | ✗ |
-| All schools files (`schools/`) | ✗ | ✓ | ✗ |
-| All dashboard files (`dashboard/`) | ✗ | ✗ | ✓ |
+Source: `for h in $(find . -name '*.html' -not -path './.git/*'); do grep -oE 'src="[^"]+\.(jsx|js)"' "$h" | sed -E 's/^src="//; s/"$//; s|^/||' | grep -vE '^https?://' | sed "s|^|$h\t|"; done | cut -f2 | sort | uniq -d`
 
-**Each surface is a fully private island.** No shared JS modules exist at runtime across surfaces. The T theme system, data hooks, and icon set are operator-only.
+Output (3 files loaded by >1 entry point):
+```
+02-onboarding/onboard-form.jsx
+92-design/icons.jsx
+92-design/theme.js
+```
+
+These 3 files are shared between `index.html` (operator) and `onboard.html` (public self-serve). Schools and Dashboard load no files from this shared set — they remain surface-private.
+
+| Module | Operator | onboard.html | Schools | Dashboard |
+|--------|----------|-------------|---------|-----------|
+| `92-design/theme.js` | ✓ | ✓ | ✗ | ✗ |
+| `92-design/icons.jsx` | ✓ | ✓ | ✗ | ✗ |
+| `02-onboarding/onboard-form.jsx` | ✓ | ✓ | ✗ | ✗ |
+| `92-design/design-tokens.js` | ✓ | ✗ | ✗ | ✗ |
+| `93-hooks/use-local-data.js` | ✓ | ✗ | ✗ | ✗ |
+| `93-hooks/use-studio-context.js` | ✓ | ✗ | ✗ | ✗ |
+| All other operator views (`0x-*`) | ✓ | ✗ | ✗ | ✗ |
+| All schools files (`schools/`) | ✗ | ✗ | ✓ | ✗ |
+| All dashboard files (`dashboard/`) | ✗ | ✗ | ✗ | ✓ |
+
+Schools and Dashboard are surface-private (no cross-surface module sharing). Operator and onboard.html share 3 modules.
 
 ### `window.sb` — defined independently per surface
 - Operator: `index.html` inline script (line 125) → operator Supabase client
 - Dashboard: `dashboard/index.html` inline script (line 20) → same Supabase project, separate client instance
-- Schools: CDN loaded, no inline init visible — verify in `schools/app.jsx`
+- Schools: CDN loaded; `schools/app.jsx` initializes a module-local Supabase client (not `window.sb`)
+- onboard.html: CDN loaded; Supabase access delegated to `onboard-form.jsx` (shared with operator)
 
 ---
 
-## 5. Routing Table (verbatim from `vercel.json`)
+## 6. Routing Table (verbatim from `vercel.json`)
 
 **Redirects** (host-based, for zirowork.com domain):
 ```
@@ -200,10 +237,23 @@ The catch-all regex carves out 8 path prefixes before falling through to the ope
 
 ---
 
-## 6. Routing Fact (for Phase 4)
+## 7. Routing Fact (for Phase 4)
 
-`/schools` and `/dashboard` each rewrite to their own `index.html`. Combined with the zero shared-local-modules finding, these surfaces are already hard-separated at the routing AND module levels. The current architecture maps cleanly to either:
-- **3 separate Next.js apps** (maximum isolation, matches current boundaries)
-- **1 Next.js app with 3 route groups** (shared CDN deps + same Supabase project are the commonality)
+`/schools` and `/dashboard` each rewrite to their own `index.html` and share no local JS modules with the operator or with each other. `/onboarding` rewrites to `onboard.html`, which shares 3 local modules with the operator (`theme.js`, `icons.jsx`, `onboard-form.jsx`). `www/index.html` and `legal/*.html` are static pages with 0 local scripts.
+
+**Total HTML entry points on disk: 7** (`find . -name '*.html' -not -path './.git/*' | wc -l`)
+```
+dashboard/index.html
+index.html
+legal/privacy-policy.html
+legal/terms.html
+onboard.html
+schools/index.html
+www/index.html
+```
+
+The current architecture maps to either:
+- **3–4 separate Next.js apps** (maximum isolation, matches current module boundaries)
+- **1 Next.js app with route groups** (shared CDN versions + 3 shared local modules are commonality)
 
 This is a Phase 4 architectural decision, not a Phase 0 conclusion.

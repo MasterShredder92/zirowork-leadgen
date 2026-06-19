@@ -219,8 +219,8 @@ Source: `Router.jsx` renderMain() switch. Every `*View` global is referenced onl
 
 ### LEAVES — migrate per-view; no other view depends on them
 
-All 16 `*View` globals:
-`CommandCenterView`, `ClientsView`, `OnboardForm`, `ClientOnboardingView`, `CampaignsView`, `PagesView`, `LeadsView`, `ConversationsView`, `EscalationsView`, `BookingsView`, `EnrollmentsView`, `ReportingView`, `AutomationRulesView`, `IntegrationsView`, `SettingsView`, `InsightsView`, `StudioMapView`
+All 17 operator-surface globals (Router.jsx is the sole consumer for each):
+`CommandCenterView`, `ClientsView`, **`OnboardForm`** _(cross-surface: also loaded by `onboard.html` — porting it affects two surfaces)_, `ClientOnboardingView`, `CampaignsView`, `PagesView`, `LeadsView`, `ConversationsView`, `EscalationsView`, `BookingsView`, `EnrollmentsView`, `ReportingView`, `AutomationRulesView`, `IntegrationsView`, `SettingsView`, `InsightsView`, `StudioMapView`
 
 Schools surface leaves (fully isolated):
 `LandingLayout`, `PianoPage`, `GuitarPage`, `VocalsPage`, `DrumsPage`, `SignupPage`, `ThankYouPage`, `ConfirmPage`, plus 4 widgets
