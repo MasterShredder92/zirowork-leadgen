@@ -1,201 +1,61 @@
-# ZiroWork Lead-Gen Platform
+# CLAUDE.md — zirowork-leadgen (executor map)
 
-React 18 + Babel SPAs. No bundler. Supabase live.
-**ONE repo** (`github.com/MasterShredder92/zirowork-leadgen`), **ONE Vercel project** (Root Directory `.`).
-Surfaces, all in this repo, routed by root `vercel.json`:
-operator CRM (`/`) · student landing pages (`/schools`) · client portal (`/dashboard`) · public self-serve onboarding (`/onboarding` → `onboard.html`).
-Doctrine / SSOT: `ZiroWork-Client-Flow` + `94-knowledge/northstar-ideology.md`.
+Map, not a manual. What this repo is, how to run it, how to verify it, what you may not break.
+Moving state (current phase, what's done/blocked) lives in `_migration/progress.md` — read it first every session.
 
----
+## WHAT THIS IS
+Correcting a shipping lead-gen app, not building a new one. We are replacing the foundation
+(CDN React + in-browser Babel + `window.*` globals + inline styles) with a real toolchain
+(Next 16 App Router + TS strict + Tailwind v4 + ESLint 9), one view at a time, without changing
+what the app does or how it looks. The migration is what makes the app controllable by an agent later.
 
-## Navigate First — No Skipping
+## CURRENT STATE
+Identify the phase by which gates already pass — do not assume from this file. Source of truth: `_migration/progress.md`.
+- Phase 0 (map terrain): DONE — `bash _migration/verify-phase-0.sh` exits 0.
+- Phase 1 (empty toolchain): DONE — `bash _migration/verify-phase-1.sh` exits 0.
+- Phase 2 (spine: tokens + hooks → typed modules): NEXT.
 
-1. Read this file (CLAUDE.md) — you are doing this now
-2. Read root `CONTEXT.md` — routes your task to the correct folder
-3. Read the target folder's `CONTEXT.md` — load list + guardrails
-4. Load only the files listed there
-5. Do the task. Nothing else.
+## HOW TO RUN
+1. `npm install`
+2. `npm run dev` → http://localhost:3000 (currently a blank page — that is correct; no views ported yet)
+Scripts: `dev` `build` `start` `lint` (= `eslint`). Node ≥ 20.9.
 
-**Cannot identify the correct folder? STOP AND ASK. Do not explore.**
+## HOW TO VERIFY (the gate is the truth, not "looks done")
+Run the current phase's checker. Green (exit 0) = the only valid "done". The worker writes claims; the script grades them.
+- `bash _migration/verify-phase-1.sh` — runs tsc, eslint, build, and a blank-page serve check as four independent exit codes.
+- Each fact phase ships its own `verify-phase-N.sh`; it re-derives every headline number from disk and fails if the artifact disagrees.
+- A gate that can't go red is not a gate. After widening any exclude/ignore, plant an error in `src/` and confirm the gate fails, then revert.
 
----
+## NON-NEGOTIABLES
+1. Phases run IN ORDER. Phase N+1 is forbidden until Phase N's gate passes. The agent layer (Phase 5) is built LAST.
+2. Migration ≠ redesign. Change how code is built/organized; never change behavior or pixels. Same views, same output.
+3. Per-file gate when porting a view: it renders identically to the original + tsc + lint pass. Pixels differ → migration is wrong.
+4. One change per commit. Never mix migration with improvements.
+5. Mechanically-checkable rule → a script that exits non-zero (hex literals, missing columns, import style, types, lint). Never prose.
+6. Trust behavior, not self-reports. "It runs / the gate passes" counts. "Done" / "production-ready" is not evidence.
+7. Tooling is scoped to `src/` ON PURPOSE. `tsconfig` + `eslint` exclude all legacy folders (`00-*`…`99-agents`, `schools/`, `dashboard/`)
+   until each view migrates into `src/`. Do NOT re-include them — legacy `.jsx`/Deno `.ts` will face-plant tsc. Coverage grows as views move.
+8. Backend is UNCHANGED and lives in the Supabase project (ref `txpgyuetfsrzfxxopwzf`), not this repo. Don't touch it during view migration; it's a separate axis with its own commits.
+9. Every session ends clean: phase work verified, no debug/half-commits, `progress.md` + `session-handoff.md` updated. "Clean up later" = never.
 
-## Non-Negotiable Rules
+## STACK (pins, do not drift)
+- next 16.2.9 · react / react-dom 19.2.4 · typescript ^5 (strict, noEmit = type gate) · tailwindcss ^4 + @tailwindcss/postcss ^4 · eslint ^9 + eslint-config-next (flat config)
+- App Router only: Server Components default, `"use client"` opt-in. Do not blanket-`"use client"`.
+- Tailwind v4 is CSS-first: theme in `src/app/globals.css` via `@theme`, components use `var(--token)`. No `tailwind.config.js`, no hex literals in components, no color utilities.
+- In Next 16, `next build` does NOT run eslint and `next lint` is gone — lint is its own gate step.
 
-- **Do only what was asked.** No extra features, no cleanup, no "while I'm here."
-- **Ask, don't assume.** Unclear? Stop and ask. Never fill gaps with defaults or guesses.
-- **Load only what the task requires.** Each folder's CONTEXT.md has the load list.
-- **Surgical edits only.** Touch only the file and lines the task requires.
-- **Judgment is not permitted.** Rules are not suggestions. If not covered — stop and ask.
-
----
-
-## Keep Docs In Sync (anti-stale)
-
-These docs describe the repo and MUST be updated in the **same change** that makes them stale — that's part of "done," not optional:
-
-| If you change… | Update… |
-|---|---|
-| operator folder structure, routing, globals, or surfaces | this `CLAUDE.md` (tree + tables) + `94-knowledge/architecture.md` |
-| `schools/` · `dashboard/` · `onboard.html` · `vercel.json` routing | this `CLAUDE.md` + `README.md` |
-| edge functions / backend layout in `99-agents/` | `99-agents/CONTEXT.md` (never alter agent names, voice, or brand speak) |
-| a folder's files or load list | that folder's `CONTEXT.md` |
-| how any page reads counts, derives a shared fact, or writes a table/column | `94-knowledge/data-ssot.md` (the SSOT contract) |
-
-Each of these docs carries a `> Keep this in sync:` header. **A stale doc is a defect.**
-
----
-
-## Branding Gate (never ship a page without it)
-
-Every HTML entry point — operator, `schools`, `dashboard`, `onboard.html`, and **any new page/surface** — MUST include the ZiroWork favicon set + brand assets. Not optional. A page without ZiroWork branding is **NOT done**.
-
-```html
-<link rel="icon" href="/96-public/favicon.ico?v=3" sizes="any">
-<link rel="icon" href="/96-public/icon.svg?v=3" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/96-public/apple-touch-icon.png?v=3">
+## STRUCTURE (new tree coexists with old until migrated)
+```
+src/app/            ← new: layout.tsx, page.tsx, globals.css (App Router lives here)
+src/components/      ← new (Phase 3): src/components/[domain]/ client components
+src/hooks/           ← new (Phase 2/3): use[Domain]State.ts
+_config/             ← new (Phase 5): governance / tokens / schema docs
+.claude/workflows/   ← new (Phase 5): orchestrators
+_migration/          ← phase artifacts, verify-phase-N.sh, progress.md, session-handoff.md
+00-* … 99-agents/    ← LEGACY views (window.* jsx). Excluded from tooling. Deleted leaf-by-leaf as each ports to src/.
+index.html, schools/, dashboard/, www/, legal/, vercel.json ← legacy entry points + routing. Routing moves into App Router at Phase 4; don't patch vercel.json before then.
 ```
 
-Brand assets live in `96-public/`. (Operator `index.html` is served at `/` so it uses relative `96-public/...`; every other surface uses absolute `/96-public/...`.)
-
----
-
-## Single-Source-of-Truth Gate (one dashboard, not ten sections)
-
-Every page reads the same fact the same way and writes to the same place. No page computes a count its own way; no page reads a stale stored copy. **Full doctrine + the pre-ship checklist: [`94-knowledge/data-ssot.md`](94-knowledge/data-ssot.md). Read it before adding or editing any page that shows counts or edits client data.**
-
-Non-negotiable:
-- **Counts are derived, never read from a stored column.** Leads/trials/enrollments/active-campaigns/open-escalations/conversion all come from `window.useRollups()` — NEVER from `clients.leads_30d`, `campaigns.leads`, `open_escalations`, etc. Those denormalized columns drift and are banned for display.
-- **Exception:** `clients.mrr_cents` is the client's contract fee (a billing value), not a count — read it directly.
-- **Same fact → same read path.** If two pages show the same number, they call the same hook.
-- **Writes hit the source table only**, with columns that exist in the schema.
-- **Shared edit surfaces** (operator side panel ↔ client portal) write the same `clients` + `agent_tenants.config` rows.
-
-A page that reads a stored count column, or computes a shared number its own way, is **NOT done.**
-
----
-
-## Repo Tree
-
-One repo, one Vercel project (root dir `.`). Operator folder number = CRM sidebar nav position.
-
-```
-zirowork-leadgen/
-│
-│  OPERATOR CRM — served at /  (internal; numbered folder = sidebar position)
-├── index.html              — operator SPA shell + <script> load order (CRITICAL: order matters)
-├── 00-command-center/      window.CommandCenterView   | route: command-center
-├── 01-clients/             window.ClientsView         | route: clients
-├── 02-onboarding/          window.ClientOnboardingView| route: onboarding  (also powers onboard.html)
-├── 03-campaigns/           window.CampaignsView       | route: campaigns
-├── 04-pages/               window.PagesView           | route: pages
-├── 05-leads/               window.LeadsView           | route: leads
-├── 06-conversations/       window.ConversationsView   | route: conversations
-├── 07-escalations/         window.EscalationsView     | route: escalations
-├── 08-bookings/            window.BookingsView        | route: bookings
-├── 09-enrollments/         window.EnrollmentsView     | route: enrollments
-├── 10-reporting/           window.ReportingView       | route: reporting
-├── 11-automation-rules/    window.AutomationRulesView | route: automation-rules
-├── 13-integrations/        window.IntegrationsView    | route: integrations
-├── 14-settings/            window.SettingsView        | route: settings
-├── 15-insights/            window.InsightsView        | route: insights
-├── 16-studio-map/          window.StudioMapView       | route: studio-map
-├── 90-shell/               — Header, Router, sidebar, user-menu, workspace-overlay
-├── 91-auth/                — Session.jsx (auth bypass, seeds globals)
-├── 92-design/              — theme.js ⚠️ HIGH RISK, design-tokens, design-tweaks, icons
-├── 93-hooks/               — use-local-data.js, use-studio-context.js, use-supabase-table.js (stub), use-is-mobile.js, use-pages.js …
-├── 96-public/              — favicons, icon.svg
-│
-│  PUBLIC SURFACES — same Vercel project, routed by vercel.json
-├── schools/                — student landing pages  → /schools/{slug}/{instrument}
-├── dashboard/              — client portal           → /dashboard
-├── onboard.html            — public self-serve onboarding, served at /onboarding (renders 02-onboarding OnboardForm)
-├── onboarding/             — scaffold (future onboarding section — empty)
-├── www/                    — ZiroWork brand/business page (A2P compliance: identity + SMS program disclosure); served at /home; zirowork.com root redirects there via vercel.json host redirect once the domain is attached
-├── legal/                  — static legal pages (SMS-compliant) → /privacy, /privacy-policy, /terms, /terms-of-service. THE ONLY SOURCE — intake-form's legal routes redirect here; the old schools/ copies are deleted
-│
-│  BACKEND & DOCS — not served to the browser
-├── 99-agents/              — Python / Supabase edge-function backend
-├── 94-knowledge/           — reference docs (architecture, data-model, design-system, northstar …)
-├── ZiroWork-Client-Flow    — single source of truth / doctrine (markdown, no extension)
-├── MASTER_PLAN.md          — launch execution plan
-├── .brain/                 — session memory + logs
-│
-├── vercel.json             — rewrites /schools + /dashboard + /privacy(-policy) + /terms(-of-service) + zirowork.com host→www/; operator served at /
-├── CLAUDE.md               — this file (Layer 0 router)
-└── CONTEXT.md              — task router (Layer 1)
-```
-
----
-
-## Safety Gates
-
-| File | Risk |
-|---|---|
-| `92-design/theme.js` | Breaks all themes globally — `window.T` used by every view |
-| `index.html` script load order | New pages must load **before** `90-shell/Router.jsx` |
-| `90-shell/Router.jsx renderMain()` | Duplicate route cases silently overwrite each other |
-| `93-hooks/use-local-data.js` | `window.SEED_DATA` — all page views read from here |
-| `vercel.json` (root) | Wrong/removed rewrite 404s `/schools`, `/dashboard`, or the `/privacy`+`/terms` URLs registered with Twilio (A2P rejection risk) |
-| `legal/*.html` | THE single source of privacy/terms (all other surfaces link or redirect here) — its URLs are registered with Twilio; breaking them = A2P rejection |
-| `schools/pages/signup.jsx` SMS consent checkbox | Never remove or pre-check it. Consent gates the TEXT, never the lead: scoreAndSend + send-followup send only when `sms_consent=true`; on-reply honors stored `opted_out` + STOP/START/HELP keywords. Leads ALWAYS sync to the CRM regardless of consent |
-| `onboard.html` ↔ `02-onboarding/onboard-form.jsx` | Form shared by CRM onboarding view AND public onboard.html — edits hit both |
-| `schools/index.html`, `dashboard/index.html` | Script `src`s are absolute (`/schools/…`, `/dashboard/…`) — keep the prefix or assets 404 |
-
----
-
-## Key Globals
-
-| Symbol | File | Purpose |
-|---|---|---|
-| `window.T` | `92-design/theme.js` | Theme tokens — used by every view |
-| `window.SEED_DATA` | `93-hooks/use-local-data.js` | Dev seed data fallback |
-| `window.useRollups` | `93-hooks/use-local-data.js` | **SSOT for counts** — derives per-client/per-campaign leads/trials/enrollments/etc. from source tables. Use instead of stored `*_30d` columns. See `94-knowledge/data-ssot.md` |
-| `window.usePageFunnel` | `93-hooks/use-local-data.js` | **SSOT for the landing-page funnel** — per page (slug+instrument): views → clicks → leads → trials → enrolled, derived from `page_events` + leads/bookings/enrollments. Powers `03-campaigns`. See `94-knowledge/data-ssot.md` |
-| `window.currentUser` | `91-auth/Session.jsx` | `{ full_name, role, email }` |
-| `window.currentOperator` | `91-auth/Session.jsx` | `{ name, label }` |
-| `window.useOperatorContext` | `93-hooks/use-studio-context.js` | Operator identity hook |
-| `window.useSupabaseTable` | `93-hooks/use-supabase-table.js` | Stub — warns + returns empty |
-| `window.ComingSoon` | `90-shell/Header.jsx` | Fallback for unbuilt routes |
-| `window.App` | `90-shell/Router.jsx` | Root component |
-| `window.Root` | `91-auth/Session.jsx` | ReactDOM mount point |
-
----
-
-## Quick Navigation
-
-| Need | Go Here |
-|---|---|
-| Task routing | `CONTEXT.md` |
-| Product vision + business model | `94-knowledge/northstar-ideology.md` |
-| Single source of truth (doctrine) | `ZiroWork-Client-Flow` |
-| Design system | `94-knowledge/design-system.md` |
-| Architecture | `94-knowledge/architecture.md` |
-| Data model | `94-knowledge/data-model.md` |
-| Source-of-truth contract (counts, reads, writes) | `94-knowledge/data-ssot.md` |
-| Seed data | `93-hooks/use-local-data.js` |
-| Auth bypass | `91-auth/Session.jsx` |
-| SPA routing (operator) | `90-shell/Router.jsx` |
-| Sidebar nav | `90-shell/sidebar.jsx` |
-| Student landing pages | `schools/` → /schools/{slug}/{instrument} |
-| Client portal | `dashboard/` → /dashboard |
-| Public onboarding form | `onboard.html` + `02-onboarding/onboard-form.jsx` |
-| Deploy / routing | root `vercel.json` (one Vercel project, root dir `.`) |
-| Agent backend | `99-agents/README.md` |
-| Supabase credentials + live access | `.env` (gitignored) — see **Live Supabase Access** below |
-```
-
----
-
-## Live Supabase Access
-
-**All live credentials live in `.env`** (gitignored — never committed, never deployed; edge functions read their own secrets from the Supabase dashboard). Project ref `txpgyuetfsrzfxxopwzf`. This is the SSOT pointer — agents pull the actual values from `.env`, never from a committed file.
-
-| To do… | Use (from `.env`) | Notes |
-|---|---|---|
-| Read/write table rows | `SUPABASE_URL` + `SUPABASE_ANON_KEY` (or `SUPABASE_SERVICE_ROLE_KEY`) via PostgREST `/rest/v1/` | RLS is open in Phase 2 |
-| Call an edge function / pg_cron | `SUPABASE_SECRET_KEY` (`sb_secret_…`) as `Authorization: Bearer` | ⚠ This project migrated to new keys — the legacy `service_role` JWT returns **401** from functions |
-| Run SQL / DDL (create/alter/drop) | `SUPABASE_MGMT_TOKEN` → `POST https://api.supabase.com/v1/projects/txpgyuetfsrzfxxopwzf/database/query`, body `{"query":"…"}` | PostgREST cannot run DDL; the CLI is also logged in |
-| Deploy an edge function | `supabase functions deploy <name> --project-ref txpgyuetfsrzfxxopwzf` | CLI session already authenticated |
-
-**Never** paste these secrets into committed files — only `.env` holds them.
+## ROLES
+Plan/architecture is produced upstream (file order, per-file specs, gates). This repo is the executor surface.
+You commit; nothing else decides that. For multi-session work, keep `progress.md` and `session-handoff.md` current so the thread is never lost.
