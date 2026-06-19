@@ -33,5 +33,5 @@ NOTES:
   - Real @supabase/ssr cookie auth is a SEPARATE tracked change — deliberately not built in 2.3. Current client is anon+RLS only.
   - ESLint rule react-hooks/set-state-in-effect requires setState calls inside .then() callbacks, not via void load() pattern. Use useSupabaseTable.ts pattern (query.then inside useEffect).
 
-NEXT: 2.4 Wave C — use-local-data.js (14 exports, realtime, seed fallback). Needs its own derive pass before porting.
+NEXT: 2.4 Wave C1 — port _useTable engine to typed useTable<T>.
 COMMIT: phase 1 committed; phase 2.1+2.2 committed; phase 2.3 committed; phase 2.4 Wave A+B committed
