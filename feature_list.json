@@ -97,7 +97,7 @@
       "surface": "operator",
       "behavior": "Bookings renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare bookings",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": "Data view — empty-state baseline."
     },
@@ -115,7 +115,7 @@
       "surface": "operator",
       "behavior": "Reporting renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare reporting",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": "Likely thin — good first lane candidate."
     },
@@ -160,7 +160,7 @@
       "surface": "operator",
       "behavior": "Settings renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare settings",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": ""
     },

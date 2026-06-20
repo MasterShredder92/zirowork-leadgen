@@ -1,20 +1,20 @@
 # Handoff
 
-VERIFIED: Phase 3 shell + InsightsView COMPLETE.
-  - verify-phase-3-views.sh exits 0: tsc+eslint+build (channels 1-3) + render-diff 0.85% (channel 4) + structural 0 window.* refs (channel 5) + /insights→200 (channel 6).
-  - gate-integrity.sh exits 0.
-  - CHECKPOINT written: _migration/epic/CHECKPOINTS/phase-3-shell-insights.md
+VERIFIED: Phase 3.3 + 3.4 — ReportingView + SettingsView COMPLETE.
+  - flip-state.mjs exits 0 for both: reporting → passing, settings → passing.
+  - 4 views total passing: insights, bookings, reporting, settings.
 
-CHANGED (phase-3-shell-insights):
-  - public/brand/ — zw-bolt-dark.png + zw-bolt-light.png (copied from 92-design/brand/)
-  - src/app/globals.css — 10 new @theme tokens (MC gradient, user avatar bg/text, 6 insight category accents); @layer base html/body base styles + scrollbar; .insights-row :hover class
-  - src/app/layout.tsx — Plus_Jakarta_Sans via next/font/google (400/500/600/700); title updated
-  - src/app/(operator)/layout.tsx — NEW: server layout wrapping OperatorShell
-  - src/components/shell/OperatorShell.tsx — NEW: "use client"; desktop sidebar + header + main; usePathname active state; useTheme toggle; 17 nav items
-  - src/components/shell/UserMenu.tsx — NEW: "use client"; closed button (MC gradient avatar + ▼); dropdown deferred
-  - src/app/(operator)/insights/page.tsx — NEW: server page; renders InsightsView
-  - src/components/views/InsightsView.tsx — NEW: server component; 6 PLAYBOOKS; CSS :hover; color-mix chip bg; no JS handlers
-  - package.json / package-lock.json — lucide-react ^1.21.0
+CHANGED (this session):
+  - src/app/(operator)/reporting/page.tsx — NEW: server page; renders ReportingView
+  - src/components/views/ReportingView.tsx — NEW: "use client"; ROI metrics, SMS counts, enrollment trend
+  - src/app/globals.css — --color-roi-accent added (dark #4ADE80 / light #15803D) for ReportingView
+  - src/app/(operator)/settings/page.tsx — NEW: server page; renders SettingsView
+  - src/components/views/SettingsView.tsx — NEW: "use client"; send-window + max-followups config via useAgentTenants
+  - src/lib/derive/types.ts — Client type added (required by SettingsView + ReportingView)
+  - src/hooks/tables.ts — useClients<Client> typed (spine fix, required by ReportingView)
+  - .gitignore — *.tsbuildinfo added; tsconfig.tsbuildinfo untracked
+  - .claude/settings.json — auto-save commit hook removed
+  - feature_list.json — reporting + settings flipped to passing by gate
 
 PHASE-3 SHELL DEBT (deferred — not in static baseline, can't gate):
   - Command palette (⌘K overlay)
@@ -28,7 +28,7 @@ PHASE-3 SHELL DEBT (deferred — not in static baseline, can't gate):
 
 BROKEN: nothing
 
-NEXT BEST STEP: Phase 3.2 — port next view.
+NEXT BEST STEP: Phase 3.5 — port next view.
   PROCESS:
     1. Start legacy server (Node.js one-liner from previous handoff, port 3001)
     2. Start Next.js dev server (npm run dev, port 3000)
@@ -37,10 +37,12 @@ NEXT BEST STEP: Phase 3.2 — port next view.
     5. Create src/app/(operator)/<view>/page.tsx + src/components/views/<ViewName>View.tsx
     6. Run gate: bash _migration/epic/GATES/verify-phase-3-views.sh
     7. Iterate until exit 0
+    8. node flip-state.mjs → commit feature_list.json
 
-  CANDIDATE VIEWS (simplest first — no live data needed):
-    - reporting, studio-map (likely static/placeholder)
-    - bookings, escalations, leads (data views — need empty-state baseline capture with window.sb=null)
+  CANDIDATE VIEWS (simplest first):
+    - studio-map (likely static/placeholder — no data hooks)
+    - leads, escalations, conversations (data views — need empty-state baseline with window.sb=null)
+    - campaigns, pages, clients, onboarding (moderate complexity)
     - command-center (most complex — requires empty-state baseline)
 
 KEY GOTCHAS:
@@ -49,5 +51,4 @@ KEY GOTCHAS:
        node -e "const http=require('http'),fs=require('fs'),path=require('path');http.createServer((req,res)=>{const u=req.url==='/'?'/index.html':req.url;const f=path.join(process.cwd(),u.split('?')[0]);try{const d=fs.readFileSync(f);const ct={'.html':'text/html','.js':'text/javascript','.jsx':'text/javascript','.css':'text/css'}[path.extname(f)]||'text/plain';res.writeHead(200,{'Content-Type':ct});res.end(d)}catch(e){res.writeHead(404);res.end()}}).listen(3001,()=>console.log('OK'))"
   3. Data views: baseline must be captured with window.sb=null on legacy side (empty state), and SUPABASE_URL='' on Next.js side to avoid real data differences.
   4. Shell is already ported — next views ONLY need page.tsx + ViewName.tsx; no shell changes needed unless fixing debt.
-
-COMMIT PENDING: all of the above changes are uncommitted.
+  5. flip-state.mjs lives in PROJECT ROOT (not _migration/) — run as: node flip-state.mjs
