@@ -12,6 +12,9 @@
    ============================================================================ */
 
 @theme {
+  /* Phase 3 additions — ReportingView ROI accent (dark/light matched to T.isDark logic) */
+  --color-roi-accent: #4ADE80;
+
   /* Phase 3 additions — BookingsView status/program tokens (single-value, no light override) */
   --color-status-scheduled: #22C55E;
   --color-status-requested: #3B82F6;
@@ -143,6 +146,7 @@
     --color-mc-grad-from: #D97757;
     --color-mc-grad-to: #2A6FDB;
     --color-user-av-bg: #1C1C1A;
+    --color-roi-accent: #15803D;
   }
 
   [data-theme="light"] {
