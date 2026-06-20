@@ -21,6 +21,7 @@ DONE:
 
   - 2.4 Wave A DONE — useIsMobile, useSupabaseTable, useOperatorContext(+useStudioContext stub) ported.
   - 2.4 Wave B DONE — usePages ported. useStudents/useLessons confirmed dead (Phase-0 dead-code list + 0 call sites + not in any index.html) → NOT ported; deferred to 91-auth dead-code sweep.
+  - 2.4 Wave C DONE — use-local-data spine ported. 4 derive files (types, rollups, integrations, pageFunnel) + 4 hook files (useRealtimeTable engine, tables, useRollups, usePageFunnel). 4 dead hooks NOT ported (useConversations, useOperatorTasks, useClientReports, useIntegrations). verify-phase-2-waveC.sh exits 0; gate-integrity.sh exits 0. PHASE 2 COMPLETE.
 
 IN PROGRESS: none
 
@@ -32,6 +33,7 @@ NOTES:
   - 3 local modules shared across surfaces (theme.js, icons.jsx, onboard-form.jsx); Phase 4 decides separate apps vs route groups
   - Real @supabase/ssr cookie auth is a SEPARATE tracked change — deliberately not built in 2.3. Current client is anon+RLS only.
   - ESLint rule react-hooks/set-state-in-effect requires setState calls inside .then() callbacks, not via void load() pattern. Use useSupabaseTable.ts pattern (query.then inside useEffect).
+  - ESLint v9 react-hooks/purity fires on Date.now() inside useMemo — use eslint-disable-next-line react-hooks/purity for rollup-window use cases.
 
-NEXT: 2.4 Wave C1 — port _useTable engine to typed useTable<T>.
-COMMIT: phase 1 committed; phase 2.1+2.2 committed; phase 2.3 committed; phase 2.4 Wave A+B committed
+NEXT: Phase 3 — BUILD render-diff gate FIRST (no view ports before it). Per RUNBOOK: Phase 3 gate is prerequisite before any view migration.
+COMMIT: phase 1 committed; phase 2.1+2.2 committed; phase 2.3 committed; phase 2.4 Wave A+B committed; Wave C pending Zach commit

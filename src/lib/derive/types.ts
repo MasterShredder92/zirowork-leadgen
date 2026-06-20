@@ -1,0 +1,13 @@
+export type Lead = { id: string; client_id?: string | null; campaign_id?: string | null; created_at?: string | null; page_url?: string | null };
+export type Booking = { lead_id?: string | null; created_at?: string | null };
+export type Enrollment = { lead_id?: string | null; client_id?: string | null; outcome?: string | null; created_at?: string | null };
+export type Campaign = { id: string; client_id?: string | null; status?: string | null };
+export type Escalation = { tenant_id?: string | null; resolved_at?: string | null };
+export type Client = { id: string; name?: string | null; school_name?: string | null; lead_form_webhook?: string | null };
+export type AgentTenant = { tenant_id?: string | null; config?: { openphone_number_id?: string | null } | null; square_customer_id?: string | null; square_card_id?: string | null; per_enrollment_fee_cents?: number | null; intake_api_key?: string | null };
+export type PageEvent = { type?: string | null; slug?: string | null; instrument?: string | null; created_at?: string | null };
+export type ClientPage = { id: string; client_id?: string | null; school_name?: string | null; instrument: string; slug: string; status?: string | null; is_active?: boolean | null };
+export type ClientRollup = { leads_30d: number; trials_30d: number; enrollments_30d: number; active_campaigns: number; open_escalations: number };
+export type CampaignRollup = { leads: number; trials: number; enrolled: number };
+export type IntegrationRow = { client_id: string; client_name: string; service: string; label: string; status: string; detail: string };
+export type FunnelRow = { id: string; client_id?: string | null; client_name: string; instrument: string; rawSlug: string; rawInstrument: string; status: string; slug: string; views: number; clicks: number; leads: number; trials: number; enrolled: number };

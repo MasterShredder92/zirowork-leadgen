@@ -45,8 +45,8 @@ export function usePages(): {
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    // Legacy guarded `if (!window.sb)`; the module singleton always exists, so that
-    // branch is unreachable now — dropping it changes no behavior.
+    // Legacy null-guarded against absent client; module singleton always exists,
+    // so that branch is unreachable — dropping it changes no behavior.
     supabase
       .from("client_pages")
       .select("*")
