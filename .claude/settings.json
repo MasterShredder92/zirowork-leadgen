@@ -23,7 +23,9 @@
       "Grep(*)"
     ]
   },
-  "enabledMcpjsonServers": ["codegraph"],
+  "enabledMcpjsonServers": [
+    "codegraph"
+  ],
   "hooks": {
     "PostToolUse": [
       {
@@ -59,13 +61,6 @@
             "command": "python .claude/sweep-contexts.py",
             "statusMessage": "Sweeping CONTEXT.md files...",
             "timeout": 60,
-            "async": false
-          },
-          {
-            "type": "command",
-            "command": "bash -c 'if git status --porcelain | grep -q .; then git add -A && git commit -m \"chore: auto-save $(date +%Y-%m-%d)\" && git push origin main; fi'",
-            "statusMessage": "Auto-saving uncommitted changes...",
-            "timeout": 30,
             "async": false
           }
         ]
