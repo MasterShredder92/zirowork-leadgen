@@ -9,6 +9,7 @@ Thumbs.db
 node_modules/
 .next/
 next-env.d.ts
+*.tsbuildinfo
 
 # Environment
 .env
