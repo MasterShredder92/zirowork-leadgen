@@ -1,6 +1,6 @@
 export type Lead = { id: string; client_id?: string | null; campaign_id?: string | null; created_at?: string | null; page_url?: string | null; phone?: string | null };
 export type Booking = { id: string; lead_id?: string | null; created_at?: string | null; parent_name?: string | null; student_name?: string | null; client_name?: string | null; program?: string | null; status?: string | null; date?: string | null; time?: string | null; teacher?: string | null };
-export type Enrollment = { lead_id?: string | null; client_id?: string | null; outcome?: string | null; created_at?: string | null; weekly_rate_cents?: number | null };
+export type Enrollment = { id: string; lead_id?: string | null; client_id?: string | null; parent_name?: string | null; student_name?: string | null; client_name?: string | null; program?: string | null; outcome?: string | null; enrolled_at?: string | null; weekly_rate_cents?: number | null; created_at?: string | null };
 export type Campaign = { id: string; client_id?: string | null; status?: string | null };
 export type Escalation = { tenant_id?: string | null; resolved_at?: string | null };
 export type Client = { id: string; name?: string | null; school_name?: string | null; lead_form_webhook?: string | null; status?: string | null; mrr_cents?: number | null; city?: string | null };
