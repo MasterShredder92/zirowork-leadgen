@@ -12,6 +12,18 @@
    ============================================================================ */
 
 @theme {
+  /* Phase 3 additions — shell + InsightsView tokens */
+  --color-mc-grad-from: #D97757;
+  --color-mc-grad-to: #2A6FDB;
+  --color-user-av-bg: rgba(255,255,255,0.12);
+  --color-user-av-text: #F7F2E8;
+  --color-insight-0: #818CF8;
+  --color-insight-1: #22C55E;
+  --color-insight-2: #EF4444;
+  --color-insight-3: #F59E0B;
+  --color-insight-4: #EC4899;
+  --color-insight-5: #6B7280;
+
   --color-bg: #1A1C1F;
   --color-sidebar-bg: #141619;
   --color-card-bg: #26292D;
@@ -87,7 +99,39 @@
   --shadow-drawer: -1px 0 0 rgba(255,255,255,0.06), -20px 0 60px rgba(0,0,0,0.6);
 }
 
+/* InsightsView row hover — CSS :hover, not JS handlers (server component) */
+.insights-row {
+  transition: background 0.15s;
+}
+.insights-row:hover {
+  background: var(--color-hover);
+}
+
 @layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    background: var(--color-bg);
+    color: var(--color-text-1);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--color-scroll-thumb); border-radius: 2px; }
+
+  [data-theme="light"] {
+    --color-mc-grad-from: #D97757;
+    --color-mc-grad-to: #2A6FDB;
+    --color-user-av-bg: #1C1C1A;
+  }
+
   [data-theme="light"] {
     --color-bg: #F7F2E8;
     --color-sidebar-bg: #E8DCC8;

@@ -24,7 +24,16 @@ DONE:
   - 2.4 Wave C DONE — use-local-data spine ported. 4 derive files (types, rollups, integrations, pageFunnel) + 4 hook files (useRealtimeTable engine, tables, useRollups, usePageFunnel). 4 dead hooks NOT ported (useConversations, useOperatorTasks, useClientReports, useIntegrations). verify-phase-2-waveC.sh exits 0; gate-integrity.sh exits 0. PHASE 2 COMPLETE.
 
   Phase 3:
-  - 3.0 DONE: render-diff gate infrastructure. playwright + pixelmatch + pngjs installed; Chromium headless downloaded. render-diff.mjs (baseline+compare modes); verify-phase-3-views.sh (6-channel bundle: tsc+eslint+build+render-diff+structural+route); GATES/snapshots/insights.png baseline committed. RED-TEST PASSED: gate exits 1 on all 3 non-toolchain channels (99.43% diff, no src/components/, /insights→404). gate-integrity.sh exits 0. NEXT: 3.0-shell → 3.1-InsightsView.
+  - 3.0 DONE: render-diff gate infrastructure. playwright + pixelmatch + pngjs installed; Chromium headless downloaded. render-diff.mjs (baseline+compare modes); verify-phase-3-views.sh (6-channel bundle: tsc+eslint+build+render-diff+structural+route); GATES/snapshots/insights.png baseline committed. RED-TEST PASSED: gate exits 1 on all 3 non-toolchain channels (99.43% diff, no src/components/, /insights→404). gate-integrity.sh exits 0.
+  - 3.1 DONE: shell + InsightsView. lucide-react installed; Plus Jakarta Sans via next/font/google; 10 new CSS tokens; html/body base styles; (operator) route group; OperatorShell "use client" (sidebar, header, theme toggle, user footer); UserMenu "use client" (closed button); InsightsView server component (6 PLAYBOOKS, CSS :hover, color-mix chip bg); public/brand/ bolt assets. verify-phase-3-views.sh exits 0 (all 6 channels): 0.85% render-diff. gate-integrity.sh exits 0. CHECKPOINT: phase-3-shell-insights.md.
+  PHASE-3 SHELL DEBT (deferred, not in static baseline — logged per task spec):
+    - Command palette (⌘K overlay)
+    - Sidebar user-dropdown
+    - Header UserMenu dropdown + signOut
+    - Bolt firing animation / ring
+    - Theme-toggle circle-reveal animation
+    - All mobile (drawer, swipe, MobileHeader, equalizer)
+    - TweaksPanel
 
 IN PROGRESS: none
 
@@ -41,5 +50,5 @@ NOTES:
   - verify-phase-3-views.sh VIEWS array is the source of truth for registered views; add a view only when its baseline PNG is committed.
   - RULE 14 (code overrides docs): Legacy auth is REAL and role-gated — Session.jsx checks app_metadata.role === 'operator' against live Supabase. The "cosmetic auth / isAuthenticated:true" note in any prior doc is stale and superseded by the running code.
 
-NEXT: Phase 3.0-shell — port sidebar.jsx + Router.jsx shell into src/app/(operator)/layout.tsx. Then 3.1-InsightsView.
+NEXT: Phase 3.2 — port next view. Capture baseline PNG for target view (render-diff.mjs baseline mode), add to VIEWS registry, port component, iterate until gate green.
 COMMIT: Wave C + phase-3-gate pending Zach commit
