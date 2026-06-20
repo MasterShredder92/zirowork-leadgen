@@ -4,7 +4,7 @@
  *
  * Modes:
  *   baseline <view>   — screenshot legacy app at localhost:3001/#<view>, save as snapshots/<view>.png
- *   compare  <view>   — screenshot Next.js at localhost:3000/<path>, diff against baseline, exit 1 if >1% diff
+ *   compare  <view>   — screenshot Next.js at localhost:$NEXT_PORT/<path> (default 3000), diff against baseline, exit 1 if >1% diff
  *
  * Called from verify-phase-3-views.sh for each registered view.
  * Baseline PNGs are committed. Do NOT regenerate them in the gate; run baseline mode manually once.
@@ -21,7 +21,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SNAPSHOTS_DIR = path.join(__dirname, 'snapshots');
 
 const LEGACY_PORT = 3001;
-const NEXT_PORT   = 3000;
+const NEXT_PORT = parseInt(process.env.NEXT_PORT, 10) || 3000;
 const DIFF_THRESHOLD_PCT = 1.0; // % of pixels allowed to differ
 
 // legacySidebarText: exact visible text of the sidebar nav item to click after the app loads.
