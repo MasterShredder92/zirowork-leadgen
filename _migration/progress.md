@@ -31,6 +31,7 @@ DONE:
   - 3.3 DONE: ReportingView — ROI metrics + SMS counts + enrollment trend. --color-roi-accent token added to globals.css. useClients<Client> typed in tables.ts (spine fix). flip-state: passing.
   - 3.4 DONE: SettingsView — send-window + max-followups config via useAgentTenants. Client type added to types.ts. flip-state: passing.
   - 3.5 DONE: PagesView — 148 LOC, collapsible client groups, status/publish toggle, program + status badges via color-mix. No new tokens. render-diff 0.36%. flip-state: passing.
+  - 3.6 DONE: EnrollmentsView — Enrollment type extended (+6 fields). Overrides map for optimistic enroll/lost/charge (avoids set-state-in-effect). Billing via supabase.functions.invoke. No new tokens. render-diff 0.36%. flip-state: passing. Interactive path (enroll/lost/charge) code-reviewed only — not executable until auth + seed data.
   PHASE-3 SHELL DEBT (deferred, not in static baseline — logged per task spec):
     - Command palette (⌘K overlay)
     - Sidebar user-dropdown
@@ -55,4 +56,4 @@ NOTES:
   - verify-phase-3-views.sh VIEWS array is the source of truth for registered views; add a view only when its baseline PNG is committed.
   - RULE 14 (code overrides docs): Legacy auth is REAL and role-gated — Session.jsx checks app_metadata.role === 'operator' against live Supabase. The "cosmetic auth / isAuthenticated:true" note in any prior doc is stale and superseded by the running code.
 
-NEXT: Phase 3.6 — port next view. 5 passing (insights, bookings, reporting, settings, pages). Remaining candidates: studio-map, leads, escalations, conversations, campaigns, clients, onboarding, command-center.
+NEXT: Phase 3.7 — port next view. 6 passing (insights, bookings, reporting, settings, pages, enrollments). Remaining candidates: leads, escalations, conversations, campaigns, clients, onboarding, studio-map (vis.js — near-last), command-center.

@@ -106,7 +106,7 @@
       "surface": "operator",
       "behavior": "Enrollments renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare enrollments",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": ""
     },
