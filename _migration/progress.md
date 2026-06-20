@@ -25,7 +25,8 @@ DONE:
 
   Phase 3:
   - 3.0 DONE: render-diff gate infrastructure. playwright + pixelmatch + pngjs installed; Chromium headless downloaded. render-diff.mjs (baseline+compare modes); verify-phase-3-views.sh (6-channel bundle: tsc+eslint+build+render-diff+structural+route); GATES/snapshots/insights.png baseline committed. RED-TEST PASSED: gate exits 1 on all 3 non-toolchain channels (99.43% diff, no src/components/, /insights→404). gate-integrity.sh exits 0.
-  - 3.1 DONE: shell + InsightsView. lucide-react installed; Plus Jakarta Sans via next/font/google; 10 new CSS tokens; html/body base styles; (operator) route group; OperatorShell "use client" (sidebar, header, theme toggle, user footer); UserMenu "use client" (closed button); InsightsView server component (6 PLAYBOOKS, CSS :hover, color-mix chip bg); public/brand/ bolt assets. verify-phase-3-views.sh exits 0 (all 6 channels): 0.85% render-diff. gate-integrity.sh exits 0. CHECKPOINT: phase-3-shell-insights.md.
+  - 3.1 DONE: shell + InsightsView. lucide-react installed; Plus Jakarta Sans via next/font/google; 10 new CSS tokens; html/body base styles; (operator) route group; OperatorShell "use client" (sidebar, header, theme toggle, user footer); UserMenu "use client" (closed button); InsightsView server component (6 PLAYBOOKS, CSS :hover, color-mix chip bg); public/brand/ bolt assets. verify-phase-3-views.sh exits 0 (all 6 channels): 0.42% render-diff. gate-integrity.sh exits 0. CHECKPOINT: phase-3-shell-insights.md.
+  - 3.1 LINEHEIGHT FIX: Root cause — Tailwind Preflight (via `@import "tailwindcss"`) forces buttons to inherit `line-height: 1.5`; legacy index.html has the same 1.5 on html/body but NO Preflight, so its buttons stay at UA normal (~1.286). Each button 3px taller in Next.js → cumulative nav 48px taller → vertical center shift. Fix (spine, not per-button): `button { line-height: normal; }` inside `@layer base` in globals.css covers all 15 remaining views. 0.85% → 0.36%. Subpixel flag removed (zero rendering effect, proved by identical baseline PNG bytes). Gate: PASS. Red-test: InsightsView bg→red 75.6% exit 1, revert back to 0.36% PASS. Shell floor ~0.36%: CDN vs npm lucide-react glyph-edge noise.
   PHASE-3 SHELL DEBT (deferred, not in static baseline — logged per task spec):
     - Command palette (⌘K overlay)
     - Sidebar user-dropdown
@@ -51,4 +52,4 @@ NOTES:
   - RULE 14 (code overrides docs): Legacy auth is REAL and role-gated — Session.jsx checks app_metadata.role === 'operator' against live Supabase. The "cosmetic auth / isAuthenticated:true" note in any prior doc is stale and superseded by the running code.
 
 NEXT: Phase 3.2 — port next view. Capture baseline PNG for target view (render-diff.mjs baseline mode), add to VIEWS registry, port component, iterate until gate green.
-COMMIT: Wave C + phase-3-gate pending Zach commit
+COMMIT: Wave C + phase-3-gate + lineHeight fix pending Zach commit

@@ -122,6 +122,9 @@
     line-height: 1.5;
   }
 
+  /* Preflight forces buttons to inherit line-height; legacy UA leaves them at normal (~1.286). */
+  button { line-height: normal; }
+
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--color-scroll-thumb); border-radius: 2px; }
