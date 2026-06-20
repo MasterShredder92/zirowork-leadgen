@@ -1,6 +1,6 @@
 # Migration Progress
 
-PHASE: 2 — spine: tokens + hooks → typed modules
+PHASE: 3 — views: port operator views into Next.js App Router
 DONE:
   Phase 0:
   - dep-graph.md     (272 lines) — 66 globals (65 in jsx/js modules + window.sb inline in html); spine/leaf classified; 7 dead-code files flagged; 0 cycles; leaf-first order; OnboardForm marked cross-surface
@@ -23,6 +23,9 @@ DONE:
   - 2.4 Wave B DONE — usePages ported. useStudents/useLessons confirmed dead (Phase-0 dead-code list + 0 call sites + not in any index.html) → NOT ported; deferred to 91-auth dead-code sweep.
   - 2.4 Wave C DONE — use-local-data spine ported. 4 derive files (types, rollups, integrations, pageFunnel) + 4 hook files (useRealtimeTable engine, tables, useRollups, usePageFunnel). 4 dead hooks NOT ported (useConversations, useOperatorTasks, useClientReports, useIntegrations). verify-phase-2-waveC.sh exits 0; gate-integrity.sh exits 0. PHASE 2 COMPLETE.
 
+  Phase 3:
+  - 3.0 DONE: render-diff gate infrastructure. playwright + pixelmatch + pngjs installed; Chromium headless downloaded. render-diff.mjs (baseline+compare modes); verify-phase-3-views.sh (6-channel bundle: tsc+eslint+build+render-diff+structural+route); GATES/snapshots/insights.png baseline committed. RED-TEST PASSED: gate exits 1 on all 3 non-toolchain channels (99.43% diff, no src/components/, /insights→404). gate-integrity.sh exits 0. NEXT: 3.0-shell → 3.1-InsightsView.
+
 IN PROGRESS: none
 
 BLOCKED: none
@@ -34,6 +37,8 @@ NOTES:
   - Real @supabase/ssr cookie auth is a SEPARATE tracked change — deliberately not built in 2.3. Current client is anon+RLS only.
   - ESLint rule react-hooks/set-state-in-effect requires setState calls inside .then() callbacks, not via void load() pattern. Use useSupabaseTable.ts pattern (query.then inside useEffect).
   - ESLint v9 react-hooks/purity fires on Date.now() inside useMemo — use eslint-disable-next-line react-hooks/purity for rollup-window use cases.
+  - Legacy static server: `npx serve .` redirects / → /login on this system; use minimal Node.js http.createServer for baseline generation (see checkpoint phase-3-gate.md §DEVIATIONS).
+  - verify-phase-3-views.sh VIEWS array is the source of truth for registered views; add a view only when its baseline PNG is committed.
 
-NEXT: Phase 3 — BUILD render-diff gate FIRST (no view ports before it). Per RUNBOOK: Phase 3 gate is prerequisite before any view migration.
-COMMIT: phase 1 committed; phase 2.1+2.2 committed; phase 2.3 committed; phase 2.4 Wave A+B committed; Wave C pending Zach commit
+NEXT: Phase 3.0-shell — port sidebar.jsx + Router.jsx shell into src/app/(operator)/layout.tsx. Then 3.1-InsightsView.
+COMMIT: Wave C + phase-3-gate pending Zach commit

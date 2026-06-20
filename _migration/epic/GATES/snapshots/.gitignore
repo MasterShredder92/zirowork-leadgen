@@ -1,0 +1,2 @@
+# Ignore per-run diff images; keep committed baseline PNGs
+*.diff.png
