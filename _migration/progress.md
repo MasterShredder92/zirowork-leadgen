@@ -39,6 +39,7 @@ NOTES:
   - ESLint v9 react-hooks/purity fires on Date.now() inside useMemo — use eslint-disable-next-line react-hooks/purity for rollup-window use cases.
   - Legacy static server: `npx serve .` redirects / → /login on this system; use minimal Node.js http.createServer for baseline generation (see checkpoint phase-3-gate.md §DEVIATIONS).
   - verify-phase-3-views.sh VIEWS array is the source of truth for registered views; add a view only when its baseline PNG is committed.
+  - RULE 14 (code overrides docs): Legacy auth is REAL and role-gated — Session.jsx checks app_metadata.role === 'operator' against live Supabase. The "cosmetic auth / isAuthenticated:true" note in any prior doc is stale and superseded by the running code.
 
 NEXT: Phase 3.0-shell — port sidebar.jsx + Router.jsx shell into src/app/(operator)/layout.tsx. Then 3.1-InsightsView.
 COMMIT: Wave C + phase-3-gate pending Zach commit

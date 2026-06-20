@@ -24,22 +24,25 @@ const LEGACY_PORT = 3001;
 const NEXT_PORT   = 3000;
 const DIFF_THRESHOLD_PCT = 1.0; // % of pixels allowed to differ
 
+// legacySidebarText: exact visible text of the sidebar nav item to click after the app loads.
+// The legacy app uses React state routing (navHistory), not real URL hash routing — the hash
+// in the goto URL is ignored; navigation must happen via sidebar click.
 const VIEW_MAP = {
-  'insights':        { legacyHash: 'insights',        nextPath: '/insights'        },
-  'bookings':        { legacyHash: 'bookings',         nextPath: '/bookings'        },
-  'reporting':       { legacyHash: 'reporting',        nextPath: '/reporting'       },
-  'settings':        { legacyHash: 'settings',         nextPath: '/settings'        },
-  'automation-rules':{ legacyHash: 'automation-rules', nextPath: '/automation-rules'},
-  'pages':           { legacyHash: 'pages',            nextPath: '/pages'           },
-  'escalations':     { legacyHash: 'escalations',      nextPath: '/escalations'     },
-  'conversations':   { legacyHash: 'conversations',    nextPath: '/conversations'   },
-  'enrollments':     { legacyHash: 'enrollments',      nextPath: '/enrollments'     },
-  'leads':           { legacyHash: 'leads',            nextPath: '/leads'           },
-  'campaigns':       { legacyHash: 'campaigns',        nextPath: '/campaigns'       },
-  'onboarding':      { legacyHash: 'onboarding',       nextPath: '/onboarding'      },
-  'clients':         { legacyHash: 'clients',          nextPath: '/clients'         },
-  'command-center':  { legacyHash: 'command-center',   nextPath: '/command-center'  },
-  'studio-map':      { legacyHash: 'studio-map',       nextPath: '/studio-map'      },
+  'insights':        { legacySidebarText: 'Insights',        nextPath: '/insights'        },
+  'bookings':        { legacySidebarText: 'Bookings',        nextPath: '/bookings'        },
+  'reporting':       { legacySidebarText: 'Reporting',       nextPath: '/reporting'       },
+  'settings':        { legacySidebarText: 'Settings',        nextPath: '/settings'        },
+  'automation-rules':{ legacySidebarText: 'Automation Rules',nextPath: '/automation-rules'},
+  'pages':           { legacySidebarText: 'Pages',           nextPath: '/pages'           },
+  'escalations':     { legacySidebarText: 'Escalations',     nextPath: '/escalations'     },
+  'conversations':   { legacySidebarText: 'Conversations',   nextPath: '/conversations'   },
+  'enrollments':     { legacySidebarText: 'Enrollments',     nextPath: '/enrollments'     },
+  'leads':           { legacySidebarText: 'Leads',           nextPath: '/leads'           },
+  'campaigns':       { legacySidebarText: 'Campaigns',       nextPath: '/campaigns'       },
+  'onboarding':      { legacySidebarText: 'Onboarding',      nextPath: '/onboarding'      },
+  'clients':         { legacySidebarText: 'Clients',         nextPath: '/clients'         },
+  'command-center':  { legacySidebarText: 'Command Center',  nextPath: '/command-center'  },
+  'studio-map':      { legacySidebarText: 'Studio Map',      nextPath: '/studio-map'      },
 };
 
 const [, , mode, viewName] = process.argv;
@@ -88,8 +91,45 @@ async function main() {
     await waitForServer(LEGACY_PORT);
     const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
-    const url = `http://localhost:${LEGACY_PORT}/#${cfg.legacyHash}`;
-    const buf = await screenshot(page, url);
+
+    // Intercept window.sb assignment (index.html:125) and fake an operator session so
+    // Session.jsx's role check (app_metadata.role === 'operator') passes and the real
+    // render path runs instead of OperatorLogin.  LEGACY CAPTURE ONLY — never applied
+    // to the compare path (Next.js has its own auth layer).
+    await page.addInitScript(() => {
+      let _sb;
+      Object.defineProperty(window, 'sb', {
+        configurable: true,
+        get() { return _sb; },
+        set(client) {
+          _sb = client;
+          _sb.auth.getSession = async () => ({
+            data: {
+              session: {
+                user: {
+                  email: 'operator@zirowork.com',
+                  app_metadata: { role: 'operator' },
+                  user_metadata: { full_name: 'Zach Adkins' },
+                },
+              },
+            },
+          });
+        },
+      });
+    });
+
+    // Load the app root (hash is irrelevant — legacy uses React state routing).
+    // Wait for the sidebar to appear, then click the correct nav item.
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`http://localhost:${LEGACY_PORT}/`, { waitUntil: 'networkidle', timeout: 20000 });
+    await page.waitForTimeout(2000); // Session.jsx auth check + initial render
+
+    // Click the sidebar nav item by its visible text label.
+    // Use .first() because the button element and its inner span both match the text.
+    await page.getByText(cfg.legacySidebarText, { exact: true }).first().click({ timeout: 8000 });
+    await page.waitForTimeout(1500); // view transition + data hydration
+
+    const buf = await page.screenshot({ fullPage: false });
     await browser.close();
     const outPath = path.join(SNAPSHOTS_DIR, `${viewName}.png`);
     await fs.writeFile(outPath, buf);
