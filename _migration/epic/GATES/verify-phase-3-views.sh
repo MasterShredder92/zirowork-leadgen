@@ -6,13 +6,11 @@ cd "$(dirname "$0")/../../.." || exit 2   # repo root
 fail=0
 run(){ echo "=== $1 ==="; shift; "$@"; local e=$?; echo "exit=$e"; [ $e -ne 0 ] && fail=1; echo; }
 
-# ── VIEWS REGISTRY ────────────────────────────────────────────────────────────
-# Source of truth: which views have been ported and have committed baselines.
-# Add a view ONLY when its baseline PNG exists at GATES/snapshots/<view>.png.
-# Gate goes RED if this list is empty or a view fails render-diff.
-VIEWS=(
-  "insights"
-)
+# ── VIEWS REGISTRY — derived from feature_list.json (single source of truth) ─
+# Passing operator views = the migrated set the gate keeps verifying.
+# flip-state.sh writes `state`; the agent never edits feature_list.json directly.
+# NOTE: uses node (always available) instead of jq (not installed on this host).
+VIEWS=($(node -e "const d=JSON.parse(require('fs').readFileSync('feature_list.json','utf8'));process.stdout.write(d.views.filter(v=>v.surface==='operator'&&v.state==='passing').map(v=>v.id).join('\n'))" 2>/dev/null))
 
 # ── Channel 1-3: toolchain ────────────────────────────────────────────────────
 run "tsc --noEmit"  npx tsc --noEmit

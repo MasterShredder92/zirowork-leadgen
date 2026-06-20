@@ -1,0 +1,186 @@
+{
+  "_meta": {
+    "phase": 3,
+    "purpose": "Single source of truth for Phase 3 view-migration scope. Nothing about 'what to do' lives anywhere else.",
+    "state_authority": "flip-state.mjs writes the `state` field. The agent NEVER hand-edits state — doing so is a Rule-7 / L08 violation. The file is context; the script makes it binding.",
+    "state_values": [
+      "not_started",
+      "active",
+      "blocked",
+      "passing"
+    ],
+    "wip_limit_per_lane": 1,
+    "lanes": 2,
+    "global_gates": {
+      "tsc": "npx tsc --noEmit",
+      "eslint": "npx eslint ."
+    },
+    "passing_rule": "A view flips to `passing` only when global gates are green AND its `verify` command exits 0. flip-state.sh enforces this; it also demotes a `passing` view back to `not_started` if its verify later fails (regression).",
+    "port_order_hint": "Port simplest-first to de-risk early (reporting / studio-map are likely thin); command-center last (most complex). Confirm with a per-view LOC scan before assigning lanes.",
+    "registry_note": "verify-phase-3-views.sh should derive its VIEWS array from this file (VIEWS=($(jq -r '.views[]|select(.surface==\"operator\" and .state!=\"passing\")|.id' feature_list.json))) so there is ONE registry, not two."
+  },
+  "views": [
+    {
+      "id": "command-center",
+      "surface": "operator",
+      "behavior": "Command Center renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare command-center",
+      "state": "not_started",
+      "lane": null,
+      "notes": "Most complex operator view — port last."
+    },
+    {
+      "id": "clients",
+      "surface": "operator",
+      "behavior": "Clients renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare clients",
+      "state": "not_started",
+      "lane": null,
+      "notes": ""
+    },
+    {
+      "id": "onboarding",
+      "surface": "operator",
+      "behavior": "Onboarding renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare onboarding",
+      "state": "not_started",
+      "lane": null,
+      "notes": "OnboardForm flagged cross-surface in dep-graph — check shared use before porting."
+    },
+    {
+      "id": "campaigns",
+      "surface": "operator",
+      "behavior": "Campaigns renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare campaigns",
+      "state": "not_started",
+      "lane": null,
+      "notes": ""
+    },
+    {
+      "id": "pages",
+      "surface": "operator",
+      "behavior": "Pages renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare pages",
+      "state": "not_started",
+      "lane": null,
+      "notes": ""
+    },
+    {
+      "id": "leads",
+      "surface": "operator",
+      "behavior": "Leads renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare leads",
+      "state": "not_started",
+      "lane": null,
+      "notes": "Data view — capture baseline with empty-state (window.sb=null legacy / SUPABASE_URL='' Next)."
+    },
+    {
+      "id": "conversations",
+      "surface": "operator",
+      "behavior": "Conversations renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare conversations",
+      "state": "not_started",
+      "lane": null,
+      "notes": "useConversations hook NOT yet ported (was dead in Phase 2). Verify spine import before porting — may need the hook first (serial)."
+    },
+    {
+      "id": "escalations",
+      "surface": "operator",
+      "behavior": "Escalations renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare escalations",
+      "state": "not_started",
+      "lane": null,
+      "notes": "Data view — empty-state baseline."
+    },
+    {
+      "id": "bookings",
+      "surface": "operator",
+      "behavior": "Bookings renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare bookings",
+      "state": "not_started",
+      "lane": null,
+      "notes": "Data view — empty-state baseline."
+    },
+    {
+      "id": "enrollments",
+      "surface": "operator",
+      "behavior": "Enrollments renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare enrollments",
+      "state": "not_started",
+      "lane": null,
+      "notes": ""
+    },
+    {
+      "id": "reporting",
+      "surface": "operator",
+      "behavior": "Reporting renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare reporting",
+      "state": "not_started",
+      "lane": null,
+      "notes": "Likely thin — good first lane candidate."
+    },
+    {
+      "id": "insights",
+      "surface": "operator",
+      "behavior": "Insights renders identically to legacy (6 playbook cards, dark default).",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare insights",
+      "state": "passing",
+      "lane": null,
+      "notes": "Done in 3.1 with the shell. Floor 0.36% (CDN vs npm lucide-react glyph edges)."
+    },
+    {
+      "id": "studio-map",
+      "surface": "operator",
+      "behavior": "Studio Map renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare studio-map",
+      "state": "not_started",
+      "lane": null,
+      "notes": "Likely thin — good first lane candidate."
+    },
+    {
+      "id": "automation-rules",
+      "surface": "operator",
+      "behavior": "Automation Rules renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare automation-rules",
+      "state": "not_started",
+      "lane": null,
+      "notes": ""
+    },
+    {
+      "id": "integrations",
+      "surface": "operator",
+      "behavior": "Integrations renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare integrations",
+      "state": "not_started",
+      "lane": null,
+      "notes": "useIntegrations hook NOT yet ported (was dead). Verify spine import before porting."
+    },
+    {
+      "id": "settings",
+      "surface": "operator",
+      "behavior": "Settings renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare settings",
+      "state": "not_started",
+      "lane": null,
+      "notes": ""
+    },
+    {
+      "id": "schools",
+      "surface": "schools",
+      "behavior": "Schools public SPA renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare schools",
+      "state": "not_started",
+      "lane": null,
+      "notes": "Single-file SPA (schools/app.jsx) — decompose into sub-entries when scoped. Surface-split routing is Phase 4."
+    },
+    {
+      "id": "dashboard",
+      "surface": "dashboard",
+      "behavior": "Dashboard SPA renders identically to legacy.",
+      "verify": "node _migration/epic/GATES/render-diff.mjs compare dashboard",
+      "state": "not_started",
+      "lane": null,
+      "notes": "Single-file SPA (dashboard/app.jsx) — decompose when scoped. Surface-split routing is Phase 4."
+    }
+  ]
+}
