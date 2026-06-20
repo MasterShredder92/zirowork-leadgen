@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/client";
 import { useRealtimeTable } from "./useRealtimeTable";
-import type { Lead, Booking, Enrollment, Campaign, Escalation, AgentTenant } from "@/lib/derive/types";
+import type { Lead, Booking, Enrollment, Campaign, Escalation, AgentTenant, Client } from "@/lib/derive/types";
 
 type Filters = Record<string, unknown>;
 
-export const useClients         = (f?: Filters) => useRealtimeTable("clients", f);
+export const useClients         = (f?: Filters) => useRealtimeTable<Client>("clients", f);
 export const useCampaigns       = (f?: Filters) => useRealtimeTable<Campaign>("campaigns", f);
 export const useLeads           = (f?: Filters) => useRealtimeTable<Lead>("leads", f);
 export const useEscalations     = (f?: Filters) => useRealtimeTable<Escalation>("escalations", f);
