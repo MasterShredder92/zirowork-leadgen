@@ -12,6 +12,16 @@
    ============================================================================ */
 
 @theme {
+  /* Phase 3 additions — BookingsView status/program tokens (single-value, no light override) */
+  --color-status-scheduled: #22C55E;
+  --color-status-requested: #3B82F6;
+  --color-status-completed: #6B7280;
+  --color-status-no_show:   #EF4444;
+  --color-program-piano:    #818CF8;
+  --color-program-guitar:   #F59E0B;
+  --color-program-voice:    #EC4899;
+  --color-program-drums:    #F97316;
+
   /* Phase 3 additions — shell + InsightsView tokens */
   --color-mc-grad-from: #D97757;
   --color-mc-grad-to: #2A6FDB;
