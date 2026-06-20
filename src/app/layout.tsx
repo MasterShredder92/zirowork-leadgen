@@ -14,7 +14,7 @@ const themeBoot = `try{if(localStorage.getItem('zw-theme')==='light')document.do
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeBoot }} /></head>
       <body className={jakarta.className}><Providers>{children}</Providers></body>
     </html>
