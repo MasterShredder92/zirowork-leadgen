@@ -151,7 +151,7 @@
       "surface": "operator",
       "behavior": "Integrations renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare integrations",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": "useIntegrations hook NOT yet ported (was dead). Verify spine import before porting."
     },
