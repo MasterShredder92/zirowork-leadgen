@@ -1,0 +1,4 @@
+# Force LF line endings for shell scripts on all platforms.
+# Without this, git on Windows (core.autocrlf=true) converts to CRLF and bash
+# reads the shebang as "bash\r" — script dies before channel 1 runs.
+*.sh text eol=lf
