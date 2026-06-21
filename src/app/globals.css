@@ -44,6 +44,9 @@
   --color-stage-contacted: #60A5FA;
   --color-stage-qualified: #38BDF8;
 
+  /* Phase 3 additions — ClientsView color picker placeholder (dark only) */
+  --color-client-navy: #1A2B3C;
+
   --color-bg: #1A1C1F;
   --color-sidebar-bg: #141619;
   --color-card-bg: #26292D;
@@ -140,6 +143,7 @@
     -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
     line-height: 1.5;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
 
   /* Preflight forces buttons to inherit line-height; legacy UA leaves them at normal (~1.286). */

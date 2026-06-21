@@ -5,7 +5,10 @@ import Providers from "./providers";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = { title: "ZiroWork — Operator CRM", description: "" };
