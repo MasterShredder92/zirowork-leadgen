@@ -25,9 +25,8 @@ else
   # Start Next.js production server (built in channel 3)
   npm run start >/tmp/ph3-next.log 2>&1 & NEXT_PID=$!
 
-  # Start legacy static server for comparison reference (only needed during baseline generation,
-  # but kept here so the gate can be re-run if baselines need regeneration)
-  npx serve . -p 3001 --no-clipboard >/tmp/ph3-legacy.log 2>&1 & LEGACY_PID=$!
+  # Start legacy server with vercel.json rewrite support (schools, dashboard, onboard need rewrites).
+  node _migration/epic/GATES/legacy-server.mjs 3001 >/tmp/ph3-legacy.log 2>&1 & LEGACY_PID=$!
 
   # Wait for Next.js to be ready
   for i in $(seq 1 20); do

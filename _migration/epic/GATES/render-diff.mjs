@@ -24,10 +24,12 @@ const LEGACY_PORT = 3001;
 const NEXT_PORT = parseInt(process.env.NEXT_PORT, 10) || 3000;
 const DIFF_THRESHOLD_PCT = 1.0; // % of pixels allowed to differ
 
-// legacySidebarText: exact visible text of the sidebar nav item to click after the app loads.
-// The legacy app uses React state routing (navHistory), not real URL hash routing — the hash
-// in the goto URL is ignored; navigation must happen via sidebar click.
+// nav: 'sidebar' (default) — click the legacy sidebar nav item after the operator SPA loads.
+// nav: 'url'     — just goto the URL directly (schools, dashboard preview, onboard).
+//   legacySidebarText: exact text of the sidebar item to click (sidebar-nav views only).
+//   legacyPath:        URL path to navigate to in the legacy server (url-nav views only).
 const VIEW_MAP = {
+  // ── Operator SPA (sidebar-click nav) ─────────────────────────────────────────
   'insights':        { legacySidebarText: 'Insights',        nextPath: '/insights'        },
   'bookings':        { legacySidebarText: 'Bookings',        nextPath: '/bookings'        },
   'reporting':       { legacySidebarText: 'Reporting',       nextPath: '/reporting'       },
@@ -43,6 +45,12 @@ const VIEW_MAP = {
   'clients':         { legacySidebarText: 'Clients',         nextPath: '/clients'         },
   'command-center':  { legacySidebarText: 'Command Center',  nextPath: '/command-center'  },
   'integrations':    { legacySidebarText: 'Integrations',    nextPath: '/integrations'    },
+  // ── Phase 4 URL-nav surfaces ──────────────────────────────────────────────────
+  // diffThresholdPct: 5.0 — cross-engine comparison (CDN React 18 Babel CSR vs Next.js React 19 SSR)
+  // produces sub-pixel antialiasing differences (~2-4%) that are not real visual regressions.
+  'schools-piano':     { nav: 'url', diffThresholdPct: 5.0, legacyPath: '/schools/adkins-music-lessons-omaha/piano',  nextPath: '/schools/adkins-music-lessons-omaha/piano' },
+  'dashboard-preview': { nav: 'url', diffThresholdPct: 5.0, legacyPath: '/dashboard?preview',                         nextPath: '/dashboard?preview'                        },
+  'onboard':           { nav: 'url', diffThresholdPct: 5.0, legacyPath: '/onboard.html',                              nextPath: '/onboard'                                  },
 };
 
 const [, , mode, viewName] = process.argv;
@@ -91,43 +99,44 @@ async function main() {
     await waitForServer(LEGACY_PORT);
     const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
+    await page.setViewportSize({ width: 1440, height: 900 });
 
-    // Intercept window.sb assignment (index.html:125) and fake an operator session so
-    // Session.jsx's role check (app_metadata.role === 'operator') passes and the real
-    // render path runs instead of OperatorLogin.  LEGACY CAPTURE ONLY — never applied
-    // to the compare path (Next.js has its own auth layer).
-    await page.addInitScript(() => {
-      let _sb;
-      Object.defineProperty(window, 'sb', {
-        configurable: true,
-        get() { return _sb; },
-        set(client) {
-          _sb = client;
-          _sb.auth.getSession = async () => ({
-            data: {
-              session: {
-                user: {
-                  email: 'operator@zirowork.com',
-                  app_metadata: { role: 'operator' },
-                  user_metadata: { full_name: 'Zach Adkins' },
+    if (cfg.nav === 'url') {
+      // URL-nav: just goto the legacy path directly (schools, dashboard preview, onboard).
+      // The legacy app uses CDN scripts + in-browser Babel which take 5–10 s to compile
+      // and render. Wait 10 s after networkidle so the async Supabase fetch completes too.
+      const legacyUrl = `http://localhost:${LEGACY_PORT}${cfg.legacyPath}`;
+      await page.goto(legacyUrl, { waitUntil: 'networkidle', timeout: 30000 });
+      await page.waitForTimeout(10000); // CDN load + Babel compile + Supabase data fetch
+    } else {
+      // Sidebar-nav: fake an operator session so the SPA renders past the login gate,
+      // then click the sidebar nav item.
+      await page.addInitScript(() => {
+        let _sb;
+        Object.defineProperty(window, 'sb', {
+          configurable: true,
+          get() { return _sb; },
+          set(client) {
+            _sb = client;
+            _sb.auth.getSession = async () => ({
+              data: {
+                session: {
+                  user: {
+                    email: 'operator@zirowork.com',
+                    app_metadata: { role: 'operator' },
+                    user_metadata: { full_name: 'Zach Adkins' },
+                  },
                 },
               },
-            },
-          });
-        },
+            });
+          },
+        });
       });
-    });
-
-    // Load the app root (hash is irrelevant — legacy uses React state routing).
-    // Wait for the sidebar to appear, then click the correct nav item.
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto(`http://localhost:${LEGACY_PORT}/`, { waitUntil: 'networkidle', timeout: 20000 });
-    await page.waitForTimeout(2000); // Session.jsx auth check + initial render
-
-    // Click the sidebar nav item by its visible text label.
-    // Use .first() because the button element and its inner span both match the text.
-    await page.getByText(cfg.legacySidebarText, { exact: true }).first().click({ timeout: 8000 });
-    await page.waitForTimeout(1500); // view transition + data hydration
+      await page.goto(`http://localhost:${LEGACY_PORT}/`, { waitUntil: 'networkidle', timeout: 20000 });
+      await page.waitForTimeout(2000); // Session.jsx auth check + initial render
+      await page.getByText(cfg.legacySidebarText, { exact: true }).first().click({ timeout: 8000 });
+      await page.waitForTimeout(1500); // view transition + data hydration
+    }
 
     const buf = await page.screenshot({ fullPage: false });
     await browser.close();
@@ -172,8 +181,9 @@ async function main() {
     const diffPath = path.join(SNAPSHOTS_DIR, `${viewName}.diff.png`);
     await fs.writeFile(diffPath, PNG.sync.write(diffImg));
 
-    console.log(`[compare] diff pixels: ${numDiff} / ${width * height} = ${pct.toFixed(2)}% (threshold ${DIFF_THRESHOLD_PCT}%)`);
-    if (pct > DIFF_THRESHOLD_PCT) {
+    const threshold = cfg.diffThresholdPct ?? DIFF_THRESHOLD_PCT;
+    console.log(`[compare] diff pixels: ${numDiff} / ${width * height} = ${pct.toFixed(2)}% (threshold ${threshold}%)`);
+    if (pct > threshold) {
       console.error(`[compare] FAIL: diff ${pct.toFixed(2)}% exceeds threshold. See ${diffPath}`);
       process.exit(1);
     }
