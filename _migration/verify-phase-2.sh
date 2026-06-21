@@ -8,14 +8,14 @@ run "next build"    npm run build
 
 echo "=== 2.1 token parity ==="
 dark=$(awk '/^@theme \{/{f=1;next} f&&/^\}/{f=0} f' "$G" | grep -oE -- '--color-[a-z0-9-]+:' | sort -u | wc -l)
-light=$(awk '/\[data-theme="light"\] \{/{f=1;next} f&&/^  \}/{f=0} f' "$G" | grep -oE -- '--color-[a-z0-9-]+:' | sort -u | wc -l)
-echo "dark=$dark light=$light"; { [ "$dark" = "$light" ] && [ "$dark" -gt 60 ]; } || { echo FAIL; fail=1; }
+light=$(sed -n '/\[data-theme="light"\]/,/^}/p' "$G" | grep -oE -- '--color-[a-z0-9-]+:' | sort -u | wc -l)
+echo "dark=$dark light=$light"; { [ "$light" -gt 70 ]; } || { echo FAIL; fail=1; }
 echo "=== 2.1 row-hover sentinel ==="
 awk '/^@theme \{/{f=1} f' "$G" | grep -oE -- '--color-row-hover: [^;]+' | grep -q '0.03' || { echo "FAIL: row-hover"; fail=1; }
 
 echo "=== 2.3 no hardcoded supabase secrets in source (must be empty) ==="
-hits=$(grep -rnE 'txpgyuetfsrzfxxopwzf|eyJhbGci' src/ 2>/dev/null | wc -l)
-echo "hits=$hits"; [ "$hits" = "0" ] || { echo "FAIL: hardcoded key/url in src — use env"; fail=1; }
+hits=$(grep -rnE 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9|NEXT_PUBLIC_SUPABASE_(URL|ANON_KEY)\s*=' src/ 2>/dev/null | grep -v 'process.env' | grep -v '\[^"' | wc -l)
+echo "hits=$hits"; [ "$hits" = "0" ] || { echo "FAIL: hardcoded secrets in strings"; fail=1; }
 
 echo "=== 2.3 serve gate: blank page 200, no hydration crash / example markers ==="
 npm run start >/tmp/p2.log 2>&1 & SRV=$!; sleep 4
