@@ -46,11 +46,15 @@ const VIEW_MAP = {
   'command-center':  { legacySidebarText: 'Command Center',  nextPath: '/command-center'  },
   'integrations':    { legacySidebarText: 'Integrations',    nextPath: '/integrations'    },
   // ── Phase 4 URL-nav surfaces ──────────────────────────────────────────────────
-  // diffThresholdPct: 5.0 — cross-engine comparison (CDN React 18 Babel CSR vs Next.js React 19 SSR)
-  // produces sub-pixel antialiasing differences (~2-4%) that are not real visual regressions.
-  'schools-piano':     { nav: 'url', diffThresholdPct: 5.0, legacyPath: '/schools/adkins-music-lessons-omaha/piano',  nextPath: '/schools/adkins-music-lessons-omaha/piano' },
-  'dashboard-preview': { nav: 'url', diffThresholdPct: 5.0, legacyPath: '/dashboard?preview',                         nextPath: '/dashboard?preview'                        },
-  'onboard':           { nav: 'url', diffThresholdPct: 5.0, legacyPath: '/onboard.html',                              nextPath: '/onboard'                                  },
+  // schools-piano: 3.41% measured diff, 100% concentrated in text regions.
+  // Cross-engine font-metric rasterization noise (CDN React 18 Babel CSR vs Next.js React 19 SSR
+  // — different font bytes → per-glyph sub-pixel deltas). pixelmatch runs with includeAA=false
+  // (default), so AA pixels are excluded; this is font hinting divergence, not AA.
+  // Threshold = 4.0 (measured 3.41% + 0.59% margin). PNG diff on file confirms text-only.
+  // dashboard-preview and onboard both pass the global 1.0% — no per-entry override needed.
+  'schools-piano':     { nav: 'url', diffThresholdPct: 4.0, legacyPath: '/schools/adkins-music-lessons-omaha/piano',  nextPath: '/schools/adkins-music-lessons-omaha/piano' },
+  'dashboard-preview': { nav: 'url',                         legacyPath: '/dashboard?preview',                         nextPath: '/dashboard?preview'                        },
+  'onboard':           { nav: 'url',                         legacyPath: '/onboard.html',                              nextPath: '/onboard'                                  },
 };
 
 const [, , mode, viewName] = process.argv;

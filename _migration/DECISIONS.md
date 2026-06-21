@@ -60,3 +60,45 @@ Note: clients (597 LOC) landed at 0.36% — gate diff tracks rendered glyph dens
 ### Files touched
 - `src/app/layout.tsx` — next/font config updated (weights + style + adjustFontFallback)
 - `src/app/globals.css` — explicit `font-family` added to `html, body` rule
+
+---
+
+## 2026-06-21 — Phase 4 per-entry thresholds: schools-piano at 4.0%, others at global
+
+### The problem
+Phase 4 committed `diffThresholdPct: 5.0` on all three URL-nav views with the comment
+"antialiasing differences." Two of the three didn't need it at all; one had an imprecise
+value and an inaccurate label.
+
+### What the diff PNGs show
+Eyeballed all three committed diff PNGs:
+
+- **schools-piano** (3.41%): diff is 100% concentrated in text regions — hero headline,
+  subhead, button, nav phone number, testimonial body. Zero structural/layout delta.
+  Pattern is scattered glyph-edge speckle identical to the operator SPA font-metric noise
+  documented above, but larger magnitude because this is CDN React 18 Babel CSR (legacy)
+  vs Next.js React 19 SSR — bigger cross-engine rasterization gap.
+- **onboard** (0.42%): light scattered text speckle. No layout change. Passes global 1.0%.
+- **dashboard-preview** (0.31%): near-invisible noise. Passes global 1.0%.
+
+### Why "antialiasing" is the wrong label
+`pixelmatch` runs with no `includeAA` key → default `false`, which **excludes** AA pixels
+from the count. So the 3.41% cannot be antialiasing — those pixels are not counted.
+This is font-hinting/metric divergence: different font bytes at the rasterization level
+produce per-glyph sub-pixel deltas that accumulate with glyph count.
+
+### Fix
+- `onboard` + `dashboard-preview`: removed `diffThresholdPct` override — both pass global 1.0%.
+- `schools-piano`: threshold set to **4.0** (measured 3.41% + 0.59% margin). PNG diff
+  committed as evidence; text-only concentration confirmed by visual inspection.
+
+### Red-test (rule 15)
+Temporarily set schools-piano threshold to 3.0, ran compare:
+```
+diff pixels: 44215 / 1296000 = 3.41% (threshold 3%)
+FAIL: diff 3.41% exceeds threshold.   EXIT: 1
+```
+Gate can go red. Restored to 4.0 → PASS.
+
+### Files touched
+- `_migration/epic/GATES/render-diff.mjs` — corrected thresholds + accurate comment
