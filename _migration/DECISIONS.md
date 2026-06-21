@@ -4,6 +4,23 @@ Record of non-obvious choices made during the migration. Each entry: what was tr
 
 ---
 
+## 2026-06-21 — RENDER-DIFF RETIRED (Phase 5 close)
+
+App never shipped / zero customers → pixel-fidelity to the old app has no value.
+
+**Deleted:**
+- `_migration/epic/GATES/verify-phase-3-views.sh`
+- `_migration/epic/GATES/render-diff.mjs`
+- `_migration/epic/GATES/legacy-server.mjs`
+- `_migration/epic/GATES/snapshots/`
+- `96-public/`, `99-agents/`, `dashboard/`, `legal/`, `schools/` (root legacy SPAs)
+
+**New definition of done:** `bash _migration/verify-build.sh` — clean-clone build + tsc + lint + routes serve. Fidelity is no longer gated.
+
+**Action required:** Run `bash _migration/epic/GATES/gate-integrity.sh --update` and commit `HASHES.txt` (Zach only — agent never touches HASHES.txt).
+
+---
+
 ## 2026-06-20 — Font floor: why render-diff sits at 1.00% for text-dense views
 
 ### The symptom
