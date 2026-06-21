@@ -43,6 +43,7 @@ const VIEW_MAP = {
   'clients':         { legacySidebarText: 'Clients',         nextPath: '/clients'         },
   'command-center':  { legacySidebarText: 'Command Center',  nextPath: '/command-center'  },
   'studio-map':      { legacySidebarText: 'Studio Map',      nextPath: '/studio-map'      },
+  'integrations':    { legacySidebarText: 'Integrations',    nextPath: '/integrations'    },
 };
 
 const [, , mode, viewName] = process.argv;
