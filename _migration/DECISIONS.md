@@ -63,6 +63,32 @@ Note: clients (597 LOC) landed at 0.36% — gate diff tracks rendered glyph dens
 
 ---
 
+## 2026-06-21 — Phase 5 design: gate decoupling from prod data
+
+### The problem
+Two Phase 4 gate checks couple to the live `adkins-music-lessons-omaha` slug row in the prod `client_pages` table:
+
+1. **verify-phase-4.sh** `check_200 "/schools/adkins-music-lessons-omaha/piano"` — returns 200 only if the slug exists in the live DB.
+2. **render-diff.mjs** `schools-piano` URL-nav entry — captures the baseline by hitting the same live slug.
+
+Delete that row (or rename the slug) and both gates red for a non-migration reason. "Migration correct" and "prod data present" are conflated.
+
+### Why not fixed now
+The gate's one job today is to certify Phase 4. It does. Editing a passing gate mid-certification is churn on a frozen artifact. A half-fix (e.g. `check_not_500` on a fake slug in verify-phase-4.sh) drops happy-path render coverage without actually decoupling — the render-diff baseline still hits the live slug, so the prod-data dependency just moves one door over.
+
+### Phase 5 design unit (do together, not piecemeal)
+Decouple both checks onto a seeded fixture, not the live slug:
+
+- **Fixture**: insert one deterministic row into a test schema (or seed the prod `client_pages` table with a stable `test-fixture` slug, never to be deleted). Fixture slug needs `school_name`, `instrument`, `agent_tenants` entry — enough for the landing page Server Component to render fully.
+- **verify-phase-4.sh**: replace `check_200 ".../adkins-music-lessons-omaha/piano"` with `check_200 ".../test-fixture/piano"` against the fixture slug; OR replace with `check_not_500 "/schools/unknown-slug/piano"` (proves route handler runs + `notFound()` fires, no fixture needed) and let render-diff own "schools renders correctly."
+- **render-diff.mjs**: update `schools-piano` URL-nav entry to hit the fixture slug, commit a new baseline PNG from fixture data.
+- Do both changes in one commit so the decoupled gate is atomic and provably consistent.
+
+### Status
+Deferred to Phase 5. Phase 4 gate remains as-is — documented manual gate, adkins slug assumed stable during Phase 4 certification window.
+
+---
+
 ## 2026-06-21 — Phase 4 per-entry thresholds: schools-piano at 4.0%, others at global
 
 ### The problem
