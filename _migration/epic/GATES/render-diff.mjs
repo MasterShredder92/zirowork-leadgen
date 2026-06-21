@@ -42,7 +42,6 @@ const VIEW_MAP = {
   'onboarding':      { legacySidebarText: 'Onboarding',      nextPath: '/onboarding'      },
   'clients':         { legacySidebarText: 'Clients',         nextPath: '/clients'         },
   'command-center':  { legacySidebarText: 'Command Center',  nextPath: '/command-center'  },
-  'studio-map':      { legacySidebarText: 'Studio Map',      nextPath: '/studio-map'      },
   'integrations':    { legacySidebarText: 'Integrations',    nextPath: '/integrations'    },
 };
 

@@ -27,7 +27,6 @@ const eslintConfig = defineConfig([
     "13-integrations/**",
     "14-settings/**",
     "15-insights/**",
-    "16-studio-map/**",
     "90-shell/**",
     "91-auth/**",
     "92-design/**",

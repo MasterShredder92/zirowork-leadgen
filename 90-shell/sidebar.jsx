@@ -23,7 +23,6 @@ const NAV = [
   { section: 'PERFORMANCE', items: [
     { id: 'reporting',   label: 'Reporting',   icon: 'BarChart2' },
     { id: 'insights',    label: 'Insights',    icon: 'Sparkles' },
-    { id: 'studio-map',  label: 'Studio Map',  icon: 'Network' },
   ]},
   { section: 'SYSTEM', items: [
     { id: 'automation-rules', label: 'Automation Rules', icon: 'Zap' },

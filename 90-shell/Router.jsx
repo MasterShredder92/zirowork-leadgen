@@ -62,7 +62,6 @@ function App() {
     'integrations':     'Integrations',
     'settings':         'Settings',
     'insights':         'Insights',
-    'studio-map':       'Studio Map',
   };
 
   const renderMain = () => {
@@ -82,7 +81,6 @@ function App() {
       case 'integrations':     return window.IntegrationsView     ? React.createElement(window.IntegrationsView,     { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Integrations' });
       case 'settings':         return window.SettingsView         ? React.createElement(window.SettingsView,         { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Settings' });
       case 'insights':         return window.InsightsView         ? React.createElement(window.InsightsView,         { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Insights' });
-      case 'studio-map':       return window.StudioMapView        ? React.createElement(window.StudioMapView,        { onNavigate: nav }) : React.createElement(window.ComingSoon, { label: 'Studio Map' });
       default:                 return React.createElement(window.ComingSoon, { label: view });
     }
   };
