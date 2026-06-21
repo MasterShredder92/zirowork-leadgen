@@ -1,63 +1,45 @@
 # Handoff
 
-VERIFIED: Phase 3.5 + 3.6 — PagesView + EnrollmentsView COMPLETE.
-  - flip-state.mjs exits 0: pages → passing, enrollments → passing.
-  - 6 views total passing: insights, bookings, reporting, settings, pages, enrollments.
-  - Separate fix committed: suppressHydrationWarning on <html> for theme-boot (pre-existing on all views).
+VERIFIED: Phase 3.7 — AutomationRulesView COMPLETE.
+  - render-diff: 0.35% PASS · tsc: 0 errors · eslint: 0 issues
+  - flip-state: automation-rules → passing
+  - 7 views total passing: insights, bookings, reporting, settings, pages, enrollments, automation-rules
 
 CHANGED (this session):
-  - src/app/(operator)/pages/page.tsx — NEW: server page; renders PagesView
-  - src/components/views/PagesView.tsx — NEW: "use client"; collapsible client groups, status/publish toggle, program + status badges via color-mix. No new tokens.
-  - src/app/(operator)/enrollments/page.tsx — NEW: server page; renders EnrollmentsView
-  - src/components/views/EnrollmentsView.tsx — NEW: "use client"; overrides map for optimistic enroll/lost/charge; billing via supabase.functions.invoke; no new tokens.
-  - src/lib/derive/types.ts — Enrollment type extended (+id, parent_name, student_name, client_name, program, enrolled_at)
-  - src/app/layout.tsx — suppressHydrationWarning on <html> (theme-boot pre-hydration mutation, pre-existing on all views)
-  - feature_list.json — pages + enrollments flipped to passing by gate
-  - _migration/progress.md — 3.5 + 3.6 entries added; NEXT updated to 3.7
+  - _migration/verify-phase-2.sh — light-token parity uses sed (not awk); test = light>70 (not dark==light); secrets grep more precise (JWT pattern + env-var literal, excludes process.env refs)
+  - _migration/epic/GATES/render-diff.mjs — integrations added to VIEW_MAP
+  - _migration/epic/GATES/gate-integrity.sh — strip Windows sha256sum binary-mode '*' prefix on HASHES.txt read
+  - _migration/epic/GATES/HASHES.txt — regenerated after verify-phase-2 + gate-integrity fixes
+  - _migration/epic/GATES/snapshots/ — 8 baselines committed: onboarding, automation-rules, command-center, integrations, conversations, campaigns, clients, studio-map
+  - src/app/(operator)/automation-rules/page.tsx — NEW: server page; renders AutomationRulesView
+  - src/components/views/AutomationRulesView.tsx — NEW: "use client"; local AutomationRule type; overrides+created derive pattern; color-mix translucent fills; zero new tokens
+  - feature_list.json — automation-rules flipped to passing by flip-state
+  - _migration/progress.md — 3.7 entry added; NEXT updated to 3.8
 
-INTERACTIVE PATH NOTE (enrollments):
-  Enroll/Lost/Charge optimistic update paths were verified by code review only —
-  not executable until auth + seed data are present. render-diff covers empty-state only.
-  The gate cannot see: override map clearing on realtime catchup, billing edge function
-  responses, or lead-stage writes downstream.
+CORRECTIONS FROM USER (apply to all future prompts):
+  - 10 remaining views, not 8: feature_list.json is the source of truth (command-center, clients, onboarding, campaigns, leads, conversations, escalations, studio-map, automation-rules[now done], integrations)
+  - onboarding = dead file trap: 91-auth/onboarding.jsx is NOT loaded anywhere. Live operator view is ClientOnboardingView (02-onboarding/onboarding.jsx, 154 LOC), cross-surface with OnboardForm → Phase 4 surface-split concern. Port last.
+  - conversations/integrations hooks warning in prior prompts is STALE: integrations' two hooks (useAgentTenants+useClients) are already in spine; conversations imports zero window.use* hooks.
 
-PHASE-3 SHELL DEBT (deferred — not in static baseline, can't gate):
-  - Command palette (⌘K overlay)
-  - Sidebar user-dropdown
-  - Header UserMenu dropdown + signOut
-  - Bolt firing animation / ring
-  - Theme-toggle circle-reveal animation
-  - All mobile (drawer, swipe, MobileHeader, equalizer)
-  - TweaksPanel
-  - Real auth for user name/initials (Zach Adkins/ZA hardcoded to match baseline)
+INTERACTIVE PATH NOTE (automation-rules):
+  Toggle/save optimistic paths verified by code review only — not executable until auth + seed data.
+  Gate covers empty-state only (no rules → header + empty scroll area, modal closed).
 
 BROKEN: nothing
 
-NEXT BEST STEP: Phase 3.7 — parallel prep for un-baselined views.
-  VIEWS NEEDING BASELINES (no snapshot yet):
-    Check: ls _migration/epic/GATES/snapshots/ — any view without a .png needs a baseline run first.
-    Baseline command: node _migration/epic/GATES/render-diff.mjs baseline <view-name>
-    Legacy server must be on :3001; Next.js dev on :3000.
+NEXT BEST STEP: Phase 3.8 — port escalations (208 LOC, next simplest live leaf).
+  PROCESS (same as always):
+    1. Legacy server on :3001 (Node.js one-liner), Next dev on :3000
+    2. Both servers already up in this session — confirm or restart
+    3. Read legacy: 04-escalations/escalations.jsx
+    4. CREATE src/app/(operator)/escalations/page.tsx + src/components/views/EscalationsView.tsx
+    5. Gate: node _migration/epic/GATES/render-diff.mjs compare escalations + npx tsc --noEmit + npx eslint .
+    6. node flip-state.mjs → commit
 
-  CANDIDATE VIEWS (simplest first):
-    - leads, escalations, conversations (data views — empty-state baseline)
-    - campaigns, clients, onboarding (moderate complexity)
-    - studio-map (vis.js force graph — window.vis CDN dep, 6 data hooks, NOT static. Port near-last or skip until Phase 4 decides CDN strategy.)
-    - command-center (most complex — requires empty-state baseline)
-
-  PROCESS:
-    1. Start legacy server (Node.js one-liner, port 3001)
-    2. Start Next.js dev server (npm run dev, port 3000)
-    3. Run baseline: node _migration/epic/GATES/render-diff.mjs baseline <view-name>
-    4. Create src/app/(operator)/<view>/page.tsx + src/components/views/<ViewName>View.tsx
-    5. Run gate: node _migration/epic/GATES/render-diff.mjs compare <view-name> + tsc + eslint
-    6. node flip-state.mjs → commit feature_list.json + progress.md + session-handoff.md
-
-KEY GOTCHAS:
-  1. Port 3000 may have lingering Python processes from previous sessions — check + kill before running gate.
-  2. Legacy server: use Node.js one-liner (not npx serve — redirects / to /login):
-       node -e "const http=require('http'),fs=require('fs'),path=require('path');http.createServer((req,res)=>{const u=req.url==='/'?'/index.html':req.url;const f=path.join(process.cwd(),u.split('?')[0]);try{const d=fs.readFileSync(f);const ct={'.html':'text/html','.js':'text/javascript','.jsx':'text/javascript','.css':'text/css'}[path.extname(f)]||'text/plain';res.writeHead(200,{'Content-Type':ct});res.end(d)}catch(e){res.writeHead(404);res.end()}}).listen(3001,()=>console.log('OK'))"
-  3. Data views: baseline must be captured with window.sb=null on legacy side (empty state), and SUPABASE_URL='' on Next.js side to avoid real data differences.
-  4. Shell is already ported — next views ONLY need page.tsx + ViewName.tsx; no shell changes needed unless fixing debt.
-  5. flip-state.mjs lives in PROJECT ROOT (not _migration/) — run as: node flip-state.mjs
-  6. studio-map uses window.vis (vis.js CDN) for force graph — no npm equivalent wired yet. Do NOT attempt to port until Phase 4 CDN strategy is decided.
+KEY GOTCHAS (carried forward):
+  1. Port 3000 may have lingering Python processes — check + kill before running gate.
+  2. Legacy server: use Node.js one-liner (not npx serve — redirects / to /login).
+  3. flip-state.mjs lives in PROJECT ROOT (not _migration/).
+  4. studio-map: window.vis CDN dep — do NOT port until Phase 4 decides CDN strategy.
+  5. onboarding: disambiguate dead (91-auth/onboarding.jsx) vs live (02-onboarding/onboarding.jsx) + cross-surface OnboardForm before attempting — port last.
+  6. verify-phase-3-views.sh VIEWS array is the source of truth for registered views; add a view only when its baseline PNG is committed (all 16 now committed).
