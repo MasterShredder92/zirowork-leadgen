@@ -79,7 +79,7 @@
       "surface": "operator",
       "behavior": "Conversations renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare conversations",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": "useConversations hook NOT yet ported (was dead in Phase 2). Verify spine import before porting — may need the hook first (serial)."
     },

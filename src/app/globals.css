@@ -37,6 +37,9 @@
   --color-insight-4: #EC4899;
   --color-insight-5: #6B7280;
 
+  /* Phase 3 additions — ConversationsView accent (dark only; #6366F1 was not in theme.js light override) */
+  --color-conv-accent: #6366F1;
+
   --color-bg: #1A1C1F;
   --color-sidebar-bg: #141619;
   --color-card-bg: #26292D;
