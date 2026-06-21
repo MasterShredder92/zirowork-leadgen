@@ -23,6 +23,7 @@ fi
 [ -f "$MANIFEST" ] || { echo "FAIL: no HASHES.txt — run with --update once, commit it."; exit 1; }
 fail=0
 while read -r want g; do
+  g="${g#\*}"   # sha256sum on Windows prefixes path with * (binary mode) — strip it
   [ -f "$g" ] || { echo "FAIL: gate in manifest but missing: $g"; fail=1; continue; }
   got=$(sha256sum "$g" | awk '{print $1}')
   [ "$got" = "$want" ] || { echo "FAIL: gate altered since commit: $g"; fail=1; }
