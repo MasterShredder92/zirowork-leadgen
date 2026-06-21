@@ -25,7 +25,7 @@
       "surface": "operator",
       "behavior": "Command Center renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare command-center",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": "Most complex operator view — port last."
     },
