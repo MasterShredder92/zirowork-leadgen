@@ -33,6 +33,7 @@ DONE:
   - 3.5 DONE: PagesView — 148 LOC, collapsible client groups, status/publish toggle, program + status badges via color-mix. No new tokens. render-diff 0.36%. flip-state: passing.
   - 3.6 DONE: EnrollmentsView — Enrollment type extended (+6 fields). Overrides map for optimistic enroll/lost/charge (avoids set-state-in-effect). Billing via supabase.functions.invoke. No new tokens. render-diff 0.36%. flip-state: passing. Interactive path (enroll/lost/charge) code-reviewed only — not executable until auth + seed data.
   - 3.7 DONE: AutomationRulesView — 176 LOC legacy. Local AutomationRule type (not in types.ts — no hook change needed). Derive pattern: overrides map for optimistic toggle + created array for optimistic insert. color-mix for translucent fills (18→9%, 1A→10%). Zero new tokens. render-diff 0.35%. flip-state: passing. Toggle/save paths code-reviewed only — not executable until auth + seed data.
+  - 3.8 DONE: EscalationsView — 208 LOC legacy. No spine hook for escalations table — used useRealtimeTable<Escalation> directly (unfiltered) + client-side `!resolved_at` filter via resolvedIds Set (optimistic removal). Local Escalation + Msg types. Zero effects in component; all setState in onClick→.then handlers. color-mix for badge (9%) + outbound bubble (6%). Zero new tokens. render-diff 0.35%. flip-state: passing. Thread/resolve/forward paths code-reviewed only.
   PHASE-3 SHELL DEBT (deferred, not in static baseline — logged per task spec):
     - Command palette (⌘K overlay)
     - Sidebar user-dropdown
@@ -57,4 +58,4 @@ NOTES:
   - verify-phase-3-views.sh VIEWS array is the source of truth for registered views; add a view only when its baseline PNG is committed.
   - RULE 14 (code overrides docs): Legacy auth is REAL and role-gated — Session.jsx checks app_metadata.role === 'operator' against live Supabase. The "cosmetic auth / isAuthenticated:true" note in any prior doc is stale and superseded by the running code.
 
-NEXT: Phase 3.8 — port next view. 7 passing (insights, bookings, reporting, settings, pages, enrollments, automation-rules). Remaining (9 operator views, simplest-first): escalations(208), integrations(209), conversations(252), leads(265), campaigns(287), command-center(194), clients(597), studio-map(448/vis.js—defer), onboarding(disambiguate dead vs live + cross-surface first).
+NEXT: Phase 3.9 — port next view. 8 passing (insights, bookings, reporting, settings, pages, enrollments, automation-rules, escalations). Remaining (8 operator views, simplest-first): integrations(209), conversations(252), leads(265), campaigns(287), command-center(194), clients(597), studio-map(448/vis.js—defer), onboarding(disambiguate dead vs live + cross-surface first).
