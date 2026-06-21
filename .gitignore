@@ -15,8 +15,10 @@ next-env.d.ts
 .env
 .env.*
 
-# Claude Code internals
-.claude/
+# Claude Code internals — exclude agent state, track only committed workflow docs.
+# .claude/* (not .claude/) so negation can un-ignore .claude/workflows/.
+.claude/*
+!.claude/workflows/
 
 # Temp
 *.log
