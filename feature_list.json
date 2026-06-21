@@ -52,7 +52,7 @@
       "surface": "operator",
       "behavior": "Campaigns renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare campaigns",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": ""
     },
