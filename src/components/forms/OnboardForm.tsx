@@ -4,10 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 
-// Theme tokens — mirrors the CSS vars in onboard.html and the legacy window.T shape.
-// In standalone mode the page sets --bg/--surface/--border/--accent via :root,
-// so we reference the same vars here. The CRM modal path gets these values from
-// the operator shell's window.T; this component owns them for the public route.
+// Theme tokens — mirrors the legacy window.T shape.
+// The CRM modal path gets these values from the operator shell's window.T;
+// this component owns them for the public route (standalone).
 const T = {
   bg:      "var(--color-bg)",
   surface: "var(--color-surface)",

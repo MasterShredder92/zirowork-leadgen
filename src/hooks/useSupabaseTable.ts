@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/client";
 
-// Generic one-off table read. Named hooks live in use-local-data. (Real hook,
-// despite the old CONTEXT.md calling it a stub — the code queries the table.)
+// Generic one-off table read. Named hooks live in use-local-data.
 export function useSupabaseTable<T = Record<string, unknown>>(
   table: string,
   filters?: Record<string, unknown>,

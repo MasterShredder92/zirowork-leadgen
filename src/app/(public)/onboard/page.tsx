@@ -1,10 +1,8 @@
 import OnboardForm from "@/components/forms/OnboardForm";
 
-// Mirrors the OnboardPage wrapper from onboard.html:
-// - #root: min-height 100vh, flex column, align items center, padding 48px 16px
-// - .onboard-header: full-width up to 560px, ZiroWork wordmark in accent color
-// CSS vars (--bg, --surface, --border, --accent, --text-*) are set by globals.css
-// which already includes the same :root values as onboard.html.
+// #root: min-height 100vh, flex column, align items center, padding 48px 16px
+// .onboard-header: full-width up to 560px, ZiroWork wordmark in accent color
+// CSS vars (--bg, --surface, --border, --accent, --text-*) come from globals.css
 
 export default function OnboardPage() {
   return (
