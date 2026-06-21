@@ -1,6 +1,6 @@
 # Migration Progress
 
-PHASE: 3 — views: port operator views into Next.js App Router
+PHASE: 4 — surfaces: route-groups, operator default, middleware RLS gate
 DONE:
   Phase 0:
   - dep-graph.md     (272 lines) — 66 globals (65 in jsx/js modules + window.sb inline in html); spine/leaf classified; 7 dead-code files flagged; 0 cycles; leaf-first order; OnboardForm marked cross-surface
@@ -62,5 +62,9 @@ NOTES:
 
   - 3.14 DONE: ClientsView (+ ClientDetail panel). 597 LOC legacy. ClientDetail selection-gated (code-review-only); gate sees empty list. 1 new token: --color-client-navy (#1A2B3C). Declarative hoverId row hover. Effects→.then. window.sb/SEED_DATA branches dropped. render-diff 0.36% (shell floor — floor panic was moot; empty list = sparse text). flip-state: passing.
 
-NEXT: Phase 3.15 — onboarding (port last: dead-vs-live disambiguation + cross-surface). 14 passing: insights, bookings, reporting, settings, pages, enrollments, automation-rules, escalations, integrations, conversations, leads, campaigns, command-center, clients. Remaining: onboarding(port last). schools/dashboard are Phase-4 surfaces.
+  Phase 4:
+  - 4.1 DONE: Operator surface. Deleted src/app/page.tsx (phase-1 blank). Created src/app/(operator)/page.tsx → InsightsView at /. Gate: / → 200, /insights → 200, render-diff 0.52% (< 1.0%), tsc 0 errors, eslint 0 errors, next build 18 pages. Route-groups strategy confirmed: (operator) wraps all 14 views, root layout stays server-only. OperatorShell remains in src/components/shell/ (correct pattern: thin server layout wrapping "use client" component).
+
+NEXT: Phase 4.2 — Schools surface (src/app/(public)/schools/). Port 8 pages (3.3k LOC, no auth). Gate: /schools/:instrument 200 + render-diff.
+  - Phase 3.15 (onboarding) is deferred: port AFTER Phase 4.4 (public onboard) since OnboardForm is shared cross-surface.
   - studio-map DELETED (2026-06-20): vis.js force-directed graph is non-deterministic, unblock Phase 4 routing without surface-split decisions; revisit post-Phase-4 if needed.
