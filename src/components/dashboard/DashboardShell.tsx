@@ -70,13 +70,13 @@ const THEME_CSS = `
   /* ZiroWork bolt logo — swaps with theme */
   .zw-dash .zw-logo {
     flex-shrink: 0;
-    background-image: url('/92-design/brand/zw-bolt-light.png');
+    background-image: url('/brand/zw-bolt-light.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
   }
   html[data-theme="dark"] .zw-dash .zw-logo {
-    background-image: url('/92-design/brand/zw-bolt-dark.png');
+    background-image: url('/brand/zw-bolt-dark.png');
   }
 
   .zw-dash ::-webkit-scrollbar { width: 4px; height: 4px; }
