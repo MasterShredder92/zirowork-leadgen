@@ -94,6 +94,16 @@ NOTES:
 
   - Repo cleanup (2026-06-21): .brain/ superseded docs deleted; canonical-crm-schema.md deleted; p4-verify/ deleted; _migration/north-path-plan.md added (six-phase engine plan).
 
+  - Render-diff retired + verify-build.sh (2026-06-21):
+      - render-diff.mjs, legacy-server.mjs, verify-phase-3-views.sh, snapshots/ deleted.
+      - Root legacy SPAs deleted: 96-public/, 99-agents/, dashboard/, legal/, schools/.
+      - _migration/verify-build.sh added: build + tsc + lint + serve (proper status assertions).
+      - verify-final.sh:35 dangling ref to deleted verify-phase-3-views.sh removed.
+      - HASHES.txt regenerated (8 gates). gate-integrity: PASS.
+      - COLD-CLONE PROOF: BUILD VERIFY: PASS / exit=0 — 2026-06-21.
+        build 24 pages | tsc 0 errors | lint 0 errors | / → 307 | /insights → 307 | 5 public routes → 200.
+      - Decision recorded in _migration/DECISIONS.md.
+
 NEXT: North-path engine (see _migration/north-path-plan.md).
   Phase 1: Excise 2nd CRM remnants from 94-knowledge/schema.sql.
   Phase 2: Isolate vertical vocab → src/config/vertical.ts.
