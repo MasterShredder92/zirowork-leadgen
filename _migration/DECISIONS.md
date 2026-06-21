@@ -47,9 +47,15 @@ Confirmed: `font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-ser
 ### Gate status
 - Shell/sparse views: ~0.36%
 - Text-dense views (campaigns, command-center): 1.00%
-- Threshold: 1.00%
+- clients (597 LOC): **0.36%** — same as shell floor
+- Threshold: 1.00% — permanently
 
-campaigns passes by exactly 0 pixels of headroom. If clients (597 LOC — denser than campaigns) exceeds 1.00%, raise DIFF_THRESHOLD to **1.5%** with this entry as the documented rationale. A threshold increase is a calibration, not a gate weakening, when the source is provably font rendering noise and not a visual regression. The re-compare at that point must confirm the layout is pixel-identical to legacy (eyeball the diff PNG first).
+### Decision
+Global `DIFF_THRESHOLD_PCT` stays at **1.0** — permanently. Raising it loosens the gate for *every* view (including 0.36% shell views), so a real ~1.4% regression anywhere would pass silently. That is exactly the failure the gate exists to prevent.
+
+If a view's empty-state diff ever genuinely exceeds 1.0%, the order is: (1) eyeball its diff PNG — concentrated region = real regression, fix it; scattered glyph-edge speckle = noise; (2) only if PNG-proven noise, add a **per-view** tolerance for that one view with the PNG committed as evidence; the global 1.0% is unchanged. Never a global raise.
+
+Note: clients (597 LOC) landed at 0.36% — gate diff tracks rendered glyph density in the anon empty state, not file size. The "denser LOC → higher diff" assumption was wrong.
 
 ### Files touched
 - `src/app/layout.tsx` — next/font config updated (weights + style + adjustFontFallback)
