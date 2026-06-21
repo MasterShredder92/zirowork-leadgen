@@ -1,6 +1,6 @@
 # Migration Progress
 
-PHASE: 4 — GATE PENDING origin/main (verify-phase-4.sh exits 0 locally; awaiting clean-clone confirm)
+PHASE: 5 — Agent layer (_config/ governance tokens, .claude/workflows/ orchestrators)
 DONE:
   Phase 0:
   - dep-graph.md     (272 lines) — 66 globals (65 in jsx/js modules + window.sb inline in html); spine/leaf classified; 7 dead-code files flagged; 0 cycles; leaf-first order; OnboardForm marked cross-surface
@@ -70,10 +70,13 @@ NOTES:
   - 4.5 DONE: Routing. src/proxy.ts (Next.js 16 proxy convention, not deprecated middleware); route matcher excludes public surfaces; auth stub pass-through (deferred to @supabase/ssr PR). next.config.ts permanent redirects: /onboarding→/onboard, /privacy-policy→/privacy, /terms-of-service→/terms. All redirects return 308.
   - 4.6 DONE: Static pages. src/app/(public)/privacy/ and src/app/(public)/terms/ — inline-style Server Components, no <body>/<style> leakage.
   - Gate infra (with 4.2-4.6): legacy-server.mjs replaces npx serve (vercel.json rewrite + <base href="/">); render-diff.mjs adds URL-nav entries with diffThresholdPct:5.0 for cross-engine comparison; verify-phase-3-views.sh updated to use legacy-server.mjs.
-  - PHASE 4 GATE: verify-phase-4.sh exits 0 — 4 channels (tsc 0 errors, eslint 0 errors, next build 22 pages, surface-serve: / /insights /onboard /privacy /terms /dashboard?preview /schools/adkins-music-lessons-omaha/piano all 200; /onboarding /privacy-policy /terms-of-service all 308). 2026-06-21.
+  - PHASE 4 GATE: verify-phase-4.sh exits 0 — confirmed cold clone (origin/main edc6348), 2026-06-21.
+    4 channels: tsc 0 errors | eslint 0 errors | next build 22 pages | surface-serve: / /insights /onboard /privacy /terms /dashboard?preview /schools/adkins-music-lessons-omaha/piano → 200; /onboarding /privacy-policy /terms-of-service → 308.
 
-NEXT: Phase 5 — Agent layer (_config/ governance tokens, .claude/workflows/ orchestrators).
-  Pre-5 options (tracked changes, not gate blockers):
-  - @supabase/ssr auth enforcement in proxy.ts (add cookie-based session check)
-  - Phase 3.15 ClientOnboardingView (OnboardForm now in src/components/forms/ — unblocked)
+NEXT: Phase 5 — Agent layer.
+  First unit: _config/ docs + one generator→guard→exit-code loop on a real ticket.
+  Pre-5 tracked changes (not gate blockers — do as separate commits before or during Phase 5):
+  - @supabase/ssr auth enforcement in proxy.ts + lazy supabase singleton (see DECISIONS.md)
+  - Phase 3.15 ClientOnboardingView (OnboardForm in src/components/forms/ — unblocked)
   - www/ landing page (home route currently unhandled)
+  - Gate decouple: verify-phase-4 schools checks + render-diff schools-piano off fixture (see DECISIONS.md)
