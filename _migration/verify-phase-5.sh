@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # verify-phase-5.sh — Phase 5 gate.
-# Contract: agent workflows + auth middleware + server client + fixture decoupling + loop-demo.
+# Contract: agent workflows + auth proxy + server client + fixture decoupling + loop-demo.
 # Exit 0 = gate passes. Non-zero = real failure. No self-grading.
 set -uo pipefail
 fail=0
@@ -15,22 +15,21 @@ for f in \
   "_config/agent.md" \
   ".claude/workflows/gate-guard.md" \
   ".claude/workflows/generate-guard-retry.md" \
-  "src/middleware.ts" \
-  "src/lib/supabase/server.ts" \
-  "src/proxy.ts"
+  "src/proxy.ts" \
+  "src/lib/supabase/server.ts"
 do
   [ -f "$f" ] && echo "ok: $f" || { echo "FAIL: missing $f"; fail=1; }
 done
 echo
 
 # ---------------------------------------------------------------------------
-echo "=== 5.B middleware contents ==="
-grep -q 'createServerClient' src/middleware.ts \
-  && echo "ok: createServerClient in middleware.ts" \
-  || { echo "FAIL: createServerClient missing in src/middleware.ts"; fail=1; }
-grep -q 'app_metadata' src/middleware.ts \
-  && echo "ok: role check in middleware.ts" \
-  || { echo "FAIL: operator role check missing in src/middleware.ts"; fail=1; }
+echo "=== 5.B proxy contents ==="
+grep -q 'createServerClient' src/proxy.ts \
+  && echo "ok: createServerClient in proxy.ts" \
+  || { echo "FAIL: createServerClient missing in src/proxy.ts"; fail=1; }
+grep -q 'app_metadata' src/proxy.ts \
+  && echo "ok: role check in proxy.ts" \
+  || { echo "FAIL: operator role check missing in src/proxy.ts"; fail=1; }
 echo
 
 # ---------------------------------------------------------------------------
@@ -56,7 +55,7 @@ check_redir(){
   case "$code" in 301|302|307|308) : ;; *) echo "FAIL: ${label} not a redirect (got ${code})"; fail=1 ;; esac
 }
 
-# Operator routes must redirect (middleware auth gate active)
+# Operator routes must redirect (proxy auth gate active)
 check_redir "/"         "operator / (auth redirect)"
 check_redir "/insights" "operator /insights (auth redirect)"
 

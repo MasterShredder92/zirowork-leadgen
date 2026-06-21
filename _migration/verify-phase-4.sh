@@ -25,8 +25,9 @@ for f in \
 do
   [ -f "$f" ] && echo "ok: $f" || { echo "FAIL: missing $f"; fail=1; }
 done
-grep -q 'export function proxy' src/proxy.ts   && echo "ok: proxy fn exported"    || { echo "FAIL: proxy fn missing in src/proxy.ts"; fail=1; }
-grep -q 'matcher'               src/proxy.ts   && echo "ok: matcher in proxy.ts"  || { echo "FAIL: matcher missing in src/proxy.ts"; fail=1; }
+grep -q 'export async function proxy' src/proxy.ts && echo "ok: proxy fn exported"   || { echo "FAIL: proxy fn missing in src/proxy.ts"; fail=1; }
+grep -q 'createServerClient'             src/proxy.ts && echo "ok: SSR auth in proxy.ts" || { echo "FAIL: SSR auth missing in src/proxy.ts"; fail=1; }
+grep -q 'matcher'                        src/proxy.ts && echo "ok: matcher in proxy.ts"  || { echo "FAIL: matcher missing in src/proxy.ts"; fail=1; }
 grep -q 'redirects'             next.config.ts && echo "ok: redirects in next.config.ts" || { echo "FAIL: redirects missing in next.config.ts"; fail=1; }
 echo
 
