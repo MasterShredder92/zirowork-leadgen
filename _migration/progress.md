@@ -75,10 +75,26 @@ NOTES:
   - PHASE 4 GATE: verify-phase-4.sh exits 0 — confirmed cold clone (origin/main edc6348), 2026-06-21.
     4 channels: tsc 0 errors | eslint 0 errors | next build 22 pages | surface-serve: / /insights /onboard /privacy /terms /dashboard?preview /schools/adkins-music-lessons-omaha/piano → 200; /onboarding /privacy-policy /terms-of-service → 308.
 
-NEXT: Phase 5 — Agent layer.
-  First unit: _config/ docs + one generator→guard→exit-code loop on a real ticket.
-  Pre-5 tracked changes (not gate blockers — do as separate commits before or during Phase 5):
-  - @supabase/ssr auth enforcement in proxy.ts + lazy supabase singleton (see DECISIONS.md)
-  - Phase 3.15 ClientOnboardingView (OnboardForm in src/components/forms/ — unblocked) ✅ DONE 2026-06-21
-  - www/ landing page → /home route ✅ DONE 2026-06-21: src/app/(public)/home/page.tsx; proxy excludes /home; 96-public/ → public/96-public/; www/ deleted.
-  - Gate decouple: verify-phase-4 schools checks + render-diff schools-piano off fixture (see DECISIONS.md)
+  Phase 5:
+  - 5.1 DONE: gate-guard loop — _config/agent.md (governance/token schema) + .claude/workflows/gate-guard.md (orchestrator). commit af25910.
+  - 5.2 DONE: generate-guard-retry loop — fixture + orchestrator. commit 5668f4c.
+  - 5.3 DONE: @supabase/ssr auth + gate decoupling — 2026-06-21.
+      - @supabase/ssr installed.
+      - src/proxy.ts: real auth (createServerClient + operator role check + session refresh). Pass-through stub replaced.
+      - src/lib/supabase/server.ts: server-side Supabase client factory (cookies, SSR-safe).
+      - verify-phase-4.sh: operator routes → check_redir (auth redirect, not 200); schools decoupled to test-fixture slug + 3 sub-routes added.
+      - verify-phase-5.sh: Phase 5 gate (files, proxy contents, loop-demo, tsc, eslint, serve).
+      - render-diff.mjs: schools-piano URL → /schools/test-fixture/piano.
+      - verify-final.sh: Phase 3/4/5 activated (pending → run).
+      - test-fixture seeded in live Supabase (clients + agent_tenants + client_pages, slug=test-fixture).
+      - schools-piano baseline PNG regenerated from test-fixture. HASHES.txt updated.
+      - PHASE 5 GATE: verify-phase-5.sh exits 0 — 2026-06-21.
+        Channels: gate-integrity PASS | files present | proxy auth checked | loop-demo PASS | tsc 0 errors | eslint 0 errors | / → 307 | /insights → 307 | schools test-fixture 4 routes → 200 | dashboard?preview → 200.
+      - Pre-5 tracked changes resolved: @supabase/ssr ✅ | gate decouple ✅.
+
+  - Repo cleanup (2026-06-21): .brain/ superseded docs deleted; canonical-crm-schema.md deleted; p4-verify/ deleted; _migration/north-path-plan.md added (six-phase engine plan).
+
+NEXT: North-path engine (see _migration/north-path-plan.md).
+  Phase 1: Excise 2nd CRM remnants from 94-knowledge/schema.sql.
+  Phase 2: Isolate vertical vocab → src/config/vertical.ts.
+  Phase 3: Connector abstraction + Tier C availability/booking API.

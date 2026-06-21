@@ -1,43 +1,38 @@
 # Handoff
 
-VERIFIED: Phase 4 CLOSED — verify-phase-4.sh exit 0 from cold clone (origin/main edc6348), 2026-06-21.
+VERIFIED: Phase 5 CLOSED — verify-phase-5.sh exit 0, 2026-06-21.
 
-## Phase 4 gate — confirmed green
-Cold clone at `C:\Users\admin\Desktop\p4-verify`, npm install from scratch, `.env.local` injected,
-`bash _migration/verify-phase-4.sh` → `PHASE 4 VERIFY: PASS` / `exit=0`.
+## Phase 5 gate — confirmed green
 
-4 channels all clear:
+`bash _migration/verify-phase-5.sh` → `PHASE 5 VERIFY: PASS` / `exit=0`.
+
+Channels all clear:
+- gate integrity: PASS
+- files present: _config/agent.md, .claude/workflows/gate-guard.md, .claude/workflows/generate-guard-retry.md, src/proxy.ts, src/lib/supabase/server.ts
+- proxy.ts: createServerClient + operator role check confirmed
+- loop-demo pct.guard.mjs: PASS
 - tsc: 0 errors
-- eslint: 0 errors (10 pre-existing no-img-element warnings, not introduced by Phase 4)
-- next build: 22 pages, exit 0
-- surface-serve: `/` `/insights` `/onboard` `/privacy` `/terms` `/dashboard?preview` `/schools/adkins-music-lessons-omaha/piano` → 200; `/onboarding` `/privacy-policy` `/terms-of-service` → 308
+- eslint: 0 errors (10 pre-existing no-img-element warnings)
+- serve: / → 307, /insights → 307 (auth redirect active) | schools test-fixture 4 routes → 200 | dashboard?preview → 200
 
-## Deferred defects (logged in DECISIONS.md, not Phase 4 blockers)
-1. `src/lib/supabase/client.ts` top-level `createClient` throws at import with no env — fix with lazy singleton alongside `@supabase/ssr` work.
-2. `verify-phase-4.sh` schools serve checks cover `[instrument]` only — `signup/thank-you/confirm` are gate-blind. Fix in Phase 5 gate-decouple unit (atomic with fixture row change).
-3. Both schools serve check and render-diff baseline couple to live `adkins` slug — decouple to fixture in Phase 5 (do both checks together, not piecemeal). See DECISIONS.md §2026-06-21.
+## What landed this session (commits 76a4aa0 → fbb3143)
 
-## Phase 3.15 — ClientOnboardingView (DONE 2026-06-21)
-- `src/components/views/ClientOnboardingView.tsx` — typed port of 02-onboarding/onboarding.jsx. Proxy-lazy supabase singleton; useClients + refetch(); OnboardForm modal.
-- `src/app/(operator)/client-onboarding/page.tsx` — thin page entrypoint.
-- OperatorShell nav id: `onboarding` → `client-onboarding`.
-- ClientsView "Add Client" push: `/onboarding` → `/client-onboarding`.
-- Legacy `02-onboarding/onboarding.jsx` + `02-onboarding/onboard-form.jsx` deleted.
-- `p4-verify/` added to tsconfig `exclude` (untracked cold-clone; Deno globals broke tsc).
-- tsc 0 errors, eslint 0 errors on changed files, next build passes.
+- `chore(cleanup)`: deleted .brain/ superseded docs + canonical-crm-schema.md; added _migration/north-path-plan.md
+- `feat(phase-5/unit-3)`: @supabase/ssr installed; src/proxy.ts real auth (createServerClient + operator role check); src/lib/supabase/server.ts server client factory; verify-phase-5.sh; gate scripts updated
+- `fix(phase-5/unit-3)`: proxy.ts replaces middleware.ts (Next.js 16 convention); middleware.ts deleted
+- `chore(gate)`: schools-piano baseline PNG regenerated from test-fixture; HASHES.txt updated
 
-## www/ landing page → /home (DONE 2026-06-21)
-- `src/app/(public)/home/page.tsx` — Server Component port of www/index.html. Light-mode brand palette (`#F7F2E8` bg, `#D9641C` accent). Metadata exported. No client event handlers (Server Component constraint; footer link hover dropped).
-- `public/96-public/` — copied from legacy `96-public/` (icon.svg, favicon.ico, favicon.png, apple-touch-icon.png).
-- `src/proxy.ts` matcher: `home` added to exclusion list.
-- `www/` deleted.
-- Build: `/home` appears as static `○` page. eslint 0 errors on changed files.
+## Key decisions made
 
-## NEXT: Phase 5 — Agent layer
-First unit: `_config/` governance docs + one generator→guard→exit-code loop on a real ticket.
-NOT the gate-decouple (that's logged, it waits its turn in Phase 5).
+- Next.js 16 uses `src/proxy.ts` + `export function proxy()` — `middleware.ts` is deprecated in this version. Auth logic lives in proxy.ts.
+- Operator routes (/, /insights, etc.) now redirect unauthenticated requests to /dashboard (307). This is correct post-auth behavior; verify-phase-4.sh updated to expect redirects.
+- test-fixture slug seeded in live Supabase (clients + agent_tenants + client_pages). Never delete this row — gates depend on it.
+- client.ts lazy singleton already existed via Proxy pattern (no change needed).
 
-Pre-5 tracked changes (separate commits, any order):
-- `@supabase/ssr` cookie auth in `proxy.ts` + lazy supabase singleton
-- Phase 3.15 ClientOnboardingView (`OnboardForm` is in `src/components/forms/` — unblocked)
-- `www/` landing page (home route unhandled)
+## NEXT: North-path engine
+
+Migration is COMPLETE. All phases 0–5 gated. Next work follows _migration/north-path-plan.md:
+
+**Phase 1** — Excise 2nd CRM from 94-knowledge/schema.sql (families/students/teachers/lessons/payroll/financials docs only; live table drops are a separate Supabase decision).
+**Phase 2** — Isolate vertical vocab into src/config/vertical.ts (programColor, instrument labels, entity names).
+**Phase 3** — Connector abstraction + Tier C: src/lib/connectors/types.ts interface + Supabase-backed availability/booking store.
