@@ -40,6 +40,10 @@
   /* Phase 3 additions — ConversationsView accent (dark only; #6366F1 was not in theme.js light override) */
   --color-conv-accent: #6366F1;
 
+  /* Phase 3 additions — LeadsView stage tokens (dark only; not in theme.js light override) */
+  --color-stage-contacted: #60A5FA;
+  --color-stage-qualified: #38BDF8;
+
   --color-bg: #1A1C1F;
   --color-sidebar-bg: #141619;
   --color-card-bg: #26292D;

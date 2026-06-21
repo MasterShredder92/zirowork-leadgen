@@ -70,7 +70,7 @@
       "surface": "operator",
       "behavior": "Leads renders identically to legacy.",
       "verify": "node _migration/epic/GATES/render-diff.mjs compare leads",
-      "state": "not_started",
+      "state": "passing",
       "lane": null,
       "notes": "Data view — capture baseline with empty-state (window.sb=null legacy / SUPABASE_URL='' Next)."
     },
