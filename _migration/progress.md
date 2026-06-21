@@ -62,4 +62,5 @@ NOTES:
 
   - 3.14 DONE: ClientsView (+ ClientDetail panel). 597 LOC legacy. ClientDetail selection-gated (code-review-only); gate sees empty list. 1 new token: --color-client-navy (#1A2B3C). Declarative hoverId row hover. Effects→.then. window.sb/SEED_DATA branches dropped. render-diff 0.36% (shell floor — floor panic was moot; empty list = sparse text). flip-state: passing.
 
-NEXT: Phase 3.15 — onboarding (port last: dead-vs-live disambiguation + cross-surface). 14 passing: insights, bookings, reporting, settings, pages, enrollments, automation-rules, escalations, integrations, conversations, leads, campaigns, command-center, clients. Remaining: onboarding(port last), studio-map(defer—vis.js/Phase4). schools/dashboard are Phase-4 surfaces.
+NEXT: Phase 3.15 — onboarding (port last: dead-vs-live disambiguation + cross-surface). 14 passing: insights, bookings, reporting, settings, pages, enrollments, automation-rules, escalations, integrations, conversations, leads, campaigns, command-center, clients. Remaining: onboarding(port last). schools/dashboard are Phase-4 surfaces.
+  - studio-map DELETED (2026-06-20): vis.js force-directed graph is non-deterministic, unblock Phase 4 routing without surface-split decisions; revisit post-Phase-4 if needed.

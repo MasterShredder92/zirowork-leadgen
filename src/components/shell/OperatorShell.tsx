@@ -5,7 +5,7 @@ import { useTheme } from "@/app/providers";
 import {
   LayoutDashboard, Building2, ClipboardList, Megaphone, Globe,
   Inbox, MessageSquare, AlertTriangle, CalendarCheck, UserCheck,
-  BarChart2, Sparkles, Network, Zap, Plug,
+  BarChart2, Sparkles, Zap, Plug,
   Settings as SettingsIcon, Search, ChevronRight, Circle, ChevronsUpDown,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -34,7 +34,6 @@ const NAV: NavSection[] = [
   { section: "PERFORMANCE", items: [
     { id: "reporting",  label: "Reporting",  Icon: BarChart2 },
     { id: "insights",   label: "Insights",   Icon: Sparkles },
-    { id: "studio-map", label: "Studio Map", Icon: Network },
   ]},
   { section: "SYSTEM", items: [
     { id: "automation-rules", label: "Automation Rules", Icon: Zap },
