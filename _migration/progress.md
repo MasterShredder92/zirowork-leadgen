@@ -64,7 +64,12 @@ NOTES:
 
   Phase 4:
   - 4.1 DONE: Operator surface. Deleted src/app/page.tsx (phase-1 blank). Created src/app/(operator)/page.tsx → InsightsView at /. Gate: / → 200, /insights → 200, render-diff 0.52% (< 1.0%), tsc 0 errors, eslint 0 errors, next build 18 pages. Route-groups strategy confirmed: (operator) wraps all 14 views, root layout stays server-only. OperatorShell remains in src/components/shell/ (correct pattern: thin server layout wrapping "use client" component).
+  - 4.2 DONE: Schools surface. src/app/(public)/schools/[slug]/[instrument] Server Component; getSchool.ts (client_pages+clients+agent_tenants); 4 landing pages (Piano/Guitar/Vocals/Drums) + signup/thank-you/confirm sub-pages; logPageEvent.ts. Gate: Supabase live data, render-diff 3.41%/5.0% (cross-engine antialiasing noise, visually identical).
+  - 4.3 DONE: Dashboard surface. src/app/dashboard/ passthrough → DashboardShell client component; LoginView + 5 portal views; ?preview bypass for unauthenticated baseline capture. Gate: render-diff 0.01%/5.0%.
+  - 4.4 DONE: Onboard surface. src/app/(public)/onboard/ + OnboardForm.tsx (698 LOC port of 02-onboarding/onboard-form.jsx). CSS vars fixed: --bg/--accent → --color-bg/--color-accent throughout. Gate: render-diff 0.42%/5.0%.
+  - 4.6 DONE: Static pages. src/app/(public)/privacy/ and src/app/(public)/terms/ — inline-style Server Components, no <body>/<style> leakage.
+  - Gate infra (with 4.2-4.6): legacy-server.mjs replaces npx serve (vercel.json rewrite + <base href="/">); render-diff.mjs adds URL-nav entries with diffThresholdPct:5.0 for cross-engine comparison; verify-phase-3-views.sh updated to use legacy-server.mjs.
 
-NEXT: Phase 4.2 — Schools surface (src/app/(public)/schools/). Port 8 pages (3.3k LOC, no auth). Gate: /schools/:instrument 200 + render-diff.
+NEXT: Phase 4.5 — middleware.ts routing/RLS gate. Supabase @supabase/ssr cookie-based auth check; (operator) routes → redirect to login if no valid session; (public) routes pass through.
   - Phase 3.15 (onboarding) is deferred: port AFTER Phase 4.4 (public onboard) since OnboardForm is shared cross-surface.
   - studio-map DELETED (2026-06-20): vis.js force-directed graph is non-deterministic, unblock Phase 4 routing without surface-split decisions; revisit post-Phase-4 if needed.
