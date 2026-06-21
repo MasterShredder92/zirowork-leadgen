@@ -47,9 +47,9 @@ check_redir(){
   case "$code" in 301|302|307|308) : ;; *) echo "FAIL: ${label} not a redirect (got ${code})"; fail=1 ;; esac
 }
 
-# Operator surface
-check_200 "/"         "operator /"
-check_200 "/insights" "operator /insights"
+# Operator surface — middleware redirects unauthenticated requests to /dashboard (correct post-auth behavior)
+check_redir "/"         "operator / (auth redirect)"
+check_redir "/insights" "operator /insights (auth redirect)"
 
 # Public surfaces
 check_200 "/onboard"  "(public) /onboard"
@@ -59,8 +59,11 @@ check_200 "/terms"    "(public) /terms"
 # Dashboard surface (?preview bypasses auth for gate — no session needed)
 check_200 "/dashboard?preview" "dashboard /?preview"
 
-# Schools surface (requires live DB; slug must exist in client_pages table)
-check_200 "/schools/adkins-music-lessons-omaha/piano" "(public) schools /piano"
+# Schools surface (decoupled to test-fixture slug — seed via _migration/north-path-plan.md SQL)
+check_200 "/schools/test-fixture/piano"                        "(public) schools /piano"
+check_200 "/schools/test-fixture/signup?instrument=piano"      "(public) schools /signup"
+check_200 "/schools/test-fixture/thank-you?instrument=piano"   "(public) schools /thank-you"
+check_200 "/schools/test-fixture/confirm?instrument=piano"     "(public) schools /confirm"
 
 # Legacy-redirect gate (permanent redirects from next.config.ts)
 check_redir "/onboarding"      "redirect /onboarding→/onboard"

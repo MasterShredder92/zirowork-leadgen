@@ -52,7 +52,7 @@ const VIEW_MAP = {
   // (default), so AA pixels are excluded; this is font hinting divergence, not AA.
   // Threshold = 4.0 (measured 3.41% + 0.59% margin). PNG diff on file confirms text-only.
   // dashboard-preview and onboard both pass the global 1.0% — no per-entry override needed.
-  'schools-piano':     { nav: 'url', diffThresholdPct: 4.0, legacyPath: '/schools/adkins-music-lessons-omaha/piano',  nextPath: '/schools/adkins-music-lessons-omaha/piano' },
+  'schools-piano':     { nav: 'url', diffThresholdPct: 4.0, legacyPath: '/schools/test-fixture/piano',  nextPath: '/schools/test-fixture/piano' },
   'dashboard-preview': { nav: 'url',                         legacyPath: '/dashboard?preview',                         nextPath: '/dashboard?preview'                        },
   'onboard':           { nav: 'url',                         legacyPath: '/onboard.html',                              nextPath: '/onboard'                                  },
 };

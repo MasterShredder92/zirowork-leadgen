@@ -32,10 +32,9 @@ echo "=== repo sweep: legacy folders still excluded from tooling ==="
 grep -q "00-\|99-agents\|schools\|dashboard" tsconfig.json && echo "ok: tsconfig still scopes to src" || { echo "WARN: confirm tsconfig excludes legacy"; }
 echo
 
-# Later phases — explicitly PENDING so 'final' cannot lie green before they exist.
-pending "phase 3 render-diff (all views pixel-identical)"
-pending "phase 4 (3 surfaces serve, routing in App Router)"
-pending "phase 5 (one generator->guard->exit-code loop proven)"
+run "phase 3 render-diff (all views pixel-identical)" bash _migration/epic/GATES/verify-phase-3-views.sh
+run "phase 4 (surfaces + auth routing)" bash _migration/verify-phase-4.sh
+run "phase 5 (agent layer + auth middleware)" bash _migration/verify-phase-5.sh
 
 echo "=== RESULT ==="
 [ $fail -eq 0 ] && { echo "BUILD COMPLETE: PASS"; exit 0; } || { echo "BUILD NOT DONE (expected until all phases land)"; exit 1; }
