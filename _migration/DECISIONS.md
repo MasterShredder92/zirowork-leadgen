@@ -89,6 +89,40 @@ Deferred to Phase 5. Phase 4 gate remains as-is — documented manual gate, adki
 
 ---
 
+## 2026-06-21 — Deferred defects: supabase client top-level throw + gate-blind schools routes
+
+### Defect 1 — client.ts throws at import when env is absent
+
+```ts
+// src/lib/supabase/client.ts
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;  // ! = type lie; undefined at runtime
+export const supabase = createClient(url, anonKey);  // runs at module import
+```
+
+The `!` non-null assertion silences tsc; at runtime with no env it is `undefined` and `createClient` throws the moment the module is imported. All four schools routes import it transitively (`page.tsx → getSchoolBySlug → client.ts`), so `next build`'s page-data collection worker aborts env-less. Build completes with `.env.local` present — that is the gate's stated contract and the gate is not broken. But the throw-on-import is a latent landmine.
+
+**Fix (deferred to `@supabase/ssr` tracked change):** lazy singleton — construct the client on first call, not at module load. The throw moves from import-time to use-time; build passes env-less, SSR functions throw only when actually invoked without credentials.
+
+**This is not a Phase 4 blocker.** With `.env.local` present, `next build` passes exit 0 (22 pages, confirmed locally). Fix alongside the `@supabase/ssr` cookie-auth work as one atomic change.
+
+### Defect 2 — verify-phase-4.sh schools serve checks are gate-blind on three sub-routes
+
+The gate checks:
+```
+check_200 "/schools/adkins-music-lessons-omaha/piano"   # [slug]/[instrument]
+```
+
+Not checked:
+- `/schools/adkins-music-lessons-omaha/signup`          # [slug]/signup
+- `/schools/adkins-music-lessons-omaha/thank-you`       # [slug]/thank-you
+- `/schools/adkins-music-lessons-omaha/confirm`         # [slug]/confirm
+
+All three sub-routes exist in `src/app/(public)/schools/[slug]/` and are built (shown in `next build` route table), but the serve gate doesn't exercise them. A broken sub-route would not trip the gate today.
+
+**Fix (deferred to Phase 5 gate-decouple unit):** add `check_200` (or `check_not_500` if decoupled to fixture slug) for all three sub-routes in the same commit that decouples the main schools check from the live slug. Doing it piecemeal before the decouple just adds three more prod-data-coupled checks. Do all four together.
+
+---
+
 ## 2026-06-21 — Phase 4 per-entry thresholds: schools-piano at 4.0%, others at global
 
 ### The problem
