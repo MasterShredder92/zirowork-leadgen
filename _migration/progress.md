@@ -45,6 +45,8 @@ DONE:
     - All mobile (drawer, swipe, MobileHeader, equalizer)
     - TweaksPanel
 
+  - 3.15 DONE: ClientOnboardingView — 02-onboarding/onboarding.jsx ported. CHECKLIST (6 items: 2 derived read-only, 4 boolean toggleable via supabase singleton). Progress bar + per-client completion %. OnboardForm modal wired via refetch(). `client-onboarding` route added; OperatorShell nav id updated; ClientsView "Add Client" push updated to /client-onboarding. Legacy 02-onboarding/onboarding.jsx + onboard-form.jsx deleted. p4-verify/ added to tsconfig exclude (untracked cold-clone, Deno globals). tsc 0 errors, eslint 0 errors on changed files, next build passes.
+
 IN PROGRESS: none
 
 BLOCKED: none
@@ -77,6 +79,6 @@ NEXT: Phase 5 — Agent layer.
   First unit: _config/ docs + one generator→guard→exit-code loop on a real ticket.
   Pre-5 tracked changes (not gate blockers — do as separate commits before or during Phase 5):
   - @supabase/ssr auth enforcement in proxy.ts + lazy supabase singleton (see DECISIONS.md)
-  - Phase 3.15 ClientOnboardingView (OnboardForm in src/components/forms/ — unblocked)
-  - www/ landing page (home route currently unhandled)
+  - Phase 3.15 ClientOnboardingView (OnboardForm in src/components/forms/ — unblocked) ✅ DONE 2026-06-21
+  - www/ landing page → /home route ✅ DONE 2026-06-21: src/app/(public)/home/page.tsx; proxy excludes /home; 96-public/ → public/96-public/; www/ deleted.
   - Gate decouple: verify-phase-4 schools checks + render-diff schools-piano off fixture (see DECISIONS.md)

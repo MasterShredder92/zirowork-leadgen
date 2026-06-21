@@ -538,7 +538,7 @@ export default function ClientsView() {
           <h1 style={{ fontSize: 25, fontWeight: 700, color: 'var(--color-text-1)', letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Clients</h1>
           <div style={{ fontSize: 13, color: 'var(--color-text-3)' }}>Which schools are live, onboarding, healthy, stuck, or at risk?</div>
         </div>
-        <button onClick={() => router.push('/onboarding')} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+        <button onClick={() => router.push('/client-onboarding')} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
           <Plus size={14} strokeWidth={1.75} /> Add Client
         </button>
       </div>

@@ -10,6 +10,6 @@ export function proxy() {
 export const config = {
   matcher: [
     // Match all operator SPA paths; exclude public surfaces, API routes, and Next.js internals.
-    '/((?!schools|dashboard|onboard|privacy|terms|api|_next/static|_next/image|favicon\\.ico|96-public).*)',
+    '/((?!schools|dashboard|onboard|home|privacy|terms|api|_next/static|_next/image|favicon\\.ico|96-public).*)',
   ],
 };

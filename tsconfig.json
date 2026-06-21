@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "99-agents", "_migration"]
+  "exclude": ["node_modules", "99-agents", "_migration", "p4-verify"]
 }

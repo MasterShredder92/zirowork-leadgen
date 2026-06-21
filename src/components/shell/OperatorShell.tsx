@@ -18,7 +18,7 @@ const NAV: NavSection[] = [
   { section: "OPS", items: [
     { id: "command-center", label: "Command Center", Icon: LayoutDashboard },
     { id: "clients",        label: "Clients",         Icon: Building2 },
-    { id: "onboarding",    label: "Onboarding",      Icon: ClipboardList },
+    { id: "client-onboarding", label: "Onboarding",      Icon: ClipboardList },
   ]},
   { section: "FUNNELS", items: [
     { id: "campaigns", label: "Campaigns", Icon: Megaphone },
