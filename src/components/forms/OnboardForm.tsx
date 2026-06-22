@@ -79,6 +79,10 @@ interface FormState {
   gtm_id:        string;
   twilio_phone_number: string;
   about:         string;
+  legal_business_name: string;
+  ein:           string;
+  privacy_policy_url: string;
+  tos_url:       string;
 }
 
 interface OperatorCreds {
@@ -105,6 +109,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
     slots: [],
     fb_pixel_id: "", gtm_id: "", twilio_phone_number: "",
     about: "",
+    legal_business_name: "", ein: "", privacy_policy_url: "", tos_url: "",
   };
 
   // Live landing-page templates only — expand as more instrument pages ship
@@ -237,6 +242,10 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
 
   const blockers = [
     !form.studio_name              && "Studio name is required",
+    !form.legal_business_name      && "Legal business name is required for SMS compliance",
+    !form.ein                      && "EIN/Tax ID is required for SMS compliance",
+    !form.privacy_policy_url       && "Privacy Policy URL is required for SMS compliance",
+    !form.tos_url                  && "Terms of Service URL is required for SMS compliance",
     form.instruments.length === 0  && "At least one instrument required — needed to build landing pages",
     standalone && !form.email                                  && "Email is required to create your portal login",
     standalone && (!form.password || form.password.length < 8) && "A portal password (8+ characters) is required",
@@ -340,6 +349,17 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
       <div style={{ marginBottom: 14 }}>{fLabel("Booking / Contact Email", !!standalone)}<input style={inp} value={form.email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("email", e.target.value)} placeholder="hello@yourstudio.com" /></div>
       <div style={{ marginBottom: 14 }}>{fLabel("Street Address")}<input style={inp} value={form.address} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("address", e.target.value)} placeholder="1234 Music Ave, Suite 200" /></div>
       <div style={{ marginBottom: 14 }}>{fLabel("Hours")}<input style={inp} value={form.hours} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("hours", e.target.value)} placeholder="Mon–Fri 2–8pm · Sat 9am–2pm" /></div>
+
+      <div style={{ marginTop: 24, padding: "16px 14px", background: T.bg, border: `1px solid ${T.border}`, borderRadius: 8 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: T.t1, marginBottom: 4 }}>SMS Compliance (A2P 10DLC)</div>
+        <div style={{ fontSize: 12, color: T.t3, marginBottom: 14, lineHeight: 1.5 }}>
+          Required by mobile carriers to send text messages. This information must exactly match your tax records.
+        </div>
+        <div style={{ marginBottom: 12 }}>{fLabel("Legal Business Name", true)}<input style={inp} value={form.legal_business_name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("legal_business_name", e.target.value)} placeholder="Adkins Music Lessons LLC" /></div>
+        <div style={{ marginBottom: 12 }}>{fLabel("EIN / Tax ID", true)}<input style={inp} value={form.ein} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("ein", e.target.value)} placeholder="XX-XXXXXXX" /></div>
+        <div style={{ marginBottom: 12 }}>{fLabel("Privacy Policy URL", true)}<input style={inp} value={form.privacy_policy_url} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("privacy_policy_url", e.target.value)} placeholder="https://yourstudio.com/privacy" /></div>
+        <div style={{ marginBottom: 12 }}>{fLabel("Terms of Service URL", true)}<input style={inp} value={form.tos_url} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("tos_url", e.target.value)} placeholder="https://yourstudio.com/terms" /></div>
+      </div>
     </div>
   );
 
