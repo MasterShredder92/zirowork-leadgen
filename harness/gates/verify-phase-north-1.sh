@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -uo pipefail
 
 echo "========================================="
 echo " ZiroWork Phase 1 Gate: Excise 2nd CRM   "
@@ -39,12 +39,8 @@ else
   echo "✅ src/: no 2nd CRM code references in tracked files"
 fi
 
-# --- build check ---
-echo "Running next build..."
-if ! npx cross-env NEXT_TELEMETRY_DISABLED=1 next build; then
-  echo "❌ FAIL: next build failed"
-  FAIL=1
-fi
+# Build integrity is covered by harness/gates/verify-build.sh — not repeated here.
+# This gate is cold-clone-safe: schema grep + src grep are the only checks.
 
 echo "========================================="
 if [ $FAIL -eq 0 ]; then
