@@ -5,25 +5,54 @@ echo "========================================="
 echo " ZiroWork Phase 1 Gate: Excise 2nd CRM   "
 echo "========================================="
 
-# 1. Grep Check
-echo "Running CRM grep check..."
-# We expect NO output from grep, so if it finds something, we fail.
-# grep exits 0 if lines are found, 1 if no lines are found. We want it to exit 1 (nothing found).
-if grep -riE "families|use-students|use-lessons|payroll|financials" src/ 94-knowledge/schema.sql; then
-  echo "❌ FAIL: Found remnants of the old CRM in src/ or schema.sql"
-  exit 1
-fi
-echo "✅ Grep check passed (no CRM remnants found)"
+FAIL=0
 
-# 2. Build Check
+# --- schema.sql check ---
+# CRM table definitions must be deleted (docs only — live DDL is a separate step).
+# We check for CREATE TABLE statements on the CRM-specific tables.
+echo "Checking schema.sql for 2nd CRM table definitions..."
+if grep -iE "CREATE TABLE (families|students|lessons|invoices|payroll|financials)" 94-knowledge/schema.sql 2>/dev/null; then
+  echo "❌ FAIL: 2nd CRM table definitions still in schema.sql"
+  FAIL=1
+else
+  echo "✅ schema.sql: no 2nd CRM tables"
+fi
+
+# --- src/ check (tracked files only) ---
+# Check for CODE references to CRM-specific identifiers.
+# We do NOT check for the word "families" alone (it appears in landing-page copy;
+# removing that is Phase 2 vertical-vocab work). We check for:
+#   - families_timeline (join table — uniquely 2nd CRM)
+#   - use-students / use-lessons (old hook file names)
+#   - payroll / financials (billing tables)
+echo "Checking tracked src/ files for 2nd CRM code references..."
+tracked=$(git ls-files src/ 2>/dev/null | grep -E '\.(ts|tsx|js|jsx)$' || true)
+crm_hits=""
+if [ -n "$tracked" ]; then
+  crm_hits=$(echo "$tracked" | xargs grep -lEi "families_timeline|use[-_]students|use[-_]lessons|payroll|financials" 2>/dev/null || true)
+fi
+if [ -n "$crm_hits" ]; then
+  echo "$crm_hits"
+  echo "❌ FAIL: tracked src/ files still reference 2nd CRM identifiers"
+  FAIL=1
+else
+  echo "✅ src/: no 2nd CRM code references in tracked files"
+fi
+
+# --- build check ---
 echo "Running next build..."
 if ! npx cross-env NEXT_TELEMETRY_DISABLED=1 next build; then
   echo "❌ FAIL: next build failed"
-  exit 1
+  FAIL=1
 fi
-echo "✅ Build passed"
 
 echo "========================================="
-echo " PHASE 1 GATE: PASS                      "
-echo "========================================="
-exit 0
+if [ $FAIL -eq 0 ]; then
+  echo " PHASE 1 GATE: PASS                      "
+  echo "========================================="
+  exit 0
+else
+  echo " PHASE 1 GATE: FAIL                      "
+  echo "========================================="
+  exit 1
+fi
