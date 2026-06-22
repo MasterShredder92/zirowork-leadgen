@@ -1,3 +1,3 @@
-76a627bfa663f0eb55a757a7fe4b1cccd040521dd3dfc948a4b39a45d9cdedea *harness/gates/no-hex-in-views.sh
-db04cd268bc382c601565f3cce861b937a75ba827b096b02c438f58ef9951b3e *harness/gates/verify-build.sh
+3d0fdfac79e5a97062f58b8d8552316a232829ff110b47253f4b8005c721acbf *harness/gates/verify-build.sh
+b31ad01757e7e4c2ec0274f93e78b3f30a1a2d46b9f52da129fe7dacb0f82ad9 *harness/gates/verify-no-hex.sh
 457f2e8fbec5537c4e90d415e7a9c26fa1f131e57ee37fa02b3db48bf15fc03f *harness/gates/verify-phase-north-1.sh
