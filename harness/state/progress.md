@@ -118,12 +118,17 @@ NOTES:
       - HASHES.txt regenerated. V4 red-check passed.
       - OPEN: verify-build.sh serve check fails (/ → 200 not 307) — auth redirect broken. proxy.ts named wrong (must be middleware.ts) or Supabase env vars absent in test. Own fix.
 
-  - Domain doc collapse (2026-06-22): 4 domain docs → 1.
-      - Deleted: ZiroWork-Client-Flow, 94-knowledge/business-model.md, 94-knowledge/northstar-ideology.md.
-      - Canonical: 94-knowledge/northstar.md (Domain Model & Invariants).
+  - Domain doc collapse (2026-06-22): 3 docs deleted, content folded into northstar.md (4-doc set → 1 canonical).
+      - Deleted (3): ZiroWork-Client-Flow, 94-knowledge/business-model.md, 94-knowledge/northstar-ideology.md.
+      - Canonical (survived): 94-knowledge/northstar.md (Domain Model & Invariants).
       - "Is Not" positioning table folded in from business-model.md.
       - Dead refs fixed in CONTEXT.md, data-model.md, README.md, zirowork-youratlas-framework.md.
       - V1–V4 PASS. Rule 15 red-check PASS.
+
+GATE MANIFEST SCOPE: gate-integrity.sh protects only harness/gates/verify-build.sh.
+  harness/gates/verify-phase-north-1.sh is the north-path Phase 1 gate — moved from _migration/ (untracked) to harness/gates/ 2026-06-22.
+  Run `bash harness/gates/gate-integrity.sh --update` and commit HASHES.txt after north-1 is confirmed stable.
+  _migration/verify-phase-{0,1,2,4,5}.sh are DEAD (historical — phases complete; archived with _migration/).
 
 NEXT: North-path engine (see _migration/north-path-plan.md).
   Phase 1: Excise 2nd CRM remnants from 94-knowledge/schema.sql.

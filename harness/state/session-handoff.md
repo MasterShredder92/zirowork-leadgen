@@ -13,12 +13,14 @@ VERIFIED: Migration COMPLETE — all phases 0–5 gated. 2026-06-21/22: harness 
 - **Harness reorg** — _config/ + migration gate files relocated to harness/:
   - harness/gates/ · harness/loop/ · harness/state/ · harness/agent.md · harness/README.md
   - gate-integrity.sh depth + list_gates() fixed; HASHES.txt regenerated; red-check passed.
-- **Domain doc collapse** — 4 domain docs → 1 canonical:
-  - Deleted: ZiroWork-Client-Flow, 94-knowledge/business-model.md, 94-knowledge/northstar-ideology.md
-  - Canonical: 94-knowledge/northstar.md (Domain Model & Invariants)
+- **Domain doc collapse** — 3 docs deleted, content folded into northstar.md (4-doc set → 1 canonical):
+  - Deleted (3): ZiroWork-Client-Flow, 94-knowledge/business-model.md, 94-knowledge/northstar-ideology.md
+  - Canonical (survived): 94-knowledge/northstar.md (Domain Model & Invariants)
   - "Is Not" positioning table folded in from business-model.md
   - Dead refs fixed in CONTEXT.md, data-model.md, README.md, zirowork-youratlas-framework.md
   - V1–V4 PASS, Rule 15 red-check PASS
+- **verify-phase-north-1.sh** — north-path Phase 1 gate moved from _migration/ → harness/gates/ (2026-06-22).
+  Not yet in HASHES.txt — run `gate-integrity.sh --update` + commit when north-path Phase 1 starts.
 - **Deferred tracked** — SMS derive layer (integrations.ts still hardcodes openphone)
 
 ## Invariants that must not break
