@@ -67,6 +67,13 @@
   --color-row-hover: rgba(255,255,255,0.03);
   --color-accent: #FD802E;
   --color-on-accent: #fff;
+  /* A2P status banner — fixed light colors, intentionally theme-invariant */
+  --color-a2p-pending-bg:     #FEF3C7;
+  --color-a2p-pending-border: #F59E0B;
+  --color-a2p-pending-text:   #92400E;
+  --color-a2p-error-bg:       #FEE2E2;
+  --color-a2p-error-border:   #EF4444;
+  --color-a2p-error-text:     #991B1B;
   --color-paid-bg: rgba(16,185,129,0.15);
   --color-paid-text: #34D399;
   --color-paid-dot: #10B981;

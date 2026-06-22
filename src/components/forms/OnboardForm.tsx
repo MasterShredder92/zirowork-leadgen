@@ -601,7 +601,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
     const { data, error } = await supabase.from("clients").insert([{
       name: form.studio_name, city: form.city, state: form.state, status: "onboarding",
       health: null, sms_number: null, lead_form_webhook: null,
-      protected_slots: false, brand_assets: false, automation_rules: false,
+      protected_slots: false, brand_assets: false, automation_rules: false, integrations: false,
       slug, instruments: form.instruments, program_prices: form.program_prices,
       teachers: form.teachers.filter((t) => t.name),
       studio_phone: form.studio_phone || null, website: form.website || null,
@@ -609,7 +609,6 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
       tagline: form.tagline || null, offer: form.offer || null,
       testimonial: form.testimonial || null, logo_url: form.logo_url || null,
       fb_pixel_id: form.fb_pixel_id || null, gtm_id: form.gtm_id || null,
-      integrations: form.scheduling_platform === "square" ? { square_access_token: form.square_access_token } : {},
     }]).select();
     setSaving(false);
     if (error) { setSaveError("Failed to create profile. Try again."); return; }
