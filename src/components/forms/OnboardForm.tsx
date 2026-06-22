@@ -83,6 +83,8 @@ interface FormState {
   ein:           string;
   privacy_policy_url: string;
   tos_url:       string;
+  scheduling_platform: "none" | "square" | "google";
+  square_access_token: string;
 }
 
 interface OperatorCreds {
@@ -110,6 +112,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
     fb_pixel_id: "", gtm_id: "", twilio_phone_number: "",
     about: "",
     legal_business_name: "", ein: "", privacy_policy_url: "", tos_url: "",
+    scheduling_platform: "none", square_access_token: "",
   };
 
   // Live landing-page templates only — expand as more instrument pages ship
@@ -360,6 +363,28 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
         <div style={{ marginBottom: 12 }}>{fLabel("Privacy Policy URL", true)}<input style={inp} value={form.privacy_policy_url} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("privacy_policy_url", e.target.value)} placeholder="https://yourstudio.com/privacy" /></div>
         <div style={{ marginBottom: 12 }}>{fLabel("Terms of Service URL", true)}<input style={inp} value={form.tos_url} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("tos_url", e.target.value)} placeholder="https://yourstudio.com/terms" /></div>
       </div>
+
+      <div style={{ marginTop: 24, padding: "16px 14px", background: T.bg, border: `1px solid ${T.border}`, borderRadius: 8 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: T.t1, marginBottom: 4 }}>Scheduling Integration</div>
+        <div style={{ fontSize: 12, color: T.t3, marginBottom: 14, lineHeight: 1.5 }}>
+          How do your teachers manage their schedules? We connect to this to avoid double-booking.
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          {fLabel("Scheduling Platform")}
+          <select style={inp} value={form.scheduling_platform} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => set("scheduling_platform", e.target.value as any)}>
+            <option value="none">Manual / Other (No live sync)</option>
+            <option value="google">Google Calendar</option>
+            <option value="square">Square Appointments</option>
+          </select>
+        </div>
+        {form.scheduling_platform === "square" && (
+          <div style={{ marginBottom: 12, padding: "12px", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 8 }}>
+            <div style={{ fontSize: 12, color: "#1E3A8A", marginBottom: 8, fontWeight: 500 }}>Please provide your Square Developer Personal Access Token.</div>
+            {fLabel("Square Access Token", true)}
+            <input style={inp} type="password" value={form.square_access_token} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("square_access_token", e.target.value)} placeholder="EAAA..." />
+          </div>
+        )}
+      </div>
     </div>
   );
 
@@ -576,7 +601,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
     const { data, error } = await supabase.from("clients").insert([{
       name: form.studio_name, city: form.city, state: form.state, status: "onboarding",
       health: null, sms_number: null, lead_form_webhook: null,
-      protected_slots: false, brand_assets: false, automation_rules: false, integrations: false,
+      protected_slots: false, brand_assets: false, automation_rules: false,
       slug, instruments: form.instruments, program_prices: form.program_prices,
       teachers: form.teachers.filter((t) => t.name),
       studio_phone: form.studio_phone || null, website: form.website || null,
@@ -584,6 +609,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
       tagline: form.tagline || null, offer: form.offer || null,
       testimonial: form.testimonial || null, logo_url: form.logo_url || null,
       fb_pixel_id: form.fb_pixel_id || null, gtm_id: form.gtm_id || null,
+      integrations: form.scheduling_platform === "square" ? { square_access_token: form.square_access_token } : {},
     }]).select();
     setSaving(false);
     if (error) { setSaveError("Failed to create profile. Try again."); return; }
