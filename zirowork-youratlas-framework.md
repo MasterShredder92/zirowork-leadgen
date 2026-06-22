@@ -22,7 +22,7 @@ Five stages, one spine, one floor.
 |---|---|---|
 | **Spine: lead state machine** | A status that advances; every transition is a trigger | ADOPT — the thing that makes it an engine, not a CRM |
 | Intake | Inbound lead → row, state `new` | HAVE |
-| Contact | State `new` fires sub-minute first text | HAVE |
+| Contact | State `new` fires sub-5-minute first text | HAVE |
 | Qualify & Close | Reply → score/intent → state `qualified` | HAVE (partial) |
 | Book | `qualified` → conversational offer→parse→write→confirm | BUILD — core gap |
 | **Floor: availability service** | Answers "what's open?" and "book this" | BUILD — the floor under Book |
@@ -35,7 +35,7 @@ The whole document hangs off one idea: **the agent only ever asks two questions 
 
 ## The non-negotiable principles (the ideology)
 
-1. **Result, not software.** ZiroWork sells booked customers. The CRM is internal ops. If a feature doesn't help close/book/hand-off a customer or prove ROI, it's out of scope. (See internal `business-model.md`.)
+1. **Result, not software.** ZiroWork sells booked customers. The CRM is internal ops. If a feature doesn't help close/book/hand-off a customer or prove ROI, it's out of scope. (See `94-knowledge/northstar.md`.)
 2. **Text-first, voice later.** ~99% of sign-ups already happen by text. Text is editable, versionable, and A/B-testable in a way voice is not. Voice is a future channel, never a prerequisite. The category's text-first players (Setter AI, Appointwise) are the proof this works and the model to study.
 3. **Federate the schedule; don't own a scheduling engine.** The business's own calendar is the source of truth. ZiroWork reads availability and writes bookings — it does not try to be the calendar. This is how the whole category does it (native Google/Outlook/Calendly integrations, API fallback).
 4. **Own-the-schedule is the default floor, not a failure mode.** For any business with no real system — a spreadsheet, a notebook, or your own pilot schools — ZiroWork holds the availability rules captured at onboarding. This means you launch with zero connectors built.
@@ -52,7 +52,7 @@ Each row: the pattern the category uses, why they use it, and whether ZiroWork s
 
 | Pattern | How it works | Why they do it | ZiroWork verdict |
 |---|---|---|---|
-| **Speed-to-lead** | First contact within seconds of a lead arriving | Sub-minute response is the single biggest driver of booking rate (category cites 15–52% lead-to-booking on ~10s contact) | ADOPT — already have it (`on-new-lead` + cron) |
+| **Speed-to-lead** | First contact within minutes of a lead arriving | Sub-5-minute response is the single biggest driver of booking rate (category cites 15–52% lead-to-booking on fast contact) | ADOPT — already have it (`on-new-lead` + cron) |
 | **Lead state machine / pipeline triggers** | Lead carries a status; each transition fires the next action | Turns scattered scripts into one predictable system; everything else plugs into it | ADOPT — build the spine first; it's a status column + transition handlers |
 | **Conversational booking (no links)** | Agent offers 2–3 concrete times in-thread, parses the reply, books inside the conversation | Booking links leak conversions; in-thread booking keeps the close in one motion | ADOPT — this is the differentiator and the core gap |
 | **Real-time availability + conflict avoidance** | Check open slots live, offer alternates, prevent double-booking across staff/services | A booking that collides with reality destroys trust instantly | ADOPT — the availability service |
@@ -164,8 +164,7 @@ Generalization (school → generic service business) is a config concern, not a 
 - Twilio messaging compliance / opt-out: https://www.twilio.com/docs/messaging/compliance
 
 ### Internal repo docs (connect ideology to the existing code)
-- `94-knowledge/business-model.md` — the result-not-software frame
-- `ZiroWork-Client-Flow` — doctrine / source of truth
+- `94-knowledge/northstar.md` — domain model, invariants, result-not-software frame, doctrine
 - `99-agents/supabase/functions/` — `on-new-lead`, `on-reply`, `send-followup`, `process-pending`, `enrollment-handoff`, `intake-form`, `complete-onboarding`
 - `13-integrations/` and `08-bookings/` — current (honest) integration + booking surfaces
 

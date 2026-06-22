@@ -1,41 +1,141 @@
-# ZiroWork — Northstar
+# ZiroWork — Domain Model & Invariants
 
-## What ZiroWork Is
-
-ZiroWork is an AI-powered lead-to-enrollment service for music schools. Not software they manage. A service that works their leads for them.
-
----
-
-## Who It's For — And What Hurts Them
-
-Music school owners are operators, not salespeople. They hire teachers, run lessons, keep parents happy. The part they consistently drop is working inquiries. A parent fills out a form on Monday. Nobody responds until Tuesday afternoon. By then the parent already called someone else, or just forgot they were interested. The school paid to generate that lead and then threw it away — not through neglect exactly, but because the front desk is busy and nobody built a system around speed.
-
-That's the pain. It's consistent across every music school. The leads are there. The response discipline isn't.
+> RULE FOR THIS DOC: no field lists, no view lists, no provider names, no status, no agent internals.
+> If a fact has a machine SSOT, point to it — never copy it.
+> schemas → src/lib/derive/types.ts + Postgres · views → feature_list.json · status → harness/state/progress.md · integrations/config → integrations layer
 
 ---
 
-## What ZiroWork Does
+## §1 — INVARIANTS (the rules that never change)
 
-When a parent submits an inquiry, ZiroWork responds within 60 seconds via text — every time, for every school we work with. The AI qualifies them, pitches enrollment directly, offers a specific time slot, sends the registration link the moment they say yes, and sends reminders up to the start date. If the parent doesn't commit right away, ZiroWork follows up on a schedule — days two, four, seven — without the school thinking about it. If something comes up that AI shouldn't handle — a complaint, a billing question, anything that requires a real person — it flags it immediately for the operator to resolve. The school sees the whole picture: how many leads came in, how many enrolled, what revenue that represents.
+**North Star**
+> ZiroWork turns music-school inquiries into enrolled, paying students — without replacing the school's CRM.
+
+Not a dashboard company. Not a chat tool. An **AI front desk and enrollment engine** for music schools.
+Every decision answers one question: *does this respond faster, enroll more, prove ROI, or earn deeper trust?* If no — cut it.
+
+**Who's who**
+- Client = the music school (pays ZiroWork monthly)
+- Lead = the parent who submitted the inquiry (ZiroWork works them on the school's behalf)
+- Student = the enrolled child (the school's, after handoff — never ZiroWork's)
+
+ZiroWork never owns the student relationship. Its job ends at enrollment.
+
+**Does / does not**
+| Does | Does not |
+|---|---|
+| Localized landing pages/funnels per school, per instrument | Manage teachers, schedules, staff |
+| Receive every lead, respond fast | Run billing or invoices |
+| Qualify the parent, pitch enrollment, book the slot | Handle existing-student relationships |
+| Send reminders, recover no-shows | Replace the school's CRM |
+| Report leads → enrolled → revenue | Take custody of the calendar (reads protected slots only) |
+
+**What ZiroWork Is Not**
+| Not This | Why It Matters |
+|---|---|
+| SaaS | Clients never log in, never learn a tool, never manage a workflow |
+| AI tool / chatbot product | The AI is how ZiroWork fulfills the service — not the thing being sold |
+| CRM for music schools | The CRM is Zach's internal ops tool, invisible to clients |
+| Marketing agency | ZiroWork owns the full chain from ad click to enrolled student — not just traffic |
+| Lead gen company | Leads alone are not the product. Enrolled students are. |
+
+**The only win that counts: Enrolled.**
+A trial is not a win — it's a last-resort fallback offered only after the follow-up sequence fails. Never lead with trial; always lead with enrollment. Trials are tracked separately so we know if the lead enrolled after; `enrolled` on the Lead record is the SSOT for ZiroWork's success.
+
+**What AI can't touch** — AI handles new-enrollment conversations only.
+| Situation | Action |
+|---|---|
+| New inquiry · reschedule inside enrollment flow · pricing w/ approved answer | AI handles |
+| Pricing w/o approved answer · billing/refund · complaint · current-student change · cancellation | Escalate |
+| Unclear intent | One clarifying question, then escalate |
+
+Every escalation logged with severity, reason, open/resolved. Zach resolves manually.
+
+**What to reject**
+| Reject | Why |
+|---|---|
+| Full CRM replacement as first sale | Too much trust before value is proven |
+| Trial as default close | Enrolled is the goal |
+| Generic AI for all service businesses | Music-school authority is the edge |
+| Deep calendar dependency day one | Start with protected slots |
+| Taking custody of funds early | Use the school's own payment link |
+| Feature usage as the main score | Booked enrollments + revenue recovered are what matter |
 
 ---
 
-## Why We're Building This
+## §2 — WHY IT WORKS
 
-Zach Adkins at Adkins Music turned lead conversion into a system that other schools never figured out. The difference wasn't product, pricing, or location. It was response time and follow-up consistency. Andrea and Zach texted leads back before they could open their next tab. That's a repeatable advantage. It shouldn't require finding your own Andrea. ZiroWork is the version of that which any music school can plug in.
+Acquisition.com's ALAN automated the painful part of brick-and-mortar acquisition — working leads — and crossed $1.4M/mo in six months by getting ~1.9x more leads to show than the average front-desk clerk. The lesson isn't "copy ALAN," it's: **lead work is the money bottleneck.** Whoever works leads faster and more consistently than the school's own team wins.
 
-This is also the model proving ground. If ZiroWork can show that faster response plus consistent follow-up creates measurable enrollment lift — which the data already shows it does — then every music school that sees the numbers becomes a client. The business case sells itself.
-
----
-
-## What Success Looks Like for a School Owner
-
-The owner stops thinking about lead follow-up entirely. Inquiries come in, students start lessons, and at the end of the month ZiroWork sends a report that shows exactly how many new enrollments came through the pipeline and what revenue that represents. They don't manage a new CRM. They don't train their front desk on new software. They just see more students on the schedule and a clear number tying those students back to what ZiroWork did.
+Operating principles (Hormozi): get paid because clients make money, not because they use software · clients buy enrolled students and visible ROI, not dashboards · speed creates leverage · remove client effort · niche first (own music schools) · earn trust before asking for migration/calendar/funds · proof unlocks expansion (reactivation → payments → retention → scheduling, in that order).
 
 ---
 
-## What ZiroWork Is Not
+## §3 — THE FLOW
+Music School → Instrument Program → Campaign → Landing Page → Lead
 
-Once a student is enrolled and on the schedule, ZiroWork's job is done. We do not manage teacher assignments, lesson notes, or payroll. We do not handle billing disputes or cancellations for existing students. We do not take over the school's calendar or payment system — we use their payment links and book into windows they define. We are not a CRM replacement. We are not trying to run the school. The school is good at running the school. We are good at turning a cold inquiry into a paying student before the school's front desk even sees the notification.
+→ AI responds fast → qualify (student, instrument, schedule)
 
-That handoff — lead to enrolled — is the whole job. We do that job better than anyone else in this space. That's the only claim we need to make.
+→ pitch enrollment directly → slot booked + payment link → confirm + remind
+
+→ ENROLLED ← the win → client report updated → school takes over
+
+FALLBACK (only if no commitment after the primary sequence):
+
+follow-up days 2–N → operator manually offers trial → trial happens
+
+→ operator records Enrolled / Lost → report updated
+
+ZiroWork owns **Lead → Enrolled**. Before and after is the school's domain. Trial is an operator-entered fallback, never an AI default and never a pipeline stage.
+
+Every lead is isolated to its client — the inbound event's location/client id selects which slots, scripts, and SMS number apply.
+
+---
+
+## §4 — SPEED DOCTRINE
+
+Speed is the first operational law: a lead's buying intent peaks the second they submit.
+| Rule | Standard |
+|---|---|
+| First response | Fast — minutes, not hours |
+| Qualification | Ask only what's needed to book the right slot |
+| Enrollment CTA | Move toward a slot; don't over-chat |
+| Payment | Use the school's existing link to cut no-shows |
+| Reminders | Confirm immediately, remind at 24hr + day-of |
+| Escalation | Not enrollment-safe? Escalate and log — never guess |
+
+---
+
+## §5 — GO-LIVE CHECKLIST
+
+Anything missing blocks campaign launch:
+- SMS number assigned to the school
+- Lead-form webhook posting to ZiroWork
+- Protected booking slots defined
+- Payment link (the school's own)
+- Client assets (logo, bios, voice, offer, testimonials)
+- Automation rules (what AI handles vs escalates)
+- Integrations verified (connected / broken / not connected)
+
+---
+
+## §6 — METRICS THAT MATTER
+
+| Metric | Why |
+|---|---|
+| Lead response time | The core speed-to-lead edge |
+| Enrolled rate | The only win — primary revenue motion |
+| Show rate | Measures reminder quality + commitment |
+| Revenue generated per client | Main retention proof |
+| Escalation volume | Where AI needs better guardrails or client data |
+
+Leads stalled past the stale threshold get an amber flag — something's stuck.
+
+---
+
+## §7 — POINTERS (don't duplicate these here)
+
+- Data object schemas → `src/lib/derive/types.ts` + Postgres
+- Dashboard views → `feature_list.json`
+- Live status / phase / decisions → `harness/state/progress.md`
+- Integrations + provider config → integrations layer (code)

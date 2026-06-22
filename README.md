@@ -31,7 +31,7 @@ npx serve .
 
 - **`CLAUDE.md`** — start here. The L0 router: repo tree, safety gates, key globals, navigation.
 - **`CONTEXT.md`** — task router (which folder for which task).
-- **`ZiroWork-Client-Flow`** — single source of truth / doctrine.
+- **`94-knowledge/northstar.md`** — domain model, invariants, flow, speed doctrine.
 - **`94-knowledge/`** — architecture, data model, design system, northstar.
 - **`99-agents/README.md`** — agent / edge-function backend.
 

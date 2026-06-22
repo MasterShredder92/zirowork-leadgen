@@ -7,7 +7,7 @@ Reference documentation — product vision, architecture, design system, and dat
 
 ## Files in this folder
 ```
-northstar-ideology.md  — product vision, business model, ZiroWork's role, operator questions per page
+northstar.md           — domain model, invariants, flow, speed doctrine, metrics
 architecture.md        — system architecture, component relationships, data flow
 design-system.md       — visual design rules, component patterns, theme usage
 data-model.md          — Supabase schema, table relationships, field definitions
@@ -26,7 +26,7 @@ Your task requires understanding the product, architecture, design conventions, 
 ## Load rules by sub-task
 | Task | Load |
 |---|---|
-| Understand product purpose / business model | `northstar-ideology.md` only |
+| Understand product purpose / business model | `northstar.md` only |
 | Understand component relationships or data flow | `architecture.md` only |
 | Understand visual patterns or theme usage | `design-system.md` only |
 | Wire a new Supabase table or understand schema | `data-model.md` only |

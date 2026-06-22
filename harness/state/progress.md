@@ -1,6 +1,6 @@
 # Migration Progress
 
-PHASE: 5 — Agent layer (_config/ governance tokens, .claude/workflows/ orchestrators)
+PHASE: 5 — Agent layer (harness/ machinery, .claude/workflows/ orchestrators)
 DONE:
   Phase 0:
   - dep-graph.md     (272 lines) — 66 globals (65 in jsx/js modules + window.sb inline in html); spine/leaf classified; 7 dead-code files flagged; 0 cycles; leaf-first order; OnboardForm marked cross-surface
@@ -76,7 +76,7 @@ NOTES:
     4 channels: tsc 0 errors | eslint 0 errors | next build 22 pages | surface-serve: / /insights /onboard /privacy /terms /dashboard?preview /schools/adkins-music-lessons-omaha/piano → 200; /onboarding /privacy-policy /terms-of-service → 308.
 
   Phase 5:
-  - 5.1 DONE: gate-guard loop — _config/agent.md (governance/token schema) + .claude/workflows/gate-guard.md (orchestrator). commit af25910.
+  - 5.1 DONE: gate-guard loop — harness/agent.md (governance/token schema) + .claude/workflows/gate-guard.md (orchestrator). commit af25910.
   - 5.2 DONE: generate-guard-retry loop — fixture + orchestrator. commit 5668f4c.
   - 5.3 DONE: @supabase/ssr auth + gate decoupling — 2026-06-21.
       - @supabase/ssr installed.
@@ -97,12 +97,33 @@ NOTES:
   - Render-diff retired + verify-build.sh (2026-06-21):
       - render-diff.mjs, legacy-server.mjs, verify-phase-3-views.sh, snapshots/ deleted.
       - Root legacy SPAs deleted: 96-public/, 99-agents/, dashboard/, legal/, schools/.
-      - _migration/verify-build.sh added: build + tsc + lint + serve (proper status assertions).
+      - harness/gates/verify-build.sh added: build + tsc + lint + serve (proper status assertions).
       - verify-final.sh:35 dangling ref to deleted verify-phase-3-views.sh removed.
       - HASHES.txt regenerated (8 gates). gate-integrity: PASS.
       - COLD-CLONE PROOF: BUILD VERIFY: PASS / exit=0 — 2026-06-21.
         build 24 pages | tsc 0 errors | lint 0 errors | / → 307 | /insights → 307 | 5 public routes → 200.
       - Decision recorded in _migration/DECISIONS.md.
+
+  - DEFERRED — SMS provider OpenPhone→Twilio: provider switched in app surfaces
+    (IntegrationsView, ConfirmPage, OnboardForm) but src/lib/derive/integrations.ts
+    still hardcodes service:"openphone" + openphone_number_id. Derive layer not yet
+    migrated. Behavior change, separate from view migration — own commit.
+
+  - Harness reorg (2026-06-21/22): _config/ + migration gate files → harness/.
+      - harness/gates/ (gate-integrity.sh, verify-build.sh, HASHES.txt)
+      - harness/loop/ (pct.mjs, pct.guard.mjs)
+      - harness/state/ (progress.md, session-handoff.md)
+      - harness/agent.md + harness/README.md
+      - gate-integrity.sh depth fixed (../.. not ../../..); list_gates() rewritten to verify-build.sh only.
+      - HASHES.txt regenerated. V4 red-check passed.
+      - OPEN: verify-build.sh serve check fails (/ → 200 not 307) — auth redirect broken. proxy.ts named wrong (must be middleware.ts) or Supabase env vars absent in test. Own fix.
+
+  - Domain doc collapse (2026-06-22): 4 domain docs → 1.
+      - Deleted: ZiroWork-Client-Flow, 94-knowledge/business-model.md, 94-knowledge/northstar-ideology.md.
+      - Canonical: 94-knowledge/northstar.md (Domain Model & Invariants).
+      - "Is Not" positioning table folded in from business-model.md.
+      - Dead refs fixed in CONTEXT.md, data-model.md, README.md, zirowork-youratlas-framework.md.
+      - V1–V4 PASS. Rule 15 red-check PASS.
 
 NEXT: North-path engine (see _migration/north-path-plan.md).
   Phase 1: Excise 2nd CRM remnants from 94-knowledge/schema.sql.
