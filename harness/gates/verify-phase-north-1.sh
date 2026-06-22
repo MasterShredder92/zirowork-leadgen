@@ -29,7 +29,7 @@ echo "Checking tracked src/ files for 2nd CRM code references..."
 tracked=$(git ls-files src/ 2>/dev/null | grep -E '\.(ts|tsx|js|jsx)$' || true)
 crm_hits=""
 if [ -n "$tracked" ]; then
-  crm_hits=$(echo "$tracked" | xargs grep -lEi "families_timeline|use[-_]students|use[-_]lessons|payroll|financials" 2>/dev/null || true)
+  crm_hits=$(echo "$tracked" | xargs grep -lE "families_timeline|use[-_]?[Ss]tudents|use[-_]?[Ll]essons|payroll|financials" 2>/dev/null || true)
 fi
 if [ -n "$crm_hits" ]; then
   echo "$crm_hits"
