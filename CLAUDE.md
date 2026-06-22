@@ -1,7 +1,7 @@
 # CLAUDE.md — zirowork-leadgen (executor map)
 
 Map, not a manual. What this repo is, how to run it, how to verify it, what you may not break.
-Moving state (current phase, what's done/blocked) lives in `_migration/progress.md` — read it first every session.
+Moving state (current phase, what's done/blocked) lives in `harness/state/progress.md` — read it first every session.
 
 ## WHAT THIS IS
 Correcting a shipping lead-gen app, not building a new one. We are replacing the foundation
@@ -10,7 +10,7 @@ Correcting a shipping lead-gen app, not building a new one. We are replacing the
 what the app does or how it looks. The migration is what makes the app controllable by an agent later.
 
 ## CURRENT STATE
-Identify the phase by which gates already pass — do not assume from this file. Source of truth: `_migration/progress.md`.
+Identify the phase by which gates already pass — do not assume from this file. Source of truth: `harness/state/progress.md`.
 - Phase 0 (map terrain): DONE — `bash _migration/verify-phase-0.sh` exits 0.
 - Phase 1 (empty toolchain): DONE — `bash _migration/verify-phase-1.sh` exits 0.
 - Phase 2 (spine: tokens + hooks → typed modules): NEXT.
@@ -49,7 +49,7 @@ Run the current phase's checker. Green (exit 0) = the only valid "done". The wor
 src/app/            ← new: layout.tsx, page.tsx, globals.css (App Router lives here)
 src/components/      ← new (Phase 3): src/components/[domain]/ client components
 src/hooks/           ← new (Phase 2/3): use[Domain]State.ts
-_config/             ← new (Phase 5): governance / tokens / schema docs
+harness/             ← agent harness (gates, state, loop, agent.md)
 .claude/workflows/   ← new (Phase 5): orchestrators
 _migration/          ← phase artifacts, verify-phase-N.sh, progress.md, session-handoff.md
 00-* … 99-agents/    ← LEGACY views (window.* jsx). Excluded from tooling. Deleted leaf-by-leaf as each ports to src/.

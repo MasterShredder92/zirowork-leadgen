@@ -4,13 +4,11 @@
 # HASHES.txt (by running this with --update) when a gate legitimately changes, then commits it.
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-cd "$HERE/../../.." || exit 2          # repo root
+cd "$HERE/../.." || exit 2             # repo root
 MANIFEST="$HERE/HASHES.txt"
 
 list_gates(){
-  ls _migration/verify-phase-*.sh 2>/dev/null
-  ls _migration/epic/GATES/verify-*.sh 2>/dev/null
-  echo _migration/epic/GATES/waveC.derive.test.ts
+  echo harness/gates/verify-build.sh
 }
 mapfile -t GATES < <(list_gates | sort -u)
 
