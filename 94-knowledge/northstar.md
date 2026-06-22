@@ -2,7 +2,7 @@
 
 > RULE FOR THIS DOC: no field lists, no view lists, no provider names, no status, no agent internals.
 > If a fact has a machine SSOT, point to it — never copy it.
-> schemas → src/lib/derive/types.ts + Postgres · views → feature_list.json · status → harness/state/progress.md · integrations/config → integrations layer
+> schemas → src/lib/derive/types.ts + Postgres · status → harness/state/progress.md · integrations/config → integrations layer
 
 ---
 
@@ -136,6 +136,5 @@ Leads stalled past the stale threshold get an amber flag — something's stuck.
 ## §7 — POINTERS (don't duplicate these here)
 
 - Data object schemas → `src/lib/derive/types.ts` + Postgres
-- Dashboard views → `feature_list.json`
 - Live status / phase / decisions → `harness/state/progress.md`
 - Integrations + provider config → integrations layer (code)

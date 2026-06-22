@@ -9,7 +9,7 @@ You can only fix what you can find. This is the harness and how to change it.
 | Instructions | rules the agent follows | `/CLAUDE.md` (router) · `harness/agent.md` (governance) | edit file; no gate |
 | Tools | what the agent may call | `.mcp.json` (root) · skills = **NOT BUILT (TODO)** | add MCP entry / build skill |
 | Environment | runnable, typed, lintable setup | `package.json` `tsconfig.json` `eslint.config.mjs` `next.config.ts` `src/proxy.ts` — **pinned**, edit in place | cannot move — tools read these paths |
-| State / memory | where we are across sessions | `harness/state/progress.md` · `harness/state/session-handoff.md` · `feature_list.json` (root) | update every session |
+| State / memory | where we are across sessions | `harness/state/progress.md` · `harness/state/session-handoff.md` | update every session |
 | Feedback | catches bad output before ship | `harness/gates/` · `.claude/workflows/` (loops) | see "Changing a gate" |
 
 Pinned = the tool demands that path. Indexed here, not relocated.
