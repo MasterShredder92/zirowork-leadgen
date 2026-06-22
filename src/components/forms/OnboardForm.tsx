@@ -7,7 +7,6 @@ import { supabase } from "@/lib/supabase/client";
 // Default color for the brand color picker input (HTML value attr — cannot use CSS var()).
 const COLOR_PICKER_DEFAULT = '#cccccc'; // hex-allow: native input[type=color] value attr; var() not accepted by HTML input
 
-// Theme tokens — mirrors the legacy window.T shape.
 // The CRM modal path gets these values from the operator shell's window.T;
 // this component owns them for the public route (standalone).
 const T = {
