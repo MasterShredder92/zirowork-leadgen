@@ -59,3 +59,5 @@ index.html, schools/, dashboard/, www/, legal/, vercel.json ← legacy entry poi
 ## ROLES
 Plan/architecture is produced upstream (file order, per-file specs, gates). This repo is the executor surface.
 You commit; nothing else decides that. For multi-session work, keep `progress.md` and `session-handoff.md` current so the thread is never lost.
+
+@AGENTS.md
