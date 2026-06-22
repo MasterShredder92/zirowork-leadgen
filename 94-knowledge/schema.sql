@@ -16,15 +16,20 @@ $$ LANGUAGE plpgsql;
 -- STUDIOS  (one row per business/brand)
 -- ============================================================
 CREATE TABLE studios (
-  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name        text NOT NULL,
-  email       text,
-  phone       text,
-  address     text,
-  timezone    text DEFAULT 'America/New_York',
-  logo_url    text,
-  created_at  timestamptz DEFAULT now(),
-  updated_at  timestamptz DEFAULT now()
+  id                    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name                  text NOT NULL,
+  email                 text,
+  phone                 text,
+  address               text,
+  timezone              text DEFAULT 'America/New_York',
+  logo_url              text,
+  twilio_subaccount_sid text,
+  a2p_status            text DEFAULT 'Pending' CHECK (a2p_status IN ('Pending', 'Approved', 'Rejected')),
+  a2p_profile_sid       text,
+  a2p_brand_sid         text,
+  a2p_campaign_sid      text,
+  created_at            timestamptz DEFAULT now(),
+  updated_at            timestamptz DEFAULT now()
 );
 
 CREATE TRIGGER studios_updated_at

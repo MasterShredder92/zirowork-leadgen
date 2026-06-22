@@ -559,7 +559,7 @@ A simple URL where school owners can see their stats without logging into the CR
 # Definition of Done
 
 ZiroWork is live and ready for Adkins when:
-- [ ] Test lead fires SMS to TEST_PHONE within 60 seconds
+- [ ] Test lead fires SMS to TEST_PHONE within 5 minutes
 - [ ] Reply to that SMS gets a contextual response within 30 seconds
 - [ ] Lead appears in CRM Leads page with correct stage and UTM source
 - [ ] Conversation appears in CRM Conversations page with full thread

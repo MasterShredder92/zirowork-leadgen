@@ -77,12 +77,22 @@ export default function BookingsView() {
     <div style={{ height: "100%", display: "flex", flexDirection: "column", background: "var(--color-bg)" }}>
 
       {/* Header */}
-      <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border)", flexShrink: 0 }}>
-        <h1 style={{ fontSize: 25, fontWeight: 700, color: "var(--color-text-1)", letterSpacing: "-0.4px", margin: "0 0 4px 0" }}>
-          Bookings
-        </h1>
-        <div style={{ fontSize: 13, color: "var(--color-text-3)" }}>
-          What has ZiroWork scheduled and is the lead enrolled?
+      <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--color-border)", flexShrink: 0, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <h1 style={{ fontSize: 25, fontWeight: 700, color: "var(--color-text-1)", letterSpacing: "-0.4px", margin: "0 0 4px 0" }}>
+            Bookings
+          </h1>
+          <div style={{ fontSize: 13, color: "var(--color-text-3)" }}>
+            What has ZiroWork scheduled and is the lead enrolled?
+          </div>
+        </div>
+        <div>
+          <button 
+            onClick={() => window.open('/api/oauth/calcom/connect', '_blank')}
+            style={{ padding: "8px 16px", background: "var(--color-accent)", color: "#fff", border: "none", borderRadius: "6px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+          >
+            Connect Calendar
+          </button>
         </div>
       </div>
 

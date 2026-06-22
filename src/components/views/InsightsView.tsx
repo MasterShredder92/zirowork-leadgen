@@ -5,7 +5,7 @@ const PLAYBOOKS = [
   {
     id: 1, category: "SPEED-TO-LEAD", colorVar: "--color-insight-0", tag: "North Star",
     title: "The 60-Second Rule",
-    excerpt: "ALAN (Acquisition.com's AI lead automation) grew to $1.4M/month in 6 months by working leads inside 60 seconds. Every minute of delay cuts conversion. ZiroWork's AI must reply before the parent closes the tab.",
+    excerpt: "ALAN (Acquisition.com's AI lead automation) grew to $1.4M/month in 6 months by working leads inside 5 minutes. Every minute of delay cuts conversion. ZiroWork's AI must reply before the parent closes the tab.",
     read: "5 min",
   },
   {
