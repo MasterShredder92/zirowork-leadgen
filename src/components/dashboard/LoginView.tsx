@@ -79,14 +79,14 @@ export default function LoginView({ onLogin }: { onLogin: (user: User, tenantId:
     fieldWrap: { marginBottom: 16 },
     btn: {
       width: "100%", padding: "11px 0",
-      background: "var(--accent)", color: "#fff",
+      background: "var(--accent)", color: "var(--color-on-accent)",
       border: "none", borderRadius: 8, fontSize: 15, fontWeight: 600,
       cursor: "pointer", marginTop: 10, fontFamily: "inherit",
       opacity: loading ? 0.6 : 1,
     },
     err: {
-      marginTop: 12, fontSize: 13, color: "#B91C1C",
-      background: "#FEE2E2", borderRadius: 6, padding: "8px 10px",
+      marginTop: 12, fontSize: 13, color: "var(--color-portal-error-text-3)",
+      background: "var(--color-a2p-error-bg)", borderRadius: 6, padding: "8px 10px",
     },
   };
 

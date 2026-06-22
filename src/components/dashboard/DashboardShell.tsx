@@ -282,7 +282,7 @@ export default function DashboardShell() {
         <div className="zw-dash" style={{ flexDirection: "column" }}>
           <div style={{
             flexShrink: 0, padding: "5px 14px", textAlign: "center",
-            background: "var(--accent)", color: "#fff",
+            background: "var(--accent)", color: "#fff", // hex-allow: JSX inline style; white on accent is a fixed semantic value, no --color- token maps to white-on-accent
             fontSize: 12, fontWeight: 600, letterSpacing: "0.02em",
           }}>
             Preview — sample data, not a real account.

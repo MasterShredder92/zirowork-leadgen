@@ -36,6 +36,8 @@ function str(v: unknown): string {
   return typeof v === 'string' ? v : '';
 }
 
+const SCHOOL_ACCENT_DEFAULT = '#E04D27'; // hex-allow: TS data-layer fallback passed as string to DB/API; var() not valid in JS data context
+
 function buildSchool(
   client: ClientRow,
   config: ConfigRow,
@@ -54,7 +56,7 @@ function buildSchool(
     email: str(client.email),
     about: str(config.about),
     tagline: str(config.tagline) || str(client.tagline),
-    accent: str(config.primary_color) || str(config.accent_color) || '#E04D27',
+    accent: str(config.primary_color) || str(config.accent_color) || SCHOOL_ACCENT_DEFAULT,
     testimonials:
       (config.testimonials as Testimonial[] | undefined) ||
       (client.testimonial ? [client.testimonial as Testimonial] : []),

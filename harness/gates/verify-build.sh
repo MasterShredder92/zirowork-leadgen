@@ -6,9 +6,10 @@ set -uo pipefail
 fail=0
 run(){ echo "=== $1 ==="; shift; "$@"; local e=$?; echo "exit=$e"; [ $e -ne 0 ] && fail=1; echo; }
 
-run "build" npm run build
-run "tsc"   npx tsc --noEmit
-run "lint"  npx eslint .
+run "build"    npm run build
+run "tsc"      npx tsc --noEmit
+run "lint"     npx eslint .
+run "hex-guard" bash harness/gates/verify-no-hex.sh
 
 echo "=== serve ==="
 npm run start >/tmp/vb.log 2>&1 & SRV=$!; sleep 5

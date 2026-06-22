@@ -44,8 +44,8 @@ type BillingStatus = {
 };
 
 const chipColors: Record<string, { bg: string; fg: string }> = {
-  succeeded: { bg: "#D1F4E8", fg: "#034636" },
-  failed:    { bg: "#FCE2E2", fg: "#7A1C1C" },
+  succeeded: { bg: "var(--color-portal-success-bg)", fg: "var(--color-portal-success-text)" },
+  failed:    { bg: "var(--color-portal-error-bg)", fg: "var(--color-portal-error-text)" },
 };
 
 function fmtMoney(cents: number) { return "$" + (cents / 100).toFixed(2); }
@@ -193,7 +193,7 @@ export default function PortalBilling({ tenantId }: { tenantId: string }) {
     cardExp: { fontSize: 13, color: "var(--t4)" },
     ghostBtn: { padding: "9px 20px", background: "transparent", color: "var(--t2)", border: "1px solid var(--bmed)", borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" },
     cardElWrap: { padding: "12px 14px", background: "var(--surface)", border: "1px solid var(--bmed)", borderRadius: 7, marginBottom: 14, maxWidth: 480 },
-    errorText: { fontSize: 13, color: "#B42318", fontWeight: 600, marginTop: 10 },
+    errorText: { fontSize: 13, color: "var(--color-portal-error-text-2)", fontWeight: 600, marginTop: 10 },
     feeLine: { fontSize: 14, color: "var(--t2)", marginTop: 14 },
     feeStrong: { fontWeight: 700, color: "var(--t1)" },
     histItem: { display: "flex", alignItems: "center", gap: 12, padding: "12px 0", borderBottom: "1px solid var(--border)" },
@@ -202,7 +202,7 @@ export default function PortalBilling({ tenantId }: { tenantId: string }) {
     histAmount: { fontSize: 14, fontWeight: 600, color: "var(--t1)", marginLeft: "auto", flexShrink: 0 },
   };
 
-  const btnStyle = (disabled: boolean): React.CSSProperties => ({ padding: "9px 20px", background: "var(--accent)", color: "#fff", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.6 : 1, fontFamily: "inherit" });
+  const btnStyle = (disabled: boolean): React.CSSProperties => ({ padding: "9px 20px", background: "var(--accent)", color: "var(--color-on-accent)", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.6 : 1, fontFamily: "inherit" });
   const chipStyle = (st: string): React.CSSProperties => ({ fontSize: 12, fontWeight: 600, padding: "3px 10px", borderRadius: 20, flexShrink: 0, background: (chipColors[st] || {}).bg || "var(--hover)", color: (chipColors[st] || {}).fg || "var(--t3)" });
 
   if (loading) return (

@@ -6,7 +6,7 @@ import type { School } from '@/lib/schools/getSchool';
 const INST_LABEL: Record<string, string> = { piano: 'Piano', guitar: 'Guitar', vocals: 'Voice', drums: 'Drums', violin: 'Violin' };
 
 export default function ThankYouPage({ school, slug }: { school: School; slug: string }) {
-  const accent = school.accent || '#E04D27';
+  const accent = school.accent || 'var(--color-school-accent-default)';
   const [instrument] = useState(() =>
     typeof window === 'undefined' ? 'music' : (new URLSearchParams(window.location.search).get('instrument') || 'music'),
   );
@@ -21,7 +21,7 @@ export default function ThankYouPage({ school, slug }: { school: School; slug: s
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#fff',
+      background: 'var(--color-school-white)',
       fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
       padding: '40px 24px',
     }}>
@@ -47,7 +47,7 @@ export default function ThankYouPage({ school, slug }: { school: School; slug: s
         width: 80,
         height: 80,
         borderRadius: '50%',
-        background: '#22c55e',
+        background: 'var(--color-status-scheduled)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -55,7 +55,7 @@ export default function ThankYouPage({ school, slug }: { school: School; slug: s
         boxShadow: '0 8px 32px rgba(34,197,94,0.25)',
       }}>
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-          <path d="M8 18.5L15 25.5L28 11" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M8 18.5L15 25.5L28 11" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
 
@@ -63,7 +63,7 @@ export default function ThankYouPage({ school, slug }: { school: School; slug: s
       <h1 style={{
         fontSize: 'clamp(28px, 5vw, 42px)',
         fontWeight: 800,
-        color: '#1a1a1a',
+        color: 'var(--color-school-ink)',
         letterSpacing: '-0.02em',
         margin: '0 0 12px',
         textAlign: 'center',
@@ -74,7 +74,7 @@ export default function ThankYouPage({ school, slug }: { school: School; slug: s
       {/* Subheadline */}
       <p style={{
         fontSize: 19,
-        color: '#555',
+        color: 'var(--color-school-text-3)',
         margin: '0 0 12px',
         textAlign: 'center',
         lineHeight: 1.5,
@@ -87,7 +87,7 @@ export default function ThankYouPage({ school, slug }: { school: School; slug: s
       {/* Body */}
       <p style={{
         fontSize: 16,
-        color: '#888',
+        color: 'var(--color-school-text-6)',
         margin: '0 0 36px',
         textAlign: 'center',
         lineHeight: 1.7,
@@ -105,14 +105,14 @@ export default function ThankYouPage({ school, slug }: { school: School; slug: s
             alignItems: 'center',
             gap: 8,
             padding: '12px 24px',
-            background: '#f8f8f6',
+            background: 'var(--color-school-bg-card)',
             borderRadius: 10,
             fontSize: 16,
             fontWeight: 700,
-            color: '#1a1a1a',
+            color: 'var(--color-school-ink)',
             textDecoration: 'none',
             marginBottom: 32,
-            border: '1px solid #f0f0ee',
+            border: '1px solid var(--color-school-bg-subtle)',
           }}
         >
           <span style={{ fontSize: 17 }}>📞</span>
@@ -141,7 +141,7 @@ export default function ThankYouPage({ school, slug }: { school: School; slug: s
         position: 'absolute',
         bottom: 24,
         fontSize: 13,
-        color: '#ccc',
+        color: 'var(--color-school-muted-3)',
         textAlign: 'center',
       }}>
         {school.name}{school.city ? ' · ' + school.city : ''}

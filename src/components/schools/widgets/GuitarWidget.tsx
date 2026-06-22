@@ -8,12 +8,12 @@ export default function GuitarWidget({ accent }: { accent: string }) {
   const AUDIO_BASE: string | null = null;
 
   const CHORDS = [
-    { name: 'C',  fingers: '032010', color: '#818CF8' },
-    { name: 'G',  fingers: '320003', color: '#22C55E' },
-    { name: 'Am', fingers: '002210', color: '#F97316' },
-    { name: 'F',  fingers: '133211', color: '#EC4899' },
-    { name: 'D',  fingers: 'xx0232', color: '#F59E0B' },
-    { name: 'Em', fingers: '022000', color: '#06B6D4' },
+    { name: 'C',  fingers: '032010', color: 'var(--color-insight-0)' },
+    { name: 'G',  fingers: '320003', color: 'var(--color-status-scheduled)' },
+    { name: 'Am', fingers: '002210', color: 'var(--color-program-drums)' },
+    { name: 'F',  fingers: '133211', color: 'var(--color-program-voice)' },
+    { name: 'D',  fingers: 'xx0232', color: 'var(--color-program-guitar)' },
+    { name: 'Em', fingers: '022000', color: 'var(--color-widget-cyan)' },
   ];
 
   const play = (chord: { name: string; fingers: string; color: string }) => {
@@ -56,8 +56,8 @@ export default function GuitarWidget({ accent }: { accent: string }) {
             onClick={() => play(chord)}
             style={{
               padding: '24px 16px',
-              background: active === chord.name ? chord.color : '#f7f7f5',
-              border: `2px solid ${active === chord.name ? chord.color : '#e5e5e3'}`,
+              background: active === chord.name ? chord.color : 'var(--color-school-bg-card-2)',
+              border: `2px solid ${active === chord.name ? chord.color : 'var(--color-school-border-light)'}`,
               borderRadius: 12,
               cursor: 'pointer',
               transition: 'all 0.15s',
@@ -65,16 +65,16 @@ export default function GuitarWidget({ accent }: { accent: string }) {
               fontFamily: "'Plus Jakarta Sans', sans-serif",
             }}
           >
-            <div style={{ fontSize: 29, fontWeight: 800, color: active === chord.name ? '#fff' : '#1a1a1a', marginBottom: 4 }}>
+            <div style={{ fontSize: 29, fontWeight: 800, color: active === chord.name ? 'var(--color-school-white)' : 'var(--color-school-ink)', marginBottom: 4 }}>
               {chord.name}
             </div>
-            <div style={{ fontSize: 11, color: active === chord.name ? 'rgba(255,255,255,0.7)' : '#aaa', fontWeight: 500, letterSpacing: '0.05em' }}>
+            <div style={{ fontSize: 11, color: active === chord.name ? 'rgba(255,255,255,0.7)' : 'var(--color-school-muted)', fontWeight: 500, letterSpacing: '0.05em' }}>
               CHORD
             </div>
           </button>
         ))}
       </div>
-      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: '#aaa' }}>
+      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: 'var(--color-school-muted)' }}>
         Tap a chord to hear how it sounds
       </div>
     </div>
