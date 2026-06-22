@@ -29,7 +29,7 @@ VERIFIED: Migration COMPLETE — all phases 0–5 gated. 2026-06-21/22: harness 
 - Agent never touches HASHES.txt. Only Zach runs `gate-integrity.sh --update` and commits.
 - 94-knowledge/northstar.md is the single domain SSOT — no other doc claims primacy.
 
-## NEXT: North-path engine (see _migration/north-path-plan.md)
+## NEXT: North-path engine (see harness/north-path-plan.md)
 
 **Fix first** — rename src/proxy.ts → src/middleware.ts + rename export `proxy` → `middleware`; confirm verify-build.sh serve check → 307.
 

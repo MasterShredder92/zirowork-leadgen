@@ -130,7 +130,7 @@ GATE MANIFEST SCOPE: gate-integrity.sh protects only harness/gates/verify-build.
   Run `bash harness/gates/gate-integrity.sh --update` and commit HASHES.txt after north-1 is confirmed stable.
   _migration/verify-phase-{0,1,2,4,5}.sh are DEAD (historical — phases complete; archived with _migration/).
 
-NEXT: North-path engine (see _migration/north-path-plan.md).
+NEXT: North-path engine (see harness/north-path-plan.md).
   Phase 1: Excise 2nd CRM remnants from 94-knowledge/schema.sql.
   Phase 2: Isolate vertical vocab → src/config/vertical.ts.
   Phase 3: Connector abstraction + Tier C availability/booking API.

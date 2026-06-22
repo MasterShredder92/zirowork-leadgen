@@ -30,7 +30,7 @@ Scope: these are build-process skills for whatever agent builds ZiroWork. They a
 | Hard bug / perf regression | `engineering/diagnosing-bugs` | — |
 | Migration merge/rebase conflict | `engineering/resolving-merge-conflicts` | CDN→React lanes will collide |
 | Testing a flow before committing (e.g. booking conversation) | `engineering/prototype` | Throwaway, not production |
-| Ending a session | `productivity/handoff` | Formalizes the `_migration/progress.md` habit |
+| Ending a session | `productivity/handoff` | Formalizes the `harness/state/progress.md` habit |
 | Authoring a CONTEXT/SKILL/gate doc | `productivity/writing-great-skills` | Reference for writing our own skills well |
 
 ## Adopt / skip ledger

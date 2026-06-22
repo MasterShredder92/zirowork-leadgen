@@ -10,10 +10,9 @@ Correcting a shipping lead-gen app, not building a new one. We are replacing the
 what the app does or how it looks. The migration is what makes the app controllable by an agent later.
 
 ## CURRENT STATE
-Identify the phase by which gates already pass — do not assume from this file. Source of truth: `harness/state/progress.md`.
-- Phase 0 (map terrain): DONE — `bash _migration/verify-phase-0.sh` exits 0.
-- Phase 1 (empty toolchain): DONE — `bash _migration/verify-phase-1.sh` exits 0.
-- Phase 2 (spine: tokens + hooks → typed modules): NEXT.
+Migration COMPLETE — Phases 0–5 all gated (2026-06-21/22). Source of truth: `harness/state/progress.md`.
+Historical phase gate scripts preserved in git history (`archive/migration` branch).
+North-path engine is NEXT — see `harness/north-path-plan.md`.
 
 ## HOW TO RUN
 1. `npm install`
@@ -22,8 +21,8 @@ Scripts: `dev` `build` `start` `lint` (= `eslint`). Node ≥ 20.9.
 
 ## HOW TO VERIFY (the gate is the truth, not "looks done")
 Run the current phase's checker. Green (exit 0) = the only valid "done". The worker writes claims; the script grades them.
-- `bash _migration/verify-phase-1.sh` — runs tsc, eslint, build, and a blank-page serve check as four independent exit codes.
-- Each fact phase ships its own `verify-phase-N.sh`; it re-derives every headline number from disk and fails if the artifact disagrees.
+- `bash harness/gates/verify-build.sh` — build + tsc + lint + serve. The standing gate. Use this.
+- Historical per-phase gate scripts (`verify-phase-N.sh`) are in the `archive/migration` branch.
 - A gate that can't go red is not a gate. After widening any exclude/ignore, plant an error in `src/` and confirm the gate fails, then revert.
 
 ## NON-NEGOTIABLES
@@ -51,7 +50,7 @@ src/components/      ← new (Phase 3): src/components/[domain]/ client componen
 src/hooks/           ← new (Phase 2/3): use[Domain]State.ts
 harness/             ← agent harness (gates, state, loop, agent.md)
 .claude/workflows/   ← new (Phase 5): orchestrators
-_migration/          ← phase artifacts, verify-phase-N.sh, progress.md, session-handoff.md
+harness/north-path-plan.md ← live north-path engine plan (moved from _migration/)
 00-* … 99-agents/    ← LEGACY views (window.* jsx). Excluded from tooling. Deleted leaf-by-leaf as each ports to src/.
 index.html, schools/, dashboard/, www/, legal/, vercel.json ← legacy entry points + routing. Routing moves into App Router at Phase 4; don't patch vercel.json before then.
 ```

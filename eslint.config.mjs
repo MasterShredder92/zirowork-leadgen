@@ -34,7 +34,6 @@ const eslintConfig = defineConfig([
     "99-agents/**",
     "schools/**",
     "dashboard/**",
-    "_migration/**",
   ]),
 ]);
 
