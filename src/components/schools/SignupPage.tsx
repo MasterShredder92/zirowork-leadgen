@@ -12,7 +12,7 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday'];
 type NewStudent = { firstName: string; lastName: string; instruments: string[]; bio: string; goals: string };
 
 export default function SignupPage({ school, slug, instrument }: { school: School; slug: string; instrument: string }) {
-  const accent = school.accent || '#E04D27';
+  const accent = school.accent || 'var(--color-school-accent-default)';
 
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
@@ -118,11 +118,11 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      background: '#fff',
+      background: 'var(--color-school-white)',
       fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
     } as React.CSSProperties,
     progressWrap: {
-      position: 'fixed', top: 0, left: 0, right: 0, height: 3, zIndex: 100, background: '#f0f0ee',
+      position: 'fixed', top: 0, left: 0, right: 0, height: 3, zIndex: 100, background: 'var(--color-school-bg-subtle)',
     } as React.CSSProperties,
     progressFill: {
       height: '100%',
@@ -155,7 +155,7 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
     headline: {
       fontSize: 'clamp(22px, 4vw, 32px)',
       fontWeight: 800,
-      color: '#1a1a1a',
+      color: 'var(--color-school-ink)',
       marginBottom: 8,
       marginTop: 0,
       letterSpacing: '-0.02em',
@@ -163,7 +163,7 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
     } as React.CSSProperties,
     sub: {
       fontSize: 16,
-      color: '#888',
+      color: 'var(--color-school-text-6)',
       marginBottom: 28,
       marginTop: 0,
       lineHeight: 1.6,
@@ -171,44 +171,44 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
     pathCard: (selected: boolean): React.CSSProperties => ({
       width: '100%',
       padding: '20px 24px',
-      border: '2px solid ' + (selected ? accent : '#f0f0ee'),
+      border: '2px solid ' + (selected ? accent : 'var(--color-school-bg-subtle)'),
       borderRadius: 14,
       cursor: 'pointer',
       textAlign: 'left',
-      background: selected ? accent + '10' : '#fff',
+      background: selected ? accent + '10' : 'var(--color-school-white)',
       marginBottom: 10,
       transition: 'all 0.15s',
     }),
     pathCardTitle: {
       fontSize: 17,
       fontWeight: 800,
-      color: '#1a1a1a',
+      color: 'var(--color-school-ink)',
       marginBottom: 3,
     } as React.CSSProperties,
     pathCardSub: {
       fontSize: 14,
-      color: '#888',
+      color: 'var(--color-school-text-6)',
       margin: 0,
     } as React.CSSProperties,
     pill: (selected: boolean): React.CSSProperties => ({
       padding: '10px 20px',
       borderRadius: 24,
-      border: '2px solid ' + (selected ? accent : '#f0f0ee'),
+      border: '2px solid ' + (selected ? accent : 'var(--color-school-bg-subtle)'),
       fontSize: 15,
       fontWeight: 600,
       cursor: 'pointer',
-      background: selected ? accent + '12' : '#fff',
-      color: selected ? accent : '#1a1a1a',
+      background: selected ? accent + '12' : 'var(--color-school-white)',
+      color: selected ? accent : 'var(--color-school-ink)',
       transition: 'all 0.15s',
       whiteSpace: 'nowrap',
     }),
     instCard: (selected: boolean): React.CSSProperties => ({
       padding: '18px 12px',
-      border: '2px solid ' + (selected ? accent : '#f0f0ee'),
+      border: '2px solid ' + (selected ? accent : 'var(--color-school-bg-subtle)'),
       borderRadius: 14,
       cursor: 'pointer',
       textAlign: 'center',
-      background: selected ? accent + '10' : '#fff',
+      background: selected ? accent + '10' : 'var(--color-school-white)',
       transition: 'all 0.15s',
       display: 'flex',
       flexDirection: 'column',
@@ -218,19 +218,19 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
     input: {
       width: '100%',
       padding: '13px 16px',
-      border: '2px solid #f0f0ee',
+      border: '2px solid var(--color-school-bg-subtle)',
       borderRadius: 10,
       fontSize: 16,
       fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
       outline: 'none',
-      color: '#1a1a1a',
-      background: '#fff',
+      color: 'var(--color-school-ink)',
+      background: 'var(--color-school-white)',
       boxSizing: 'border-box',
     } as React.CSSProperties,
     label: {
       fontSize: 14,
       fontWeight: 700,
-      color: '#555',
+      color: 'var(--color-school-text-3)',
       marginBottom: 6,
       display: 'block',
     } as React.CSSProperties,
@@ -240,8 +240,8 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
       left: 0,
       right: 0,
       padding: '16px 20px',
-      background: '#fff',
-      borderTop: '1px solid #f0f0ee',
+      background: 'var(--color-school-white)',
+      borderTop: '1px solid var(--color-school-bg-subtle)',
       display: 'flex',
       justifyContent: 'center',
       zIndex: 50,
@@ -255,8 +255,8 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
       cursor: disabled ? 'not-allowed' : 'pointer',
       width: '100%',
       maxWidth: 480,
-      background: disabled ? '#ccc' : accent,
-      color: '#fff',
+      background: disabled ? 'var(--color-school-muted-3)' : accent,
+      color: 'var(--color-school-white)',
       opacity: disabled ? 0.7 : 1,
       transition: 'opacity 0.15s',
     }),
@@ -266,7 +266,7 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
       cursor: 'pointer',
       fontSize: 14,
       fontWeight: 700,
-      color: '#888',
+      color: 'var(--color-school-text-6)',
       padding: '4px 0',
       marginBottom: 16,
       alignSelf: 'flex-start',
@@ -281,13 +281,13 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
     textarea: {
       width: '100%',
       padding: '13px 16px',
-      border: '2px solid #f0f0ee',
+      border: '2px solid var(--color-school-bg-subtle)',
       borderRadius: 10,
       fontSize: 15,
       fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
       outline: 'none',
-      color: '#1a1a1a',
-      background: '#fff',
+      color: 'var(--color-school-ink)',
+      background: 'var(--color-school-white)',
       resize: 'vertical',
       minHeight: 100,
       boxSizing: 'border-box',
@@ -392,7 +392,7 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
           />
         </div>
         <div style={{ ...S.fieldGroup }}>
-          <label style={S.label}>Age <span style={{ fontWeight: 400, color: '#bbb' }}>(optional)</span></label>
+          <label style={S.label}>Age <span style={{ fontWeight: 400, color: 'var(--color-school-muted-2)' }}>(optional)</span></label>
           <input
             style={S.input}
             type="number"
@@ -474,7 +474,7 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
           {INSTRUMENTS.map(inst => (
             <button key={inst} style={S.instCard(selectedInstruments.includes(inst))} onClick={() => toggleInst(inst)}>
               <span style={{ fontSize: 29 }}>{INST_ICON[inst]}</span>
-              <span style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a' }}>{inst}</span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-school-ink)' }}>{inst}</span>
             </button>
           ))}
         </div>
@@ -552,7 +552,7 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
           ))}
         </div>
         {hasInstrument === 'No' && (
-          <p style={{ fontSize: 14, color: '#888', marginTop: 16, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 14, color: 'var(--color-school-text-6)', marginTop: 16, lineHeight: 1.6 }}>
             No problem — we can help you find something.
           </p>
         )}
@@ -567,9 +567,9 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
       {renderBadge()}
       <h1 style={S.headline}>Your location</h1>
       <p style={S.sub}>Based on the page you came from.</p>
-      <div style={{ width: '100%', padding: '24px 28px', background: '#f8f8f6', borderRadius: 16, border: '1px solid #f0f0ee', marginBottom: 24 }}>
-        <div style={{ fontSize: 21, fontWeight: 800, color: '#1a1a1a', marginBottom: 6 }}>{school.name}</div>
-        <div style={{ fontSize: 16, color: '#666' }}>{school.city}{school.state ? ', ' + school.state : ''}</div>
+      <div style={{ width: '100%', padding: '24px 28px', background: 'var(--color-school-bg-card)', borderRadius: 16, border: '1px solid var(--color-school-bg-subtle)', marginBottom: 24 }}>
+        <div style={{ fontSize: 21, fontWeight: 800, color: 'var(--color-school-ink)', marginBottom: 6 }}>{school.name}</div>
+        <div style={{ fontSize: 16, color: 'var(--color-school-text-4)' }}>{school.city}{school.state ? ', ' + school.state : ''}</div>
       </div>
       <div style={S.stickyBottom}>
         <button style={S.btn(false)} onClick={goNext}>
@@ -622,14 +622,14 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
         <div style={S.fieldGroup}>
           <label style={S.label}>Email</label>
           <input
-            style={{ ...S.input, borderColor: emailError ? '#e04d27' : '#f0f0ee' }}
+            style={{ ...S.input, borderColor: emailError ? 'var(--color-school-accent-default)' : 'var(--color-school-bg-subtle)' }}
             type="email"
             value={contact.email}
             onChange={e => { setContact(c => ({ ...c, email: e.target.value })); setEmailError(''); }}
             onBlur={handleEmailBlur}
             placeholder="you@example.com"
           />
-          {emailError && <div style={{ fontSize: 13, color: '#e04d27', marginTop: 4 }}>{emailError}</div>}
+          {emailError && <div style={{ fontSize: 13, color: 'var(--color-school-accent-default)', marginTop: 4 }}>{emailError}</div>}
         </div>
         <div style={S.fieldGroup}>
           <label style={S.label}>Phone</label>
@@ -649,26 +649,26 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
             onChange={e => setSmsConsent(e.target.checked)}
             style={{ marginTop: 2, accentColor: accent, flexShrink: 0, cursor: 'pointer' }}
           />
-          <label htmlFor="sms-consent" style={{ fontSize: 13, color: '#888', lineHeight: 1.5, cursor: 'pointer' }}>
+          <label htmlFor="sms-consent" style={{ fontSize: 13, color: 'var(--color-school-text-6)', lineHeight: 1.5, cursor: 'pointer' }}>
             I consent to receive text messages from ZiroWork on behalf of {school.name} about my lesson inquiry, including follow-ups and booking reminders, at the number provided. Message frequency varies. Msg & data rates may apply. Reply HELP for help or STOP to cancel.{' '}
             <a href="/privacy" target="_blank" style={{ color: accent, textDecoration: 'underline' }}>Privacy Policy</a>
             {' | '}
             <a href="/terms" target="_blank" style={{ color: accent, textDecoration: 'underline' }}>Terms</a>
           </label>
         </div>
-        <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: '#f8f8f6', borderRadius: 10, marginBottom: 16, cursor: 'pointer' }}
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: 'var(--color-school-bg-card)', borderRadius: 10, marginBottom: 16, cursor: 'pointer' }}
           onClick={() => setContact(c => ({ ...c, isMilitary: !c.isMilitary }))}>
           <div style={{
-            width: 42, height: 24, borderRadius: 12, background: contact.isMilitary ? accent : '#ddd',
+            width: 42, height: 24, borderRadius: 12, background: contact.isMilitary ? accent : 'var(--color-school-muted-4)',
             position: 'relative', transition: 'background 0.2s', flexShrink: 0,
           }}>
             <div style={{
               position: 'absolute', top: 2, left: contact.isMilitary ? 20 : 2,
-              width: 20, height: 20, borderRadius: '50%', background: '#fff',
+              width: 20, height: 20, borderRadius: '50%', background: 'var(--color-school-white)',
               transition: 'left 0.2s', boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
             }} />
           </div>
-          <span style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a' }}>Military family?</span>
+          <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-school-ink)' }}>Military family?</span>
         </div>
         <div style={S.stickyBottom}>
           <button style={S.btn(!valid)} disabled={!valid} onClick={goNext}>
@@ -709,10 +709,10 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
         {additionalStudents.length > 0 && (
           <div style={{ width: '100%', marginBottom: 16 }}>
             {additionalStudents.map((s, i) => (
-              <div key={i} style={{ padding: '14px 18px', background: '#f8f8f6', borderRadius: 12, marginBottom: 8, border: '1px solid #f0f0ee' }}>
-                <div style={{ fontWeight: 700, fontSize: 16, color: '#1a1a1a' }}>{s.firstName} {s.lastName}</div>
+              <div key={i} style={{ padding: '14px 18px', background: 'var(--color-school-bg-card)', borderRadius: 12, marginBottom: 8, border: '1px solid var(--color-school-bg-subtle)' }}>
+                <div style={{ fontWeight: 700, fontSize: 16, color: 'var(--color-school-ink)' }}>{s.firstName} {s.lastName}</div>
                 {s.instruments.length > 0 && (
-                  <div style={{ fontSize: 14, color: '#888', marginTop: 2 }}>{s.instruments.join(', ')}</div>
+                  <div style={{ fontSize: 14, color: 'var(--color-school-text-6)', marginTop: 2 }}>{s.instruments.join(', ')}</div>
                 )}
               </div>
             ))}
@@ -765,7 +765,7 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
                 {INSTRUMENTS.map(inst => (
                   <button key={inst} style={S.instCard(newStudent.instruments.includes(inst))} onClick={() => toggleNewInst(inst)}>
                     <span style={{ fontSize: 23 }}>{INST_ICON[inst]}</span>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a' }}>{inst}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-school-ink)' }}>{inst}</span>
                   </button>
                 ))}
               </div>
@@ -781,7 +781,7 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button
-                style={{ ...S.btn(false), background: '#f0f0ee', color: '#555' }}
+                style={{ ...S.btn(false), background: 'var(--color-school-bg-subtle)', color: 'var(--color-school-text-3)' }}
                 onClick={() => setAddingStudent(false)}
               >
                 Cancel
@@ -829,11 +829,11 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
     if (matchLoading) {
       return (
         <div style={{ ...S.stepFade, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 60 }} key={stepKey}>
-          <div style={{ width: 44, height: 44, border: '3px solid #f0f0ee', borderTopColor: accent, borderRadius: '50%', animation: 'spin 0.8s linear infinite', marginBottom: 24 }} />
-          <p style={{ fontSize: 17, fontWeight: 700, color: '#1a1a1a', textAlign: 'center', maxWidth: 280, lineHeight: 1.5, margin: 0 }}>
+          <div style={{ width: 44, height: 44, border: '3px solid var(--color-school-bg-subtle)', borderTopColor: accent, borderRadius: '50%', animation: 'spin 0.8s linear infinite', marginBottom: 24 }} />
+          <p style={{ fontSize: 17, fontWeight: 700, color: 'var(--color-school-ink)', textAlign: 'center', maxWidth: 280, lineHeight: 1.5, margin: 0 }}>
             Finding your perfect match...
           </p>
-          <p style={{ fontSize: 14, color: '#aaa', marginTop: 8, textAlign: 'center' }}>we take this very seriously.</p>
+          <p style={{ fontSize: 14, color: 'var(--color-school-muted)', marginTop: 8, textAlign: 'center' }}>we take this very seriously.</p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       );
@@ -844,11 +844,11 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
         <div style={{ fontSize: 65, fontWeight: 800, color: accent, lineHeight: 1, marginBottom: 4 }}>
           {matchScore}%
         </div>
-        <div style={{ fontSize: 13, fontWeight: 700, color: '#aaa', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-school-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 24 }}>
           compatibility
         </div>
         <h1 style={{ ...S.headline, textAlign: 'center' }}>We found your match.</h1>
-        <p style={{ fontSize: 16, color: '#555', lineHeight: 1.7, maxWidth: 400, marginBottom: 8 }}>
+        <p style={{ fontSize: 16, color: 'var(--color-school-text-3)', lineHeight: 1.7, maxWidth: 400, marginBottom: 8 }}>
           We&apos;re reaching out ASAP — expect to hear from us within the hour during business hours.
         </p>
         {school.offer && (
@@ -856,16 +856,16 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
             ✓ {school.offer}
           </div>
         )}
-        <div style={{ width: '100%', padding: '20px 24px', background: '#f8f8f6', borderRadius: 14, border: '1px solid #f0f0ee', marginBottom: 24, textAlign: 'left' }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: '#aaa', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Your enrollment</div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', marginBottom: 4 }}>{student.firstName} {student.lastName}</div>
+        <div style={{ width: '100%', padding: '20px 24px', background: 'var(--color-school-bg-card)', borderRadius: 14, border: '1px solid var(--color-school-bg-subtle)', marginBottom: 24, textAlign: 'left' }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-school-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Your enrollment</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-school-ink)', marginBottom: 4 }}>{student.firstName} {student.lastName}</div>
           {selectedInstruments.length > 0 && (
-            <div style={{ fontSize: 15, color: '#666' }}>{selectedInstruments.join(', ')}</div>
+            <div style={{ fontSize: 15, color: 'var(--color-school-text-4)' }}>{selectedInstruments.join(', ')}</div>
           )}
-          <div style={{ fontSize: 14, color: '#aaa', marginTop: 4 }}>{school.name}</div>
+          <div style={{ fontSize: 14, color: 'var(--color-school-muted)', marginTop: 4 }}>{school.name}</div>
         </div>
         {error && (
-          <div style={{ width: '100%', padding: '12px 16px', background: '#fff0ee', border: '1px solid #ffd0c4', borderRadius: 10, fontSize: 15, color: '#c0392b', marginBottom: 16 }}>
+          <div style={{ width: '100%', padding: '12px 16px', background: 'var(--color-school-error-bg)', border: '1px solid var(--color-school-error-border)', borderRadius: 10, fontSize: 15, color: 'var(--color-school-error-text)', marginBottom: 16 }}>
             {error}
           </div>
         )}
@@ -876,9 +876,9 @@ export default function SignupPage({ school, slug, instrument }: { school: Schoo
         >
           {submitting ? 'Submitting...' : 'Complete Enrollment →'}
         </button>
-        <p style={{ fontSize: 13, color: '#bbb', marginTop: 12 }}>
+        <p style={{ fontSize: 13, color: 'var(--color-school-muted-2)', marginTop: 12 }}>
           {school.phone && (
-            <a href={'tel:' + school.phone.replace(/\D/g, '')} style={{ color: '#aaa', textDecoration: 'none' }}>
+            <a href={'tel:' + school.phone.replace(/\D/g, '')} style={{ color: 'var(--color-school-muted)', textDecoration: 'none' }}>
               {school.phone}
             </a>
           )}

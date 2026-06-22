@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 
+// Default color for the brand color picker input (HTML value attr — cannot use CSS var()).
+const COLOR_PICKER_DEFAULT = '#cccccc'; // hex-allow: native input[type=color] value attr; var() not accepted by HTML input
+
 // Theme tokens — mirrors the legacy window.T shape.
 // The CRM modal path gets these values from the operator shell's window.T;
 // this component owns them for the public route (standalone).
@@ -297,11 +300,11 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
             <button
               onClick={scrapeWebsite}
               disabled={!form.website || scraping}
-              style={{ padding: "8px 16px", borderRadius: 7, border: "none", background: T.accent, color: "#fff", fontSize: 13, fontWeight: 700, cursor: form.website && !scraping ? "pointer" : "not-allowed", opacity: form.website && !scraping ? 1 : 0.4, fontFamily: "'Plus Jakarta Sans', sans-serif", whiteSpace: "nowrap" }}>
+              style={{ padding: "8px 16px", borderRadius: 7, border: "none", background: T.accent, color: "var(--color-school-white)", fontSize: 13, fontWeight: 700, cursor: form.website && !scraping ? "pointer" : "not-allowed", opacity: form.website && !scraping ? 1 : 0.4, fontFamily: "'Plus Jakarta Sans', sans-serif", whiteSpace: "nowrap" }}>
               {scraping ? "Scraping…" : "Auto-fill ↓"}
             </button>
           </div>
-          {scrapeMsg && <div style={{ fontSize: 12, marginTop: 5, color: scrapeMsg.startsWith("Could") ? "#ef4444" : T.accent }}>{scrapeMsg}</div>}
+          {scrapeMsg && <div style={{ fontSize: 12, marginTop: 5, color: scrapeMsg.startsWith("Could") ? "var(--color-status-no_show)" : T.accent }}>{scrapeMsg}</div>}
         </div>
       )}
 
@@ -329,7 +332,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
             </div>
           )}
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-            <button onClick={() => setStep((s) => s + 1)} style={{ padding: "6px 14px", borderRadius: 6, border: "none", background: T.accent, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Looks good → Step 2</button>
+            <button onClick={() => setStep((s) => s + 1)} style={{ padding: "6px 14px", borderRadius: 6, border: "none", background: T.accent, color: "var(--color-school-white)", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Looks good → Step 2</button>
           </div>
         </div>
       )}
@@ -378,8 +381,8 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
           </select>
         </div>
         {form.scheduling_platform === "square" && (
-          <div style={{ marginBottom: 12, padding: "12px", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 8 }}>
-            <div style={{ fontSize: 12, color: "#1E3A8A", marginBottom: 8, fontWeight: 500 }}>Please provide your Square Developer Personal Access Token.</div>
+          <div style={{ marginBottom: 12, padding: "12px", background: "var(--color-info-bg)", border: "1px solid var(--color-info-border)", borderRadius: 8 }}>
+            <div style={{ fontSize: 12, color: "var(--color-info-text)", marginBottom: 8, fontWeight: 500 }}>Please provide your Square Developer Personal Access Token.</div>
             {fLabel("Square Access Token", true)}
             <input style={inp} type="password" value={form.square_access_token} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set("square_access_token", e.target.value)} placeholder="EAAA..." />
           </div>
@@ -410,7 +413,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
               <button key={inst} onClick={() => toggleInst(inst)} style={{
                 padding: "6px 14px", borderRadius: 20, fontSize: 13, fontWeight: 600, cursor: "pointer",
                 border: "none", fontFamily: "'Plus Jakarta Sans', sans-serif",
-                background: on ? T.accent : (T.border || "#e2e8f0"), color: on ? "#fff" : T.t3,
+                background: on ? T.accent : (T.border || "var(--color-onboard-border)"), color: on ? "var(--color-school-white)" : T.t3,
               }}>{inst}</button>
             );
           })}
@@ -457,7 +460,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
               <div key={k} style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <input
                   type="color"
-                  value={(scrapedMeta[k] as string | null) || "#cccccc"}
+                  value={(scrapedMeta[k] as string | null) || COLOR_PICKER_DEFAULT}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setScrapedMeta((m) => ({ ...m, [k]: e.target.value }))}
                   style={{ width: 30, height: 30, padding: 0, border: `1px solid ${T.border}`, borderRadius: 6, background: "none", cursor: "pointer" }}
                 />
@@ -508,12 +511,12 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
       {(form.photos || []).length > 0 && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 10 }}>
           {(form.photos || []).map((url, i) => (
-            <div key={i} style={{ position: "relative", aspectRatio: "1", borderRadius: 8, overflow: "hidden", background: "#f0f0ee" }}>
+            <div key={i} style={{ position: "relative", aspectRatio: "1", borderRadius: 8, overflow: "hidden", background: "var(--color-school-bg-subtle)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={url} alt={"Studio photo " + (i + 1)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               <button
                 onClick={() => set("photos", (form.photos || []).filter((_, idx) => idx !== i))}
-                style={{ position: "absolute", top: 4, right: 4, width: 20, height: 20, borderRadius: "50%", background: "rgba(0,0,0,0.6)", color: "#fff", border: "none", cursor: "pointer", fontSize: 13, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>
+                style={{ position: "absolute", top: 4, right: 4, width: 20, height: 20, borderRadius: "50%", background: "rgba(0,0,0,0.6)", color: "var(--color-school-white)", border: "none", cursor: "pointer", fontSize: 13, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>
                 ×
               </button>
             </div>
@@ -557,20 +560,20 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
           </span>
         </label>
       )}
-      {photoError && <div style={{ fontSize: 12, color: "#EF4444", marginTop: 4 }}>{photoError}</div>}
+      {photoError && <div style={{ fontSize: 12, color: "var(--color-status-no_show)", marginTop: 4 }}>{photoError}</div>}
     </div>
   );
 
   const S9 = () => (
     <div>
       {blockers.length > 0 && (
-        <div style={{ padding: "12px 14px", background: "#EF44440D", border: "1px solid #EF444430", borderRadius: 8, marginBottom: 14 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#EF4444", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Missing — required before launch</div>
-          {blockers.map((b) => <div key={b} style={{ fontSize: 13, color: "#EF4444", marginBottom: 2 }}>· {b}</div>)}
+        <div style={{ padding: "12px 14px", background: "var(--color-error-bg-tint)", border: "1px solid var(--color-error-border-tint)", borderRadius: 8, marginBottom: 14 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-status-no_show)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Missing — required before launch</div>
+          {blockers.map((b) => <div key={b} style={{ fontSize: 13, color: "var(--color-status-no_show)", marginBottom: 2 }}>· {b}</div>)}
         </div>
       )}
-      <div style={{ padding: "12px 14px", background: "#22C55E0D", border: "1px solid #22C55E30", borderRadius: 8, marginBottom: 14 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#22C55E", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Will be created automatically</div>
+      <div style={{ padding: "12px 14px", background: "var(--color-success-bg-tint)", border: "1px solid var(--color-success-border-tint)", borderRadius: 8, marginBottom: 14 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-status-scheduled)", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>Will be created automatically</div>
         {willCreate.map((w) => <div key={w} style={{ fontSize: 13, color: T.t2, marginBottom: 2 }}>· {w}</div>)}
       </div>
       <div style={{ border: `1px solid ${T.border}`, borderRadius: 8, overflow: "hidden" }}>
@@ -732,11 +735,11 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
           <button
             onClick={() => { void startFromWebsite(); }}
             disabled={!form.website}
-            style={{ width: "100%", padding: "13px", background: T.accent, color: "#fff", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: form.website ? "pointer" : "not-allowed", opacity: form.website ? 1 : 0.45, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            style={{ width: "100%", padding: "13px", background: T.accent, color: "var(--color-school-white)", border: "none", borderRadius: 9, fontSize: 16, fontWeight: 700, cursor: form.website ? "pointer" : "not-allowed", opacity: form.website ? 1 : 0.45, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             Get started →
           </button>
         )}
-        {scrapeMsg && !scraping && <div style={{ fontSize: 13, marginTop: 10, color: scrapeMsg.startsWith("Could") ? "#EF4444" : T.t3 }}>{scrapeMsg}</div>}
+        {scrapeMsg && !scraping && <div style={{ fontSize: 13, marginTop: 10, color: scrapeMsg.startsWith("Could") ? "var(--color-status-no_show)" : T.t3 }}>{scrapeMsg}</div>}
         <div style={{ marginTop: 18 }}>
           <button onClick={() => { setScrapeMsg(""); setStep(1); setPhase("wizard"); }} style={{ background: "none", border: "none", color: T.t4, fontSize: 13, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif", textDecoration: "underline" }}>
             I don&#39;t have a website — set up manually
@@ -749,8 +752,8 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
   if (submitted) {
     return (
       <div style={{ background: T.cardBg || "var(--surface)", borderRadius: 12, width: "100%", maxWidth: 560, border: `1px solid ${T.border}`, padding: "40px 32px", textAlign: "center" }}>
-        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#22C55E20", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
-          <CheckIcon size={24} color="#22C55E" strokeWidth={2.5} />
+        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "var(--color-success-bg-tint-2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+          <CheckIcon size={24} color="var(--color-status-scheduled)" strokeWidth={2.5} />
         </div>
         <div style={{ fontSize: 19, fontWeight: 700, color: T.t1, marginBottom: 8 }}>
           {standalone ? "You're in!" : `${form.studio_name || "Studio"} is queued.`}
@@ -761,7 +764,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
             : "Profile created. Complete the checklist below to get this client fully live."}
         </div>
         {blockers.length > 0 && !standalone && (
-          <div style={{ fontSize: 13, color: "#F59E0B", marginBottom: 16 }}>{blockers.length} item{blockers.length > 1 ? "s" : ""} still needed before launch.</div>
+          <div style={{ fontSize: 13, color: "var(--color-program-guitar)", marginBottom: 16 }}>{blockers.length} item{blockers.length > 1 ? "s" : ""} still needed before launch.</div>
         )}
         {!standalone && operatorCreds && (
           <div style={{ textAlign: "left", padding: "14px 16px", background: T.accent + "12", border: `1px solid ${T.accent}40`, borderRadius: 8, marginBottom: 16 }}>
@@ -773,7 +776,7 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
         )}
         <button
           onClick={standalone ? () => { router.push("/dashboard"); } : () => onCancel && onCancel()}
-          style={{ padding: "10px 28px", background: T.accent, color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          style={{ padding: "10px 28px", background: T.accent, color: "var(--color-school-white)", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {standalone ? "Go to my portal →" : "Done"}
         </button>
       </div>
@@ -817,16 +820,16 @@ export default function OnboardForm({ standalone, onSuccess, onCancel }: Onboard
         {step < STEPS.length ? (
           <button
             onClick={() => setStep((s) => s + 1)}
-            style={{ padding: "8px 20px", background: T.accent, color: "#fff", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            style={{ padding: "8px 20px", background: T.accent, color: "var(--color-school-white)", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             Next →
           </button>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-            {saveError && <div style={{ fontSize: 12, color: "#EF4444" }}>{saveError}</div>}
+            {saveError && <div style={{ fontSize: 12, color: "var(--color-status-no_show)" }}>{saveError}</div>}
             <button
               disabled={saving || (!!standalone && blockers.length > 0)}
               onClick={() => { void handleSubmit(); }}
-              style={{ padding: "8px 22px", background: "#22C55E", color: "#fff", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              style={{ padding: "8px 22px", background: "var(--color-status-scheduled)", color: "var(--color-school-white)", border: "none", borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
               {saving ? "Saving..." : "Create Profile"}
             </button>
           </div>

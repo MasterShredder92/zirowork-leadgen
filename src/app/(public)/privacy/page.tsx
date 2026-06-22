@@ -3,9 +3,9 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = { title: 'Privacy Policy — ZiroWork' };
 
 const s = {
-  page: { fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", lineHeight: 1.6, maxWidth: 900, margin: '0 auto', padding: '40px 20px', color: '#333', background: '#fafafa' } as React.CSSProperties,
+  page: { fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", lineHeight: 1.6, maxWidth: 900, margin: '0 auto', padding: '40px 20px', color: 'var(--color-school-text-1)', background: 'var(--color-school-fafafa)' } as React.CSSProperties,
   h1:   { fontSize: 28, marginBottom: 10 } as React.CSSProperties,
-  sub:  { color: '#666', fontSize: 14, marginBottom: 30 } as React.CSSProperties,
+  sub:  { color: 'var(--color-school-text-4)', fontSize: 14, marginBottom: 30 } as React.CSSProperties,
   h2:   { fontSize: 18, marginTop: 30, marginBottom: 15 } as React.CSSProperties,
   p:    { marginBottom: 15 } as React.CSSProperties,
   ul:   { marginBottom: 15, paddingLeft: 20 } as React.CSSProperties,

@@ -7,14 +7,14 @@ export default function DrumsWidget({ accent }: { accent: string }) {
   const AUDIO_BASE: string | null = null;
 
   const PADS = [
-    { id: 'crash',   label: 'Crash',    emoji: '💥', file: 'crash.wav',    color: '#F59E0B' },
-    { id: 'hihat',   label: 'Hi-Hat',   emoji: '🔔', file: 'hihat.wav',    color: '#818CF8' },
-    { id: 'ride',    label: 'Ride',     emoji: '🎵', file: 'ride.wav',     color: '#06B6D4' },
-    { id: 'tom1',    label: 'Tom 1',    emoji: '🥁', file: 'tom1.wav',     color: '#EC4899' },
-    { id: 'snare',   label: 'Snare',    emoji: '💢', file: 'snare.wav',    color: accent || '#E04D27' },
-    { id: 'tom2',    label: 'Tom 2',    emoji: '🥁', file: 'tom2.wav',     color: '#F97316' },
-    { id: 'floortom',label: 'Floor Tom',emoji: '🥁', file: 'floortom.wav', color: '#8B5CF6' },
-    { id: 'kick',    label: 'Kick',     emoji: '💣', file: 'kick.wav',     color: '#22C55E' },
+    { id: 'crash',   label: 'Crash',    emoji: '💥', file: 'crash.wav',    color: 'var(--color-program-guitar)' },
+    { id: 'hihat',   label: 'Hi-Hat',   emoji: '🔔', file: 'hihat.wav',    color: 'var(--color-insight-0)' },
+    { id: 'ride',    label: 'Ride',     emoji: '🎵', file: 'ride.wav',     color: 'var(--color-widget-cyan)' },
+    { id: 'tom1',    label: 'Tom 1',    emoji: '🥁', file: 'tom1.wav',     color: 'var(--color-program-voice)' },
+    { id: 'snare',   label: 'Snare',    emoji: '💢', file: 'snare.wav',    color: accent || 'var(--color-school-accent-default)' },
+    { id: 'tom2',    label: 'Tom 2',    emoji: '🥁', file: 'tom2.wav',     color: 'var(--color-program-drums)' },
+    { id: 'floortom',label: 'Floor Tom',emoji: '🥁', file: 'floortom.wav', color: 'var(--color-widget-violet)' },
+    { id: 'kick',    label: 'Kick',     emoji: '💣', file: 'kick.wav',     color: 'var(--color-status-scheduled)' },
   ];
 
   const FALLBACK_FREQS: Record<string, { f: number; type: OscillatorType; dur: number }> = {
@@ -58,8 +58,8 @@ export default function DrumsWidget({ accent }: { accent: string }) {
             onTouchStart={e => { e.preventDefault(); hit(pad); }}
             style={{
               aspectRatio: '1',
-              background: flash[pad.id] ? pad.color : '#1a1a1a',
-              border: `2px solid ${flash[pad.id] ? pad.color : '#333'}`,
+              background: flash[pad.id] ? pad.color : 'var(--color-school-ink)',
+              border: `2px solid ${flash[pad.id] ? pad.color : 'var(--color-school-text-1)'}`,
               borderRadius: 12,
               cursor: 'pointer',
               display: 'flex',
@@ -74,11 +74,11 @@ export default function DrumsWidget({ accent }: { accent: string }) {
             }}
           >
             <span style={{ fontSize: 23 }}>{pad.emoji}</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: flash[pad.id] ? '#fff' : '#999', letterSpacing: '0.04em' }}>{pad.label}</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: flash[pad.id] ? 'var(--color-school-white)' : 'var(--color-school-text-7)', letterSpacing: '0.04em' }}>{pad.label}</span>
           </button>
         ))}
       </div>
-      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: '#aaa' }}>
+      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 14, color: 'var(--color-school-muted)' }}>
         Tap the pads to play. Kick is the big one in the bottom right.
       </div>
     </div>

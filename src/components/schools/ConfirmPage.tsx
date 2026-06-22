@@ -28,7 +28,7 @@ type Client = {
 };
 
 export default function ConfirmPage({ school, slug }: { school: School; slug: string }) {
-  const accent = school.accent || '#E04D27';
+  const accent = school.accent || 'var(--color-school-accent-default)';
 
   const [client, setClient] = useState<Client | null>(null);
   const [token] = useState(() =>
@@ -122,7 +122,7 @@ export default function ConfirmPage({ school, slug }: { school: School; slug: st
 
   const wrap: React.CSSProperties = {
     minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center',
-    justifyContent: 'center', background: '#fff', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+    justifyContent: 'center', background: 'var(--color-school-white)', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
     padding: '40px 24px', textAlign: 'center',
   };
   const badge: React.CSSProperties = {
@@ -132,15 +132,15 @@ export default function ConfirmPage({ school, slug }: { school: School; slug: st
   };
 
   if (status === 'loading') {
-    return <div style={wrap}><div style={{ color: '#aaa', fontSize: 15 }}>Loading your details…</div></div>;
+    return <div style={wrap}><div style={{ color: 'var(--color-school-muted)', fontSize: 15 }}>Loading your details…</div></div>;
   }
 
   if (status === 'notfound') {
     return (
       <div style={wrap}>
         <div style={badge}>{school.name}</div>
-        <h1 style={{ fontSize: 27, fontWeight: 800, color: '#1a1a1a', margin: '0 0 12px' }}>Link not found</h1>
-        <p style={{ fontSize: 16, color: '#888', maxWidth: 380, lineHeight: 1.6 }}>
+        <h1 style={{ fontSize: 27, fontWeight: 800, color: 'var(--color-school-ink)', margin: '0 0 12px' }}>Link not found</h1>
+        <p style={{ fontSize: 16, color: 'var(--color-school-text-6)', maxWidth: 380, lineHeight: 1.6 }}>
           This confirmation link is invalid or has expired. Please call the studio and we&apos;ll get you set up.
         </p>
         {school.phone && <a href={'tel:' + school.phone.replace(/\D/g, '')} style={{ marginTop: 20, color: accent, fontWeight: 700, textDecoration: 'none' }}>📞 {school.phone}</a>}
@@ -152,21 +152,21 @@ export default function ConfirmPage({ school, slug }: { school: School; slug: st
     return (
       <div style={wrap}>
         <div style={badge}>{school.name}</div>
-        <div style={{ width: 80, height: 80, borderRadius: '50%', background: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 26, boxShadow: '0 8px 32px rgba(34,197,94,0.25)' }}>
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M8 18.5L15 25.5L28 11" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'var(--color-status-scheduled)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 26, boxShadow: '0 8px 32px rgba(34,197,94,0.25)' }}>
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M8 18.5L15 25.5L28 11" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </div>
-        <h1 style={{ fontSize: 'clamp(26px,5vw,38px)', fontWeight: 800, color: '#1a1a1a', letterSpacing: '-0.02em', margin: '0 0 12px' }}>
+        <h1 style={{ fontSize: 'clamp(26px,5vw,38px)', fontWeight: 800, color: 'var(--color-school-ink)', letterSpacing: '-0.02em', margin: '0 0 12px' }}>
           {status === 'already' ? "You're all set!" : "You're enrolled!"}
         </h1>
-        <p style={{ fontSize: 18, color: '#555', fontWeight: 600, margin: '0 0 8px', maxWidth: 420 }}>
+        <p style={{ fontSize: 18, color: 'var(--color-school-text-3)', fontWeight: 600, margin: '0 0 8px', maxWidth: 420 }}>
           {booking?.student_name ? booking.student_name + "'s " : 'Your '}{(booking?.program || 'music').split(',')[0]} lessons are confirmed.
         </p>
         {(booking?.date || booking?.time) && (
-          <p style={{ fontSize: 16, color: '#888', margin: '0 0 28px' }}>
+          <p style={{ fontSize: 16, color: 'var(--color-school-text-6)', margin: '0 0 28px' }}>
             {prettyDate(booking?.date)}{booking?.date && booking?.time ? ' · ' : ''}{booking?.time || ''}{booking?.teacher ? ' with ' + booking.teacher : ''}
           </p>
         )}
-        <p style={{ fontSize: 15, color: '#aaa', maxWidth: 400, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 15, color: 'var(--color-school-muted)', maxWidth: 400, lineHeight: 1.6 }}>
           {school.name} has your details and will see you at your first lesson.
         </p>
       </div>
@@ -177,29 +177,29 @@ export default function ConfirmPage({ school, slug }: { school: School; slug: st
   return (
     <div style={wrap}>
       <div style={badge}>{school.name}</div>
-      <h1 style={{ fontSize: 'clamp(24px,5vw,34px)', fontWeight: 800, color: '#1a1a1a', letterSpacing: '-0.02em', margin: '0 0 10px' }}>
+      <h1 style={{ fontSize: 'clamp(24px,5vw,34px)', fontWeight: 800, color: 'var(--color-school-ink)', letterSpacing: '-0.02em', margin: '0 0 10px' }}>
         Confirm your spot
       </h1>
-      <p style={{ fontSize: 16, color: '#888', margin: '0 0 28px', maxWidth: 400, lineHeight: 1.6 }}>
+      <p style={{ fontSize: 16, color: 'var(--color-school-text-6)', margin: '0 0 28px', maxWidth: 400, lineHeight: 1.6 }}>
         {booking?.student_name ? booking.student_name + ', tap' : 'Tap'} below to lock in your lesson time. This confirms your enrollment.
       </p>
 
-      <div style={{ background: '#f8f8f6', border: '1px solid #f0f0ee', borderRadius: 14, padding: '24px 28px', marginBottom: 28, minWidth: 280, maxWidth: 360, width: '100%' }}>
-        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#aaa', marginBottom: 12 }}>Your lesson</div>
-        <div style={{ fontSize: 21, fontWeight: 800, color: '#1a1a1a', marginBottom: 6 }}>{(booking?.program || 'Music').split(',')[0]}</div>
+      <div style={{ background: 'var(--color-school-bg-card)', border: '1px solid var(--color-school-bg-subtle)', borderRadius: 14, padding: '24px 28px', marginBottom: 28, minWidth: 280, maxWidth: 360, width: '100%' }}>
+        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-school-muted)', marginBottom: 12 }}>Your lesson</div>
+        <div style={{ fontSize: 21, fontWeight: 800, color: 'var(--color-school-ink)', marginBottom: 6 }}>{(booking?.program || 'Music').split(',')[0]}</div>
         {(booking?.date || booking?.time) && (
-          <div style={{ fontSize: 16, color: '#555', fontWeight: 600 }}>
+          <div style={{ fontSize: 16, color: 'var(--color-school-text-3)', fontWeight: 600 }}>
             {prettyDate(booking?.date)}{booking?.date && booking?.time ? ' · ' : ''}{booking?.time || ''}
           </div>
         )}
-        {booking?.teacher && <div style={{ fontSize: 15, color: '#888', marginTop: 4 }}>with {booking.teacher}</div>}
+        {booking?.teacher && <div style={{ fontSize: 15, color: 'var(--color-school-text-6)', marginTop: 4 }}>with {booking.teacher}</div>}
       </div>
 
       <button
         onClick={confirm}
         disabled={status === 'confirming'}
         style={{
-          padding: '15px 40px', background: accent, color: '#fff', border: 'none', borderRadius: 11,
+          padding: '15px 40px', background: accent, color: 'var(--color-school-white)', border: 'none', borderRadius: 11,
           fontSize: 17, fontWeight: 800, cursor: status === 'confirming' ? 'not-allowed' : 'pointer',
           opacity: status === 'confirming' ? 0.6 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif",
           boxShadow: '0 8px 24px ' + accent + '40',
@@ -207,7 +207,7 @@ export default function ConfirmPage({ school, slug }: { school: School; slug: st
         {status === 'confirming' ? 'Confirming…' : 'Confirm my spot ✓'}
       </button>
 
-      {err && <div style={{ marginTop: 16, fontSize: 14, color: '#ef4444', maxWidth: 360 }}>{err}</div>}
+      {err && <div style={{ marginTop: 16, fontSize: 14, color: 'var(--color-status-no_show)', maxWidth: 360 }}>{err}</div>}
     </div>
   );
 }

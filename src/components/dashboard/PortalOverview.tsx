@@ -109,7 +109,7 @@ export default function PortalOverview({ tenantId }: { tenantId: string }) {
     },
     dot: {
       width: 8, height: 8, borderRadius: "50%",
-      background: "#10B981", flexShrink: 0,
+      background: "var(--color-portal-success-dot)", flexShrink: 0,
       boxShadow: "0 0 0 3px rgba(16,185,129,0.15)",
     },
     activityText: { fontSize: 14, color: "var(--t2)" },

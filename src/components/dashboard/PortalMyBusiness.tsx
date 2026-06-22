@@ -3,6 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase/client";
 
+// Data-layer color defaults — cannot use CSS var() in data objects or HTML input value props.
+// hex-allow markers on each line exempt them from the hex guard.
+const PREVIEW_PRIMARY_COLOR = '#1F3A5F'; // hex-allow: JS data value passed to style prop; var() not valid outside CSS
+const PREVIEW_ACCENT_COLOR = '#E07A2F'; // hex-allow: JS data value passed to style prop; var() not valid outside CSS
+const COLOR_PICKER_FALLBACK = '#000000'; // hex-allow: native input[type=color] value attr; var() not accepted by HTML input
+const COLOR_PICKER_PLACEHOLDER = '#1A2B3C'; // hex-allow: native input[type=color] value attr; var() not accepted by HTML input
+
 type ProgramPrice = { price?: string; duration?: string };
 
 type ClientRow = {
@@ -153,8 +160,8 @@ export default function PortalMyBusiness({ tenantId }: { tenantId: string }) {
             director_name: "Dana Reyes",
             director_title: "Owner",
             location_name: "Main Studio",
-            primary_color: "#1F3A5F",
-            accent_color: "#E07A2F",
+            primary_color: PREVIEW_PRIMARY_COLOR,
+            accent_color: PREVIEW_ACCENT_COLOR,
             map_url: "https://maps.google.com/?q=Maple+Street+Music+Austin",
             testimonials: [
               "My daughter went from zero to playing recitals in one year. Dana and the team are wonderful.",
@@ -418,7 +425,7 @@ export default function PortalMyBusiness({ tenantId }: { tenantId: string }) {
     photoImg: { width: "100%", height: "100%", objectFit: "cover", display: "block" },
     photoDel: {
       position: "absolute", top: 5, right: 5, width: 20, height: 20,
-      borderRadius: "50%", background: "rgba(0,0,0,0.55)", color: "#fff",
+      borderRadius: "50%", background: "rgba(0,0,0,0.55)", color: "var(--color-on-accent)",
       border: "none", cursor: "pointer", fontSize: 13, lineHeight: "20px",
       padding: 0, fontFamily: "inherit",
     },
@@ -426,15 +433,15 @@ export default function PortalMyBusiness({ tenantId }: { tenantId: string }) {
     instrumentName: { fontSize: 14, fontWeight: 700, color: "var(--t1)", marginBottom: 8 },
     readonlyLine: { fontSize: 14, color: "var(--t2)" },
     metaLine: { fontSize: 12, color: "var(--t4)", marginTop: 10 },
-    errText: { fontSize: 13, color: "#DC2626", fontWeight: 600 },
+    errText: { fontSize: 13, color: "var(--color-portal-error-red)", fontWeight: 600 },
     actions: { display: "flex", alignItems: "center", gap: 12, marginTop: 4 },
     saveBtn: {
-      padding: "9px 22px", background: "var(--accent)", color: "#fff",
+      padding: "9px 22px", background: "var(--accent)", color: "var(--color-on-accent)",
       border: "none", borderRadius: 7, fontSize: 14, fontWeight: 600,
       cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.6 : 1,
       fontFamily: "inherit",
     },
-    savedMsg: { fontSize: 13, color: "#059669", fontWeight: 600 },
+    savedMsg: { fontSize: 13, color: "var(--color-portal-success-green)", fontWeight: 600 },
   };
 
   const chipStyle = (active: boolean): React.CSSProperties => ({
@@ -475,14 +482,14 @@ export default function PortalMyBusiness({ tenantId }: { tenantId: string }) {
         <input
           type="color"
           style={s.colorSwatch}
-          value={(form[key] as string) || "#000000"}
+          value={(form[key] as string) || COLOR_PICKER_FALLBACK}
           onChange={e => set(key, e.target.value as FormState[typeof key])}
         />
         <input
           style={s.input}
           value={form[key] as string}
           onChange={e => set(key, e.target.value as FormState[typeof key])}
-          placeholder="#1A2B3C"
+          placeholder={COLOR_PICKER_PLACEHOLDER}
         />
       </div>
     </div>

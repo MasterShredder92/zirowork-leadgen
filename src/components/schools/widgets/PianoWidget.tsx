@@ -71,8 +71,8 @@ export default function PianoWidget({ accent }: { accent: string }) {
               top: 0,
               width: KEY_W - 2,
               height: KEY_H,
-              background: pressed[k.note] ? (accent + '30') : '#fff',
-              border: '1px solid #ccc',
+              background: pressed[k.note] ? (accent + '30') : 'var(--color-school-white)',
+              border: '1px solid var(--color-school-muted-3)',
               borderRadius: '0 0 6px 6px',
               cursor: 'pointer',
               display: 'flex',
@@ -81,7 +81,7 @@ export default function PianoWidget({ accent }: { accent: string }) {
               paddingBottom: 8,
               fontSize: 12,
               fontWeight: 600,
-              color: '#888',
+              color: 'var(--color-school-text-6)',
               userSelect: 'none',
               transition: 'background 0.08s',
               boxShadow: pressed[k.note] ? 'inset 0 -2px 4px rgba(0,0,0,0.1)' : '0 2px 4px rgba(0,0,0,0.15)',
@@ -102,7 +102,7 @@ export default function PianoWidget({ accent }: { accent: string }) {
               top: 0,
               width: BLACK_W,
               height: BLACK_H,
-              background: pressed[k.note] ? '#333' : '#1a1a1a',
+              background: pressed[k.note] ? 'var(--color-school-text-1)' : 'var(--color-school-ink)',
               borderRadius: '0 0 4px 4px',
               cursor: 'pointer',
               zIndex: 2,
@@ -113,7 +113,7 @@ export default function PianoWidget({ accent }: { accent: string }) {
           />
         ))}
       </div>
-      <div style={{ textAlign: 'center', marginTop: 16, fontSize: 14, color: '#aaa' }}>
+      <div style={{ textAlign: 'center', marginTop: 16, fontSize: 14, color: 'var(--color-school-muted)' }}>
         Click or tap the keys to play
       </div>
     </div>

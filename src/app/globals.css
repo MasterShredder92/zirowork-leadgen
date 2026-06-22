@@ -128,6 +128,98 @@
   --color-av-7-bg: rgba(20,83,45,0.3);
   --color-av-7-fg: #86EFAC;
   --shadow-drawer: -1px 0 0 rgba(255,255,255,0.06), -20px 0 60px rgba(0,0,0,0.6);
+
+  /* Schools landing page palette — light-only standalone pages */
+  --color-school-white: #ffffff;
+  --color-school-ink: #1a1a1a;
+  --color-school-text-1: #333333;
+  --color-school-text-2: #444444;
+  --color-school-text-3: #555555;
+  --color-school-text-4: #666666;
+  --color-school-text-5: #777777;
+  --color-school-text-6: #888888;
+  --color-school-text-7: #999999;
+  --color-school-muted: #aaaaaa;
+  --color-school-muted-2: #bbbbbb;
+  --color-school-muted-3: #cccccc;
+  --color-school-muted-4: #dddddd;
+  --color-school-bg-subtle: #f0f0ee;
+  --color-school-bg-card: #f8f8f6;
+  --color-school-bg-card-2: #f7f7f5;
+  --color-school-bg-placeholder: #ebebea;
+  --color-school-border: #d0d0ce;
+  --color-school-border-2: #d8d8d6;
+  --color-school-border-3: #d8d8d4;
+  --color-school-border-4: #e8e8e6;
+  --color-school-border-light: #e5e5e3;
+  --color-school-footer-bg: #111111;
+  --color-school-footer-border: #1e1e1e;
+  --color-school-map-bg-from: #e4e4e0;
+  --color-school-hero-dark-1: #0f0e1a;
+  --color-school-hero-dark-2: #1a1535;
+  --color-school-hero-dark-3: #0d1f4a;
+  --color-school-star: #FFB800;
+  --color-school-accent-default: #E04D27;
+  --color-school-error-bg: #fff0ee;
+  --color-school-error-border: #ffd0c4;
+  --color-school-error-text: #c0392b;
+  --color-school-fafafa: #fafafa;
+
+  /* Portal/dashboard consumer tokens */
+  --color-portal-error-bg: #FCE2E2;
+  --color-portal-error-text: #7A1C1C;
+  --color-portal-error-text-2: #B42318;
+  --color-portal-error-text-3: #B91C1C;
+  --color-portal-success-bg: #D1F4E8;
+  --color-portal-success-text: #034636;
+  --color-portal-success-green: #059669;
+  --color-portal-success-dot: #10B981;
+  --color-portal-error-red: #DC2626;
+
+  /* Portal pipeline stage chips — light-themed badges */
+  --color-portal-pipeline-new-bg: #EFF6FF;
+  --color-portal-pipeline-new-border: #BFDBFE;
+  --color-portal-pipeline-new-dot: #3B82F6;
+  --color-portal-pipeline-new-text: #1E40AF;
+  --color-portal-pipeline-follow-bg: #FFFBEB;
+  --color-portal-pipeline-follow-border: #FDE68A;
+  --color-portal-pipeline-follow-dot: #F59E0B;
+  --color-portal-pipeline-follow-text: #92400E;
+  --color-portal-pipeline-engaged-bg: #F0FDF4;
+  --color-portal-pipeline-engaged-border: #BBF7D0;
+  --color-portal-pipeline-engaged-dot: #22C55E;
+  --color-portal-pipeline-engaged-text: #15803D;
+  --color-portal-pipeline-enrolled-bg: #FFF7ED;
+  --color-portal-pipeline-enrolled-border: #FED7AA;
+  --color-portal-pipeline-enrolled-dot: #C84520;
+  --color-portal-pipeline-enrolled-text: #7C2D12;
+
+  /* Info / notice box */
+  --color-info-bg: #EFF6FF;
+  --color-info-border: #BFDBFE;
+  --color-info-text: #1E3A8A;
+
+  /* Status tint overlays (8-digit hex alpha → named tokens) */
+  --color-error-bg-tint: rgba(239,68,68,0.05);
+  --color-error-border-tint: rgba(239,68,68,0.19);
+  --color-success-bg-tint: rgba(34,197,94,0.05);
+  --color-success-bg-tint-2: rgba(34,197,94,0.13);
+  --color-success-border-tint: rgba(34,197,94,0.19);
+
+  /* Onboarding form tokens */
+  --color-onboard-border: #e2e8f0;
+
+  /* Public page palette */
+  --color-public-bg: #F7F2E8;
+  --color-public-ink: #1A1C1F;
+  --color-public-t2: #4a4843;
+  --color-public-t3: #7a766d;
+  --color-public-line: #E8DCC8;
+  --color-public-fafafa: #fafafa;
+
+  /* Widget / interactive elements */
+  --color-widget-cyan: #06B6D4;
+  --color-widget-violet: #8B5CF6;
 }
 
 /* InsightsView row hover — CSS :hover, not JS handlers (server component) */

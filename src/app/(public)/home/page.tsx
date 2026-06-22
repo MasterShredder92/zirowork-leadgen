@@ -6,12 +6,12 @@ export const metadata: Metadata = {
 };
 
 const T = {
-  bg: "#F7F2E8",
-  ink: "#1A1C1F",
-  t2: "#4a4843",
-  t3: "#7a766d",
-  accent: "#D9641C",
-  line: "#E8DCC8",
+  bg: "var(--color-public-bg)",
+  ink: "var(--color-public-ink)",
+  t2: "var(--color-public-t2)",
+  t3: "var(--color-public-t3)",
+  accent: "var(--color-accent)",
+  line: "var(--color-public-line)",
 } as const;
 
 export default function HomePage() {

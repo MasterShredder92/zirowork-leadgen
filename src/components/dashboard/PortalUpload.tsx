@@ -134,7 +134,7 @@ export default function PortalUpload({ tenantId, userId }: { tenantId: string; u
       fontFamily: "inherit", marginBottom: 14,
     },
     btn: {
-      padding: "9px 20px", background: "var(--accent)", color: "#fff",
+      padding: "9px 20px", background: "var(--accent)", color: "var(--color-on-accent)",
       border: "none", borderRadius: 7, fontSize: 14, fontWeight: 600,
       cursor: uploading || !file || !desc.trim() ? "not-allowed" : "pointer",
       opacity: uploading || !file || !desc.trim() ? 0.5 : 1,
@@ -142,7 +142,7 @@ export default function PortalUpload({ tenantId, userId }: { tenantId: string; u
     },
     successBanner: {
       marginTop: 12, padding: "10px 14px", borderRadius: 7,
-      background: "#D1F4E8", color: "#034636", fontSize: 13, fontWeight: 600,
+      background: "var(--color-portal-success-bg)", color: "var(--color-portal-success-text)", fontSize: 13, fontWeight: 600,
     },
     historyHead: { fontSize: 14, fontWeight: 700, color: "var(--t1)", marginTop: 32, marginBottom: 12 },
     historyItem: {

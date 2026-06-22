@@ -26,10 +26,10 @@ type MessageRow = {
 };
 
 const COLORS: Record<StageKey, { bg: string; border: string; dot: string; text: string }> = {
-  new:      { bg: "#EFF6FF", border: "#BFDBFE", dot: "#3B82F6", text: "#1E40AF" },
-  follow:   { bg: "#FFFBEB", border: "#FDE68A", dot: "#F59E0B", text: "#92400E" },
-  engaged:  { bg: "#F0FDF4", border: "#BBF7D0", dot: "#22C55E", text: "#15803D" },
-  enrolled: { bg: "#FFF7ED", border: "#FED7AA", dot: "#C84520", text: "#7C2D12" },
+  new:      { bg: "var(--color-portal-pipeline-new-bg)", border: "var(--color-portal-pipeline-new-border)", dot: "var(--color-portal-pipeline-new-dot)", text: "var(--color-portal-pipeline-new-text)" },
+  follow:   { bg: "var(--color-portal-pipeline-follow-bg)", border: "var(--color-portal-pipeline-follow-border)", dot: "var(--color-portal-pipeline-follow-dot)", text: "var(--color-portal-pipeline-follow-text)" },
+  engaged:  { bg: "var(--color-portal-pipeline-engaged-bg)", border: "var(--color-portal-pipeline-engaged-border)", dot: "var(--color-portal-pipeline-engaged-dot)", text: "var(--color-portal-pipeline-engaged-text)" },
+  enrolled: { bg: "var(--color-portal-pipeline-enrolled-bg)", border: "var(--color-portal-pipeline-enrolled-border)", dot: "var(--color-portal-pipeline-enrolled-dot)", text: "var(--color-portal-pipeline-enrolled-text)" },
 };
 
 export default function PortalPipeline({ tenantId }: { tenantId: string }) {
