@@ -234,8 +234,8 @@ function ClientDetail({ clientId }: { clientId: string }) {
       <label style={lbl}>{label}</label>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <input type="color" style={{ width: 36, height: 36, padding: 2, background: 'var(--color-bg)', border: '1px solid var(--color-border)', borderRadius: 7, cursor: 'pointer', flexShrink: 0 }}
-          value={(form?.[key] as string) || '#000000'} onChange={e => set(key, e.target.value)} />
-        <input style={inp} value={(form?.[key] as string) || ''} onChange={e => set(key, e.target.value)} placeholder="#1A2B3C" />
+          value={(form?.[key] as string) || ''} onChange={e => set(key, e.target.value)} />
+        <input style={inp} value={(form?.[key] as string) || ''} onChange={e => set(key, e.target.value)} placeholder="Paste hex color" />
       </div>
     </div>
   );
@@ -403,7 +403,7 @@ function ClientDetail({ clientId }: { clientId: string }) {
                   {form.photos.map((url, i) => (
                     <div key={url + i} style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--color-border)' }}>
                       <img style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} src={url} alt={`Photo ${i + 1}`} />
-                      <button style={{ position: 'absolute', top: 5, right: 5, width: 20, height: 20, borderRadius: '50%', background: 'rgba(0,0,0,0.55)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 13, lineHeight: '20px', padding: 0 }}
+                      <button style={{ position: 'absolute', top: 5, right: 5, width: 20, height: 20, borderRadius: '50%', background: 'rgba(0,0,0,0.55)', color: 'var(--color-on-accent)', border: 'none', cursor: 'pointer', fontSize: 13, lineHeight: '20px', padding: 0 }}
                         onClick={() => removePhoto(i)}>×</button>
                     </div>
                   ))}
@@ -433,7 +433,7 @@ function ClientDetail({ clientId }: { clientId: string }) {
 
             {/* Save */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 24 }}>
-              <button style={{ padding: '9px 22px', background: 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1 }}
+              <button style={{ padding: '9px 22px', background: 'var(--color-accent)', color: 'var(--color-on-accent)', border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1 }}
                 onClick={handleSave} disabled={saving}>
                 {saving ? 'Saving…' : 'Save changes'}
               </button>
@@ -462,7 +462,7 @@ function ClientDetail({ clientId }: { clientId: string }) {
             <textarea style={{ ...ta, width: '100%', boxSizing: 'border-box', marginBottom: 14, minHeight: 72 }} value={uploadDesc}
               onChange={e => setUploadDesc(e.target.value)} placeholder="e.g. Updated pricing, new teacher schedule, logo for landing page…" />
             <button
-              style={{ padding: '9px 20px', background: 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: uploading || !uploadFile || !uploadDesc.trim() ? 'not-allowed' : 'pointer', opacity: uploading || !uploadFile || !uploadDesc.trim() ? 0.5 : 1 }}
+              style={{ padding: '9px 20px', background: 'var(--color-accent)', color: 'var(--color-on-accent)', border: 'none', borderRadius: 7, fontSize: 14, fontWeight: 600, cursor: uploading || !uploadFile || !uploadDesc.trim() ? 'not-allowed' : 'pointer', opacity: uploading || !uploadFile || !uploadDesc.trim() ? 0.5 : 1 }}
               onClick={handleFileUpload} disabled={uploading || !uploadFile || !uploadDesc.trim()}>
               {uploading ? 'Uploading…' : 'Upload file'}
             </button>
@@ -538,7 +538,7 @@ export default function ClientsView() {
           <h1 style={{ fontSize: 25, fontWeight: 700, color: 'var(--color-text-1)', letterSpacing: '-0.4px', margin: '0 0 4px 0' }}>Clients</h1>
           <div style={{ fontSize: 13, color: 'var(--color-text-3)' }}>Which schools are live, onboarding, healthy, stuck, or at risk?</div>
         </div>
-        <button onClick={() => router.push('/client-onboarding')} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: 'var(--color-accent)', color: '#fff', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+        <button onClick={() => router.push('/client-onboarding')} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', background: 'var(--color-accent)', color: 'var(--color-on-accent)', border: 'none', borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
           <Plus size={14} strokeWidth={1.75} /> Add Client
         </button>
       </div>

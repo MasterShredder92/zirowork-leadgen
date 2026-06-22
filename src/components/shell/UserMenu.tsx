@@ -15,7 +15,7 @@ export default function UserMenu() {
       <div style={{
         width: 28, height: 28, borderRadius: "50%",
         background: "linear-gradient(135deg, var(--color-mc-grad-from), var(--color-mc-grad-to))",
-        color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+        color: "var(--color-on-accent)", display: "flex", alignItems: "center", justifyContent: "center",
         fontSize: 13, fontWeight: 700,
       }}>
         MC

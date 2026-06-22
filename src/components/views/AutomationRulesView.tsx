@@ -91,7 +91,7 @@ export default function AutomationRulesView() {
           <div style={{ fontSize: 13, color: "var(--color-text-3)" }}>What should AI say, do, pause, or escalate?</div>
         </div>
         <button onClick={openModal}
-          style={{ fontSize: 13, fontWeight: 600, color: "#fff", background: "var(--color-accent)", padding: "9px 16px", borderRadius: 8, border: "none", cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif", flexShrink: 0 }}>
+          style={{ fontSize: 13, fontWeight: 600, color: "var(--color-on-accent)", background: "var(--color-accent)", padding: "9px 16px", borderRadius: 8, border: "none", cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif", flexShrink: 0 }}>
           + Create Rule
         </button>
       </div>
@@ -195,7 +195,7 @@ export default function AutomationRulesView() {
                 Cancel
               </button>
               <button onClick={saveRule} disabled={saving}
-                style={{ fontSize: 13, fontWeight: 600, color: "#fff", background: "var(--color-accent)", padding: "9px 16px", borderRadius: 8, border: "none", cursor: saving ? "default" : "pointer", opacity: saving ? 0.6 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                style={{ fontSize: 13, fontWeight: 600, color: "var(--color-on-accent)", background: "var(--color-accent)", padding: "9px 16px", borderRadius: 8, border: "none", cursor: saving ? "default" : "pointer", opacity: saving ? 0.6 : 1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
                 {saving ? "Saving…" : "Save"}
               </button>
             </div>

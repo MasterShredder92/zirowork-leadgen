@@ -279,7 +279,7 @@ export default function SettingsView() {
                     disabled={saving}
                     style={{
                       padding: "7px 16px", border: "none", borderRadius: 7,
-                      background: "var(--color-accent)", color: "#fff",
+                      background: "var(--color-accent)", color: "var(--color-on-accent)",
                       fontSize: 13, fontWeight: 600,
                       cursor: saving ? "default" : "pointer",
                       opacity: saving ? 0.6 : 1,
@@ -288,8 +288,8 @@ export default function SettingsView() {
                   >
                     {saving ? "Saving…" : "Save"}
                   </button>
-                  {saved && <div style={{ fontSize: 13, color: "#059669", fontWeight: 600 }}>✓ Saved</div>}
-                  {saveErr && <div style={{ fontSize: 13, color: "#DC2626", fontWeight: 600 }}>{saveErr}</div>}
+                  {saved && <div style={{ fontSize: 13, color: "var(--color-paid-dot)", fontWeight: 600 }}>✓ Saved</div>}
+                  {saveErr && <div style={{ fontSize: 13, color: "var(--color-overdue-dot)", fontWeight: 600 }}>{saveErr}</div>}
                 </div>
               </>
             )}

@@ -113,7 +113,7 @@ export default function PagesView() {
                     cursor: "pointer",
                     border: active ? "none" : "1px solid var(--color-border)",
                     background: active ? "var(--color-accent)" : "transparent",
-                    color: active ? "#fff" : "var(--color-text-3)",
+                    color: active ? "var(--color-on-accent)" : "var(--color-text-3)",
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
                   }}
                 >

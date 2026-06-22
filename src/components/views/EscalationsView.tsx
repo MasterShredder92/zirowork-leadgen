@@ -182,7 +182,7 @@ export default function EscalationsView() {
                       <button
                         onClick={() => forwardToStudio(esc)}
                         disabled={!!acting[esc.id]}
-                        style={{ padding: "6px 14px", background: "var(--color-accent)", color: "#fff", border: "none", borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: acting[esc.id] ? "not-allowed" : "pointer", whiteSpace: "nowrap", fontFamily: "'Plus Jakarta Sans', sans-serif", opacity: acting[esc.id] ? 0.6 : 1 }}>
+                        style={{ padding: "6px 14px", background: "var(--color-accent)", color: "var(--color-on-accent)", border: "none", borderRadius: 7, fontSize: 13, fontWeight: 600, cursor: acting[esc.id] ? "not-allowed" : "pointer", whiteSpace: "nowrap", fontFamily: "'Plus Jakarta Sans', sans-serif", opacity: acting[esc.id] ? 0.6 : 1 }}>
                         {acting[esc.id] === "forward" ? "Sending…" : "Forward to Studio"}
                       </button>
                       <button

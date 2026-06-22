@@ -89,7 +89,7 @@ export default function BookingsView() {
         <div>
           <button 
             onClick={() => window.open('/api/oauth/calcom/connect', '_blank')}
-            style={{ padding: "8px 16px", background: "var(--color-accent)", color: "#fff", border: "none", borderRadius: "6px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+            style={{ padding: "8px 16px", background: "var(--color-accent)", color: "var(--color-on-accent)", border: "none", borderRadius: "6px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'Plus Jakarta Sans', sans-serif" }}
           >
             Connect Calendar
           </button>

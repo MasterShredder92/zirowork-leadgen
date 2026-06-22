@@ -32,7 +32,7 @@ const LAST_CELL: React.CSSProperties = { ...CELL, paddingRight: 0, textAlign: "r
 
 const HEADERS = ["Parent / Student", "Client", "Program", "Outcome", "Weekly Rate", "Date", ""];
 
-// green = T.isDark ? '#4ADE80' : '#15803D' — exactly --color-roi-accent (dark / light themed)
+// 100% completion uses --color-roi-accent (maps to #4ADE80 dark / #15803D light)
 const GREEN = "var(--color-roi-accent)";
 
 export default function EnrollmentsView() {

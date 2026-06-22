@@ -258,7 +258,7 @@ export default function ConversationsView() {
                         padding: "9px 13px",
                         borderRadius: out ? "12px 12px 2px 12px" : "12px 12px 12px 2px",
                         background: out ? "var(--color-conv-accent)" : "var(--color-card-bg)",
-                        color: out ? "#fff" : "var(--color-text-1)",
+                        color: out ? "var(--color-on-accent)" : "var(--color-text-1)",
                         fontSize: 14,
                         lineHeight: 1.5,
                       }}>
@@ -308,7 +308,7 @@ export default function ConversationsView() {
                         border: "none",
                         cursor: sending || !draft.trim() ? "not-allowed" : "pointer",
                         background: "var(--color-conv-accent)",
-                        color: "#fff",
+                        color: "var(--color-on-accent)",
                         fontSize: 14,
                         fontWeight: 600,
                         fontFamily: "inherit",

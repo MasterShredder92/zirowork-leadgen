@@ -207,7 +207,7 @@ export default function LeadsView() {
             {selected.stage !== "enrolled" && (
               <button
                 onClick={handleMarkEnrolled}
-                style={{ width: "100%", fontSize: 13, fontWeight: 600, color: "#fff", background: "var(--color-insight-1)", border: "none", borderRadius: 7, padding: "8px 0", cursor: "pointer" }}
+                style={{ width: "100%", fontSize: 13, fontWeight: 600, color: "var(--color-on-accent)", background: "var(--color-insight-1)", border: "none", borderRadius: 7, padding: "8px 0", cursor: "pointer" }}
               >
                 Mark Enrolled
               </button>

@@ -9,6 +9,8 @@ MANIFEST="$HERE/HASHES.txt"
 
 list_gates(){
   echo harness/gates/verify-build.sh
+  echo harness/gates/no-hex-in-views.sh
+  echo harness/gates/verify-phase-north-1.sh
 }
 mapfile -t GATES < <(list_gates | sort -u)
 

@@ -52,7 +52,7 @@ export default function ClientOnboardingView() {
             gap: 7,
             padding: "8px 16px",
             background: "var(--color-accent)",
-            color: "#fff",
+            color: "var(--color-on-accent)",
             border: "none",
             borderRadius: 7,
             fontSize: 13,
@@ -85,12 +85,12 @@ export default function ClientOnboardingView() {
                       <div style={{ fontSize: 13, color: "var(--color-text-4)" }}>{client.city}</div>
                     </div>
                     <div style={{ textAlign: "right" }}>
-                      <div style={{ fontSize: 29, fontWeight: 700, color: pct === 100 ? "#22C55E" : "var(--color-accent)", letterSpacing: "-0.6px", fontVariantNumeric: "tabular-nums" }}>{pct}%</div>
+                      <div style={{ fontSize: 29, fontWeight: 700, color: pct === 100 ? "var(--color-status-scheduled)" : "var(--color-accent)", letterSpacing: "-0.6px", fontVariantNumeric: "tabular-nums" }}>{pct}%</div>
                       <div style={{ fontSize: 12, color: "var(--color-text-4)" }}>{done}/{CHECKLIST.length} complete</div>
                     </div>
                   </div>
                   <div style={{ height: 4, background: "var(--color-border)", borderRadius: 4, marginBottom: 16 }}>
-                    <div style={{ height: "100%", width: pct + "%", background: pct === 100 ? "#22C55E" : "var(--color-accent)", borderRadius: 4, transition: "width 0.3s" }} />
+                    <div style={{ height: "100%", width: pct + "%", background: pct === 100 ? "var(--color-status-scheduled)" : "var(--color-accent)", borderRadius: 4, transition: "width 0.3s" }} />
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 24px" }}>
                     {CHECKLIST.map((item) => {
@@ -121,14 +121,14 @@ export default function ClientOnboardingView() {
                               width: 16,
                               height: 16,
                               borderRadius: "50%",
-                              background: checked ? "#22C55E" : "var(--color-border)",
+                              background: checked ? "var(--color-status-scheduled)" : "var(--color-border)",
                               flexShrink: 0,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
                             }}
                           >
-                            {checked && <Check size={10} color="#fff" strokeWidth={3} />}
+                            {checked && <Check size={10} color="var(--color-on-accent)" strokeWidth={3} />}
                           </div>
                           {item.label}
                         </div>
